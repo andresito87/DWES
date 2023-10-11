@@ -13,6 +13,6 @@
 - [x] Tema 6: Implementación de servicios web.
 - [x] Tema 7: Aplicaciones web dinámicas e híbridas.
 
-![PHP Logo](https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg)
-
 ```
+
+![PHP Logo](https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg)
