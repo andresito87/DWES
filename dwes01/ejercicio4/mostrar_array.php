@@ -1,7 +1,18 @@
 <?php
-function mostrar_array($array)
+/**
+ * Mostrar los datos de un array bidimensional.
+ * 
+ * La función recibe un array y lo muestra por pantalla.
+ *
+ *
+ * 
+ * @param array[] $datos Array de datos a mostrar.
+ * 
+ * @return void Muestra por pantalla los datos del array.
+ */
+function mostrar_array(array $datos): void
 {
-    foreach ($array as $key => $value) {
+    foreach ($datos as $key => $value) {
         echo "<p>";
         foreach ($value as $key2 => $value2) {
             // si es un array, lo recorremos

@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * Obtener un resumen de las asignaturas solicitadas.
+ * 
+ * La función recibe un array bidimensional y devuelve un array con los datos
+ * resumidos según las asignaturas solicitadas.
+ *
+ *
+ * 
+ * @param array[] $datos Código del producto a insertar.
+ * 
+ * @return array[] Array con los datos resumidos.
+ */
 function obtener_resumen_asg(array $datos): array
 {
     //mostrar el array de asignaturas
