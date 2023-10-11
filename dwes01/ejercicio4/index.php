@@ -14,33 +14,27 @@
     $archivo = "datos.csv";
     $array = cargar_archivo($archivo);
 
-    foreach ($array as $key => $value) {
-        echo "<p>";
+    include_once("mostrar_array.php");
+    echo "<h2>Array sin filtrar</h2>";
+    mostrar_array($array);
+
+    include_once("filtrar_por_curso.php");
+    $curso = "1ESO";
+    $array_filtrado = filtrar_por_curso($curso, $array);
+    echo "<h2>Array filtrado por curso: $curso</h2>";
+    mostrar_array($array_filtrado);
+
+    include_once("obtener_resumen.php");
+    echo "<h3>Contabilización de asignaturas:</h3>";
+    $array_asignaturas = obtener_resumen_asg($array);
+    foreach ($array_asignaturas as $key => $value) {
+        echo "<ul>";
         foreach ($value as $key2 => $value2) {
-            // si es un array, lo recorremos
-            if (($key2 == 4 || $key2 == 5)) {
-                foreach ($value2 as $key3 => $value3) {
-                    // si no es el ultimo elemento del array, le ponemos divisores
-                    if ($value3 != "" && end($value2) != $value3) {
-                        echo $value3 . "   ----   ";
-                        // si es el ultimo elemento del array, no le ponemos divisores
-                    } else {
-                        echo $value3;
-                    }
-                }
-                // si no es un array, lo mostramos
-            } else {
-                // si no es el ultimo elemento del array, le ponemos divisores
-                if ($value2 != "" && end($value) != $value2) {
-                    echo $value2 . "   ----   ";
-                    // si es el ultimo elemento del array, no le ponemos divisores
-                } else {
-                    echo $value2;
-                }
-            }
+            echo "<li>$key2: $value2</li>";
         }
-        echo "</p>";
+        echo "</ul>";
     }
+
     ?>
 </body>
 

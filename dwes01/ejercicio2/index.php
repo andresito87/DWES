@@ -38,10 +38,17 @@
         <!-- Se incluye el contenido de la sección seleccionada -->
         <?php
         if (isset($_GET["ver"])) {
+            $seccion_encontrada = false;
             foreach ($secciones as $seccion) {
                 if ($seccion["link"] == $_GET["ver"]) {
                     readfile("contenidos/" . $seccion["archivo"]);
+                    $seccion_encontrada = true;
+                    break;
                 }
+            }
+            //si se modifica el parámetro ver y no se encuentra la sección, se muestra la primera
+            if (!$seccion_encontrada) {
+                header("Location: index.php?ver=sección+1");
             }
         } else {
             // Si no se ha seleccionado ninguna sección, se muestra la primera(Inicio)

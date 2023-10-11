@@ -1,5 +1,5 @@
 <?php
-function filtrar_por_curso($curso, $datos)
+function filtrar_por_curso(string $curso, array $datos): array
 {
     $array = array();
     foreach ($datos as $key => $value) {

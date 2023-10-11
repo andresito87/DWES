@@ -1,6 +1,6 @@
 <?php
 // Función para guardar los datos en el archivo CSV
-function guardar_datos_en_csv($datos)
+function guardar_datos_en_csv(array $datos): void
 {
     // si el archivo no existe, lo creamos
     if (!file_exists("datos.csv")) {
