@@ -1,0 +1,11 @@
+//eliminar todas las carpetas menos 1
+/Dashboard/
+/img/
+.modell
+.version
+xampp/.modell-usb
+phpinfo.php
+favicon.ico
+index.php
+bitnami.css
+applications.html
