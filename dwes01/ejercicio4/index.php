@@ -34,8 +34,6 @@
                 if ($value2 != "" && end($value) != $value2) {
                     echo $value2 . "   ----   ";
                     // si es el ultimo elemento del array, no le ponemos divisores
-                } else {
-                    echo $value2;
                 }
             }
         }
