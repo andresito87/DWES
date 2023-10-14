@@ -9,4 +9,5 @@ favicon.ico
 index.php
 bitnami.css
 applications.html
-*.csv
+dwes01/ejercicio3/datos.csv
+dwes01/ejercicio4/datos.csv
