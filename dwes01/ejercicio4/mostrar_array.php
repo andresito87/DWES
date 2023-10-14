@@ -19,9 +19,11 @@ function mostrar_array(array $datos): void
             if (($key2 == 4 || $key2 == 5)) {
                 foreach ($value2 as $key3 => $value3) {
                     // si no es el ultimo elemento del array, le ponemos divisores
-                    if ($value3 != "" && end($value2) != $value3) {
-                        echo $value3 . "   ----   ";
+                    if (end($value2) != $value3 && $key2 == 4) {
+                        echo $value3 . " - ";
                         // si es el ultimo elemento del array, no le ponemos divisores
+                    } else if (end($value2) != $value3 && $key2 == 5) {
+                        echo $value3 . " _ ";
                     } else {
                         echo $value3;
                     }
@@ -29,12 +31,18 @@ function mostrar_array(array $datos): void
                 // si no es un array, lo mostramos
             } else {
                 // si no es el ultimo elemento del array, le ponemos divisores
-                if ($value2 != "" && end($value) != $value2) {
-                    echo $value2 . "   ----   ";
+                if (!empty($value2)) {
+                    echo $value2;
                     // si es el ultimo elemento del array, no le ponemos divisores
                 } else {
                     echo $value2;
                 }
+            }
+            // si no es el ultimo elemento del array, le ponemos divisores
+            if (!is_array($value2)) {
+                echo " | ";
+            } else if (!empty($value3) && $value2 != end($value)) {
+                echo "      ";
             }
         }
         echo "</p>";
