@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -41,7 +41,6 @@
     </div>
     <BR>
     <input type="submit" name="Siguiente" value="Siguiente"><BR><BR><BR>
-    </form>
 </body>
 
 </html>
