@@ -24,17 +24,17 @@ function obtener_resumen_asg(array $datos): array
     foreach ($asignaturas as $key => $value) {
         foreach ($value as $key2 => $value2) {
             //suma 1 a la asignatura correspondiente
-            if ($value2 == "LCL") {
+            if ($value2 === "LCL") {
                 $resumen[0]['LCL']++;
-            } elseif ($value2 == "M") {
+            } elseif ($value2 === "M") {
                 $resumen[0]['M']++;
-            } elseif ($value2 == "BG") {
+            } elseif ($value2 === "BG") {
                 $resumen[0]['BG']++;
-            } elseif ($value2 == "GH") {
+            } elseif ($value2 === "GH") {
                 $resumen[0]['GH']++;
-            } elseif ($value2 == "FQ") {
+            } elseif ($value2 === "FQ") {
                 $resumen[0]['FQ']++;
-            } elseif ($value2 == "I") {
+            } elseif ($value2 === "I") {
                 $resumen[0]['I']++;
             }
         }

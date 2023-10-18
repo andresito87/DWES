@@ -7,16 +7,16 @@
  *
  * 
  * @param string $curso Código del curso a filtrar.
- * @param array[] $datos Código del producto a insertar.
+ * @param array[] $datos Array bidimensional con los datos a filtrar.
  * 
  * @return array[] Array con los datos filtrados.
  */
 function filtrar_por_curso(string $curso, array $datos): array
 {
     $array = array();
-    foreach ($datos as $key => $value) {
-        if ($value[2] == $curso) {
-            $array[] = $value;
+    foreach ($datos as $alumno) {
+        if ($alumno[2] === $curso) {
+            $array[] = $alumno;
         }
     }
     return $array;

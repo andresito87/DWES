@@ -6,7 +6,7 @@ if (!isset($_POST["Siguiente"])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -23,7 +23,7 @@ if (!isset($_POST["Siguiente"])) {
             <label><input type="checkbox" name="asgs[]" value="M"> Matemáticas. </label><br>
             <!-- Esta opción no deberá mostrarse si el usuario selecciono 2ESO -->
             <?php
-            if ($_POST["curso"] != "2ESO") {
+            if ($_POST["curso"] !== "2ESO") {
                 echo '<label><input type="checkbox" name="asgs[]" value="BG"> Biología y Geología.</label><BR>';
             }
             ?>

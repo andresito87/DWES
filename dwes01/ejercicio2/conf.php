@@ -25,4 +25,3 @@ $secciones[] = [
     "link" => "sección 4",
     "archivo" => "fragmento_seccion4.html"
 ];
-?>

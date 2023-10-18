@@ -14,4 +14,3 @@ function guardar_datos_en_csv(array $datos): void
     fputcsv($archivo_csv, $datos); //Guardamos los datos al final
     fclose($archivo_csv); //Cerramos el archivo
 }
-?>

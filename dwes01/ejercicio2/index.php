@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -8,10 +8,11 @@
     <title>Respira -
         <?php
         require_once "conf.php";
+        global$secciones;
         // Se incluye el título de la sección seleccionada
         if (isset($_GET["ver"])) {
             foreach ($secciones as $seccion) {
-                if ($seccion["link"] == $_GET["ver"]) {
+                if ($seccion["link"] === $_GET["ver"]) {
                     echo $seccion["nombre"];
                 }
             }
@@ -40,7 +41,7 @@
         if (isset($_GET["ver"])) {
             $seccion_encontrada = false;
             foreach ($secciones as $seccion) {
-                if ($seccion["link"] == $_GET["ver"]) {
+                if ($seccion["link"] === $_GET["ver"]) {
                     readfile("contenidos/" . $seccion["archivo"]);
                     $seccion_encontrada = true;
                     break;

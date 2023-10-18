@@ -18,30 +18,32 @@ if (!isset($_POST["Terminar"])) {
     <h1>Resumen del proceso</h1>
     <?php
     $error = false;
-    if (!isset($_POST["codigo_postal"]) || empty($_POST["codigo_postal"]) || !preg_match("/^\d{5}$/", $_POST["codigo_postal"])) {
+    if (!isset($_POST["codigo_postal"]) || !preg_match("/^\d{5}$/", $_POST["codigo_postal"])) {
         echo "El código postal no es válido <BR>";
         $error = true;
     }
-    if (!isset($_POST["sexo"]) || ($_POST["sexo"] != "M" && $_POST["sexo"] != "F" && $_POST["sexo"] != "O" && $_POST["sexo"] != "N")) {
+    if (!isset($_POST["sexo"]) || ($_POST["sexo"] !== "M" && $_POST["sexo"] !== "F" && $_POST["sexo"] !== "O" && $_POST["sexo"] !== "N")) {
         echo "El sexo no es válido <BR>";
         $error = true;
     }
-    if (!isset($_POST["curso"]) || $_POST["curso"] != "1ESO" && $_POST["curso"] != "2ESO" && $_POST["curso"] != "3ESO") {
+    if (!isset($_POST["curso"]) || ($_POST["curso"] !== "1ESO" && $_POST["curso"] !== "2ESO" && $_POST["curso"] !== "3ESO")) {
         echo "El curso no es válido <BR>";
         $error = true;
     }
-    if (!isset($_POST["rama"]) || $_POST["rama"] != "BCH" && $_POST["rama"] != "FP") {
+    if (!isset($_POST["rama"]) || ($_POST["rama"] !== "BCH" && $_POST["rama"] !== "FP")) {
         echo "La rama no es válida";
         $error = true;
     }
     if (isset($_POST["asgs"])) {
         if (count($_POST["asgs"]) <= 7) {
             foreach ($_POST["asgs"] as $asg) {
-                if ($asg == "BG" && $_POST["curso"] == "2ESO") {
+                if ($asg === "BG" && $_POST["curso"] === "2ESO") {
                     echo "Asignatura Biología y Geología no matriculable en 2º ESO";
                     $error = true;
                     break;
-                } else if ($asg != "LCL" && $asg != "M" && $asg != "BG" && $asg != "GH" && $asg != "FQ" && $asg != "I") {
+                }
+
+                if ($asg !== "LCL" && $asg !== "M" && $asg !== "BG" && $asg !== "GH" && $asg !== "FQ" && $asg !== "I") {
                     echo "Asignatura inválida encontrada, revise el formulario <BR>";
                     $error = true;
                     break;
@@ -55,7 +57,7 @@ if (!isset($_POST["Terminar"])) {
     if (isset($_POST['tiempolibre'])) {
         if (count($_POST['tiempolibre']) <= 8) {
             foreach ($_POST['tiempolibre'] as $tiempo) {
-                if ($tiempo != "deportes" && $tiempo != "musica" && $tiempo != "danza" && $tiempo != "art" && $tiempo != "vjuegos" && $tiempo != "television" && $tiempo != "dom" && $tiempo != "lectura") {
+                if ($tiempo !== "deportes" && $tiempo !== "musica" && $tiempo !== "danza" && $tiempo !== "art" && $tiempo !== "vjuegos" && $tiempo !== "television" && $tiempo !== "dom" && $tiempo !== "lectura") {
                     echo "Opción de tiempo libre inválida <BR>";
                     $error = true;
                     break;
