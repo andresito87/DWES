@@ -17,10 +17,10 @@ if (!isset($_POST["Siguiente"])) {
 <body>
     <form action="save.php" method="post">
         <div>
-            Señala las asignaturas que te resulten más complicadas:<BR><BR>
+            Señala las asignaturas que te resulten más complicadas:<br><br>
 
             <label><input type="checkbox" name="asgs[]" value="LCL"> Lengua Castellana y Literatura. </label><BR>
-            <label><input type="checkbox" name="asgs[]" value="M"> Matemáticas. </label><BR>
+            <label><input type="checkbox" name="asgs[]" value="M"> Matemáticas. </label><br>
             <!-- Esta opción no deberá mostrarse si el usuario selecciono 2ESO -->
             <?php
             if ($_POST["curso"] != "2ESO") {
@@ -29,7 +29,7 @@ if (!isset($_POST["Siguiente"])) {
             ?>
             <label><input type="checkbox" name="asgs[]" value="GH"> Geografía e Historia. </label><BR>
             <label><input type="checkbox" name="asgs[]" value="FQ"> Física y Química. </label><BR>
-            <label><input type="checkbox" name="asgs[]" value="I"> Inglés. </label><BR>
+            <label><input type="checkbox" name="asgs[]" value="I"> Inglés. </label><br>
         </div>
 
         <br>
@@ -44,9 +44,9 @@ if (!isset($_POST["Siguiente"])) {
             <option value="television">Veo la televisión</option>
             <option value="dom">Realizo tareas domésticas: limpiar, cocinar, etc. </option>
             <option value="lectura">Leo libros, cómics, revistas, etc. (sin contar los libros del instituto)</option>
-        </select><BR>
+        </select><br>
         <small>Nota: pulsa Ctrl+click para seleccionar más de una opción</small>
-        <BR>
+        <br>
         <?php
         if (isset($_POST["codigo_postal"])) {
             echo '<input type="hidden" name="codigo_postal" value="' . htmlspecialchars($_POST["codigo_postal"]) . '">';

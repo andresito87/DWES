@@ -3,7 +3,7 @@ function cargar_archivo(string $archivo): array|bool
 {
     $fila = 0;
     $array = [];
-    if ($archivo = fopen($archivo, "r")) {
+    if (file_exists($archivo) && $archivo = fopen($archivo, "r")) {
         while ($datos = fgetcsv($archivo, 1000, ",")) {
             $array[] = $datos;
             $array[$fila][4] = explode("-", $array[$fila][4]);
@@ -13,10 +13,8 @@ function cargar_archivo(string $archivo): array|bool
         fclose($archivo);
         // quitamos la cabedera del archivo csv
         array_shift($array);
-        return $array;
     } else {
         echo "No se pudo abrir el archivo";
-        return false;
     }
-
+    return $array;
 }

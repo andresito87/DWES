@@ -23,6 +23,7 @@ function obtener_resumen_asg(array $datos): array
     $resumen[] = array('LCL' => 0, 'M' => 0, 'BG' => 0, 'GH' => 0, 'FQ' => 0, 'I' => 0);
     foreach ($asignaturas as $key => $value) {
         foreach ($value as $key2 => $value2) {
+            //suma 1 a la asignatura correspondiente
             if ($value2 == "LCL") {
                 $resumen[0]['LCL']++;
             } elseif ($value2 == "M") {
