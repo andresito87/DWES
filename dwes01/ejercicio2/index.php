@@ -8,7 +8,6 @@
     <title>Respira -
         <?php
         require_once "conf.php";
-        global $secciones;
         // Se incluye el título de la sección seleccionada
         if (isset($_GET["ver"])) {
             foreach ($secciones as $seccion) {
@@ -26,14 +25,10 @@
 
 <body>
     <header>
-        <!-- Se incluye el logo-->
-        <img src="./assets/logo.avif" alt="Logo">
-        <h1>Respira</h1>
-        <nav>
-            <?php
-            require "header.php";
-            ?>
-        </nav>
+        <!-- Se incluye el header-->
+        <?php
+        require "header.php";
+        ?>
     </header>
     <main>
         <!-- Se incluye el contenido de la sección seleccionada -->

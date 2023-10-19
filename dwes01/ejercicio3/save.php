@@ -34,7 +34,8 @@ if (!isset($_POST["Terminar"])) {
         echo "La rama no es válida";
         $error = true;
     }
-    if (isset($_POST["asgs"])) {
+    //Comprobamos que las asignaturas existen y forman un array
+    if (isset($_POST["asgs"]) && is_array($_POST["asgs"])) {
         if (count($_POST["asgs"]) <= 7) {
             foreach ($_POST["asgs"] as $asg) {
                 if ($asg === "BG" && $_POST["curso"] === "2ESO") {
@@ -54,7 +55,8 @@ if (!isset($_POST["Terminar"])) {
             $error = true;
         }
     }
-    if (isset($_POST['tiempolibre'])) {
+    //Comprobamos que los tiempos libres existen y forman un array
+    if (isset($_POST['tiempolibre']) && is_array($_POST['tiempolibre'])) {
         if (count($_POST['tiempolibre']) <= 8) {
             foreach ($_POST['tiempolibre'] as $tiempo) {
                 if ($tiempo !== "deportes" && $tiempo !== "musica" && $tiempo !== "danza" && $tiempo !== "art" && $tiempo !== "vjuegos" && $tiempo !== "television" && $tiempo !== "dom" && $tiempo !== "lectura") {

@@ -17,23 +17,31 @@
 
     include_once("mostrar_array.php");
     echo "<h2>Array sin filtrar</h2>";
-    mostrar_array($array);
+    //Si se pudo cargar el archivo, mostramos el array
+    if (is_array($array)) {
+        mostrar_array($array);
 
-    include_once("filtrar_por_curso.php");
-    $curso = "1ESO";
-    $array_filtrado = filtrar_por_curso($curso, $array);
-    echo "<h2>Array filtrado por curso: $curso</h2>";
-    mostrar_array($array_filtrado);
+        //Filtramos por curso
+        include_once("filtrar_por_curso.php");
+        $curso = "1ESO";
+        $array_filtrado = filtrar_por_curso($curso, $array);
+        echo "<h2>Array filtrado por curso: $curso</h2>";
+        mostrar_array($array_filtrado);
 
-    include_once("obtener_resumen.php");
-    echo "<h3>Contabilización de asignaturas:</h3>";
-    $array_asignaturas = obtener_resumen_asg($array);
-    foreach ($array_asignaturas as $key => $value) {
-        echo "<ul>";
-        foreach ($value as $key2 => $value2) {
-            echo "<li>$key2: $value2</li>";
+        //Mostramos el resumen de asignaturas
+        include_once("obtener_resumen.php");
+        echo "<h3>Contabilización de asignaturas:</h3>";
+        $array_asignaturas = obtener_resumen_asg($array);
+        foreach ($array_asignaturas as $key => $value) {
+            echo "<ul>";
+            foreach ($value as $key2 => $value2) {
+                echo "<li>$key2: $value2</li>";
+            }
+            echo "</ul>";
         }
-        echo "</ul>";
+        //Sino mostramos un mensaje de error
+    } else {
+        echo "<p>No se ha podido cargar el archivo</p>";
     }
 
     //Link to repository: https://github.com/andresito87/DWES/tree/main/dwes01/ejercicio4

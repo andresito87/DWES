@@ -13,8 +13,6 @@ function cargar_archivo(string $archivo): array|bool
         fclose($archivo);
         // quitamos la cabedera del archivo csv
         array_shift($array);
-    } else {
-        echo "No se pudo abrir el archivo";
     }
-    return $array;
+    return empty($array) ? false : $array;
 }
