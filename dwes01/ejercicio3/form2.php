@@ -48,6 +48,7 @@ if (!isset($_POST["Siguiente"])) {
         <small>Nota: pulsa Ctrl+click para seleccionar más de una opción</small>
         <br>
         <?php
+            //Comprombamos si el usuario ha introducido los datos de la parte 1 del formulario y los guardamos ocultos
         if (isset($_POST["codigo_postal"])) {
             echo '<input type="hidden" name="codigo_postal" value="' . htmlspecialchars($_POST["codigo_postal"]) . '">';
         }
