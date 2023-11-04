@@ -1,0 +1,59 @@
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.detallesUsuario {
+    border: 3px solid black;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.detallesUsuario td {
+    margin: 15px;
+    padding: 15px;
+    border: 3px solid black;
+}
+
+.detallesUsuario td:nth-child(1) {
+    background-color: darksalmon;
+    font-weight: bold;
+}
+
+.detallesUsuario td span {
+    font-style: italic;
+}
+
+.seguimientos {
+    border: 3px solid black;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.seguimientos td {
+    margin: 15px;
+    padding: 15px;
+    border: 3px solid black;
+}
+
+.seguimientos thead th {
+    background-color: darksalmon;
+    font-weight: bold;
+    border: 3px solid black;
+    border-collapse: separate;
+}
+
+.botonSeguimiento,.botonContactado {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 2px;
+    font-weight: bold;
+}
