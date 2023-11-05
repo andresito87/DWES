@@ -10,6 +10,7 @@ body {
     border: 3px solid black;
     border-collapse: separate;
     border-spacing: 0;
+    margin-bottom: 30px;
 }
 
 .detallesUsuario td {
@@ -31,6 +32,7 @@ body {
     border: 3px solid black;
     border-collapse: separate;
     border-spacing: 0;
+    margin-bottom: 30px;
 }
 
 .seguimientos td {
@@ -46,6 +48,12 @@ body {
     border-collapse: separate;
 }
 
+.sinRegistros {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+}
+
 .botonSeguimiento,.botonContactado {
     background-color: #007bff;
     color: #fff;
@@ -57,3 +65,35 @@ body {
     margin: 2px;
     font-weight: bold;
 }
+
+.nuevoSeguimiento {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nuevoSeguimiento input {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+.nuevoSeguimiento select {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+.nuevoSeguimiento input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 2px;
+    font-weight: bold;
+}
+

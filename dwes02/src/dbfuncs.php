@@ -94,3 +94,49 @@ function actualizarInforme(PDO $pdo, int $idSeguimiento, string $informe): bool
     $stmt->execute();
     return $stmt->rowCount() === 1;
 }
+
+function archivarSeguimiento(PDO $pdo, int $idSeguimiento): bool
+{
+    $pdo->beginTransaction();
+    $sql = <<<ENDSQL
+        SELECT id, fechahora,medio, otro,contactado,informe,empleados_id,usuarios_id FROM seguimiento WHERE id=:id;
+    ENDSQL;
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':id', $idSeguimiento);
+    $stmt->execute();
+    $seguimiento = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$seguimiento) {
+        $pdo->rollBack();
+        return false;
+    }
+    $sql = <<<ENDSQL
+        INSERT INTO seguimiento_archivado (id, fechahora,medio, otro,contactado,informe,empleados_id,usuarios_id) 
+        VALUES (:id, :fechahora, :medio, :otro, :contactado, :informe, :empleados_id, :usuarios_id);
+    ENDSQL;
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':id', $seguimiento['id']);
+    $stmt->bindValue(':fechahora', $seguimiento['fechahora']);
+    $stmt->bindValue(':medio', $seguimiento['medio']);
+    $stmt->bindValue(':otro', $seguimiento['otro']);
+    $stmt->bindValue(':contactado', $seguimiento['contactado']);
+    $stmt->bindValue(':informe', $seguimiento['informe']);
+    $stmt->bindValue(':empleados_id', $seguimiento['empleados_id']);
+    $stmt->bindValue(':usuarios_id', $seguimiento['usuarios_id']);
+    $stmt->execute();
+    if ($stmt->rowCount() !== 1) {
+        $pdo->rollBack();
+        return false;
+    }
+    $sql = <<<ENDSQL
+        DELETE FROM seguimiento WHERE id=:id;
+    ENDSQL;
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':id', $idSeguimiento);
+    $stmt->execute();
+    if ($stmt->rowCount() !== 1) {
+        $pdo->rollBack();
+        return false;
+    }
+    $pdo->commit();
+    return true;
+}

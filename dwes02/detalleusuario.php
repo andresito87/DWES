@@ -98,37 +98,44 @@ if (isset($_POST['idDetalleUsuario'])) {
     </thead>
     <tbody>
     <?php
-    foreach (seguimientoUsuario($pdo, $usuario['dni']) as $seguimiento) {
+    $seguimientos = seguimientoUsuario($pdo, $usuario['dni']);
+    if (empty($seguimientos)) {
         echo "<tr>";
-        echo "<td>" . $seguimiento['nombre_empleado'] . "</td>";
-        echo "<td>" . $seguimiento['apellidos_empleado'] . "</td>";
-        echo "<td>" . $seguimiento['id_seguimiento'] . "</td>";
-        echo "<td>" . $seguimiento['fechahora_seguimiento'] . "</td>";
-        echo "<td>" . $seguimiento['medio_seguimiento'] . "</td>";
-        echo "<td>" . $seguimiento['contactado_seguimiento'] . "</td>";
-        echo "<td>" . $seguimiento['informe_seguimiento'] . "</td>";
-        echo "<td>";
-        echo "<form action='archivarseguimiento.php' method='post'>";
-        echo "<input type='hidden' name='idUsuario' value='" . $usuario['id'] . "'>";
-        echo "<input type='hidden' name='idSeguimiento' value='" . $seguimiento['id_seguimiento'] . "'>";
-        echo "<input type='submit' class='botonSeguimiento' value='Archivar seguimiento'>";
-        echo "</form>";
-        if (!$seguimiento["contactado_seguimiento"]) {
-            echo "<form action='seguimientocontactado.php' method='post'>";
+        echo "<td class='sinRegistros' colspan='8'>No hay seguimientos para este usuario</td>";
+        echo "</tr>";
+    } else {
+        foreach (seguimientoUsuario($pdo, $usuario['dni']) as $seguimiento) {
+            echo "<tr>";
+            echo "<td>" . $seguimiento['nombre_empleado'] . "</td>";
+            echo "<td>" . $seguimiento['apellidos_empleado'] . "</td>";
+            echo "<td>" . $seguimiento['id_seguimiento'] . "</td>";
+            echo "<td>" . $seguimiento['fechahora_seguimiento'] . "</td>";
+            echo "<td>" . $seguimiento['medio_seguimiento'] . "</td>";
+            echo "<td>" . $seguimiento['contactado_seguimiento'] . "</td>";
+            echo "<td>" . $seguimiento['informe_seguimiento'] . "</td>";
+            echo "<td>";
+            echo "<form action='archivarseguimiento.php' method='post'>";
             echo "<input type='hidden' name='idUsuario' value='" . $usuario['id'] . "'>";
             echo "<input type='hidden' name='idSeguimiento' value='" . $seguimiento['id_seguimiento'] . "'>";
-            echo "<input type='submit' class='botonContactado' value='Contactado'>";
+            echo "<input type='submit' class='botonSeguimiento' value='Archivar seguimiento'>";
             echo "</form>";
+            if (!$seguimiento["contactado_seguimiento"]) {
+                echo "<form action='seguimientocontactado.php' method='post'>";
+                echo "<input type='hidden' name='idUsuario' value='" . $usuario['id'] . "'>";
+                echo "<input type='hidden' name='idSeguimiento' value='" . $seguimiento['id_seguimiento'] . "'>";
+                echo "<input type='submit' class='botonContactado' value='Contactado'>";
+                echo "</form>";
+            }
+            echo "</td>";
+            echo "</tr>";
         }
-        echo "</td>";
-        echo "</tr>";
     }
     ?>
     </tbody>
 </table>
 
 <h1>Crear nuevo seguimiento</h1>
-<form action="registrarseguimiento.php" method="post">
+<form class="nuevoSeguimiento" action="registrarseguimiento.php" method="post">
     <label for="medioSeguimiento">Fecha</label>
     <input type="text" name="fechaSeguimiento" id="fechaSeguimiento">(formato: dd/mm/aaaa)</input>
     <br>
@@ -142,7 +149,7 @@ if (isset($_POST['idDetalleUsuario'])) {
         foreach ($empleados as $empleado) {
             echo "<option value='" . $empleado['id'] . "'>" . $empleado['nombre'] . " " . $empleado['apellidos'] . "</option>";
         }
-        
+
         $pdo = null;
         ?>
     </select>
