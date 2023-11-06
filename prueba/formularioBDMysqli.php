@@ -41,7 +41,7 @@ http://www.w3.org/TR/html4/loose.dtd">
     ?>
     <div id="encabezado">
         <h1>Ejercicio: Consultas preparadas con MySQLi</h1>
-        <form id="form_seleccion" action="." method="post">
+        <form id="form_seleccion" action="formularioBDMysqli.php" method="post">
             <span>Producto: </span>
             <select name="producto">
                 <?php

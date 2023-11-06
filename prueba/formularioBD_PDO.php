@@ -14,7 +14,7 @@ http://www.w3.org/TR/html4/loose.dtd">
 <body>
     <div id="encabezado">
         <h1>Ejercicio: Conjuntos de resultados en PDO</h1>
-        <form id="form_seleccion" action="." method="post">
+        <form id="form_seleccion" action="formularioBD_PDO.php" method="post">
             <span>Producto: </span>
             <select name="producto">
                 <?php

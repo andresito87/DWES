@@ -43,7 +43,7 @@ http://www.w3.org/TR/html4/loose.dtd">
     ?>
     <div id="encabezado">
         <h1>Ejercicio: Utilización de excepciones en PDO</h1>
-        <form id="form_seleccion" action="." method="post">
+        <form id="form_seleccion" action="excepciones.php" method="post">
             <span>Producto: </span>
             <select name="producto">
                 <?php
