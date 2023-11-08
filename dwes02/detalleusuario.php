@@ -9,12 +9,10 @@ if (isset($_POST['idDetalleUsuario'])) {
     $id = filter_input(INPUT_POST, 'idDetalleUsuario', FILTER_VALIDATE_INT);
 
     try {
-        $pdo = connect();
         $usuario = detallesUsuario($pdo, $id);
     } catch (PDOException $e) {
         $error = $e->getMessage();
-        echo "Error:. $error";
-        die();
+        die("Error:. $error");
     }
 }
 
@@ -98,7 +96,12 @@ if (isset($_POST['idDetalleUsuario'])) {
     </thead>
     <tbody>
     <?php
-    $seguimientos = seguimientoUsuario($pdo, $usuario['dni']);
+    try {
+        $seguimientos = seguimientoUsuario($pdo, $usuario['dni']);
+    } catch (PDOException $e) {
+        $error = $e->getMessage();
+        die("Error:. $error");
+    }
     if (empty($seguimientos)) {
         echo "<tr>";
         echo "<td class='sinRegistros' colspan='8'>No hay seguimientos para este usuario</td>";
@@ -146,8 +149,12 @@ if (isset($_POST['idDetalleUsuario'])) {
     <select name="empleadoSeguimiento" id="empleadoSeguimiento">
         <?php
         $empleados = listadoCoordinadoresOTrabSociales($pdo);
-        foreach ($empleados as $empleado) {
-            echo "<option value='" . $empleado['id'] . "'>" . $empleado['nombre'] . " " . $empleado['apellidos'] . "</option>";
+        if (empty($empleados)) {
+            die("<p>No hay empleados disponibles</p>");
+        } else {
+            foreach ($empleados as $empleado) {
+                echo "<option value='" . $empleado['id'] . "'>" . $empleado['nombre'] . " " . $empleado['apellidos'] . "</option>";
+            }
         }
 
         $pdo = null;

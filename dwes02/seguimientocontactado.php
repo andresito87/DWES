@@ -31,21 +31,18 @@ if (isset($_POST['idSeguimiento']) && !isset($_POST['informe'])) {
     if(strlen($informe)>=5) {
         $informe = strip_tags($informe, '<B><STRONG><U><EM>');
     }else{
-        echo "<p>El informe debe tener al menos 5 caracteres</p>";
-        die();
+        die("<p>El informe debe tener al menos 5 caracteres</p>");
     }
     $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
     if (!$idSeguimiento || $idSeguimiento < 1) {
-        echo "<p>Error en los datos suministrados</p>";
-        die();
+        die("<p>Error en los datos suministrados</p>");
     }
     
     try {
         $seguimiento = actualizarInforme($pdo, $idSeguimiento, $informe);
     } catch (PDOException $e) {
         $error = $e->getMessage();
-        echo "Error:. $error";
-        die();
+        die("Error:. $error");
     }
     echo "<p>Se ha actualizado el informe</p>";
 } else {

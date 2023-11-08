@@ -1,5 +1,5 @@
 <?php
-function usuarios(PDO $pdo, bool $activos, string $filtro): array|int
+function usuarios(PDO $pdo, bool $activos, string $filtro): array
 {
 
     $sql = "SELECT * FROM usuarios";

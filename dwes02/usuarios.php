@@ -7,8 +7,7 @@ try {
     $usuarios = usuarios($pdo, true, '');
 } catch (PDOException $e) {
     $error = $e->getMessage();
-    echo "Error:. $error";
-    die();
+    die("Error:. $error");
 }
 
 /*Los datos recibidos de este formulario deberás procesarlos con con la función filter_input 
