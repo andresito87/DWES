@@ -47,11 +47,11 @@ $pdo = null;
 <div class="filtroDatos">
     <h2>Filtrar datos</h2>
     <form action="usuarios.php" method="post">
-        <h3>Mostrar usuarios inactivos:
-            <input type="checkbox" name="checkbox">(si no se marca, se mostrarán los usuarios activos)
-        </h3>
+        <label for="checkbox">Mostrar usuarios inactivos:</label>
+        <input type="checkbox" id="checkbox" name="checkbox">(si no se marca, se mostrarán los usuarios activos)
+        <br>
         <label for="busqueda">Filtrar usuarios:</label>
-        <input type="text" name="filtro" id="filtro" placeholder="Nombre y Apellidos">
+        <input type="text" id="busqueda" name="filtro" placeholder="Nombre y Apellidos">
         <br>
         <input type="submit" value="¡Filtrar!" name="filtrar">
     </form>

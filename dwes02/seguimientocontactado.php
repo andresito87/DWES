@@ -15,16 +15,16 @@ require 'src/dbfuncs.php';
 
 $pdo = connect();
 if (isset($_POST['idSeguimiento']) && !isset($_POST['informe'])) {
-    $id = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
+    $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
 
     echo '<h1>Introduzca el informe de seguimiento:</h1>
            <form action="seguimientocontactado.php" method="post">
             <textarea name="informe" id="informe" cols="60" rows="10"></textarea>
-            <input type="hidden" name="idSeguimiento" value="' . $id . '">
+            <input type="hidden" name="idSeguimiento" value="' . $idSeguimiento . '">
             <br>
             <input type="submit" value="Confirmar contacto y añadir informe" name="enviarInforme">
           </form>';
-} else if (isset($_POST['informe']) && $_POST['informe'] !== '') {
+} else if (isset($_POST['idSeguimiento']) && isset($_POST['informe'])) {
     //TODO:Con tantas comprobaciones, el código se hace muy largo y difícil de leer
     $informe = filter_input(INPUT_POST, 'informe', FILTER_SANITIZE_STRING);
     $informe=trim($informe);
@@ -34,7 +34,7 @@ if (isset($_POST['idSeguimiento']) && !isset($_POST['informe'])) {
         die("<p>El informe debe tener al menos 5 caracteres</p>");
     }
     $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
-    if (!$idSeguimiento || $idSeguimiento < 1) {
+    if ($idSeguimiento < 1) {
         die("<p>Error en los datos suministrados</p>");
     }
     

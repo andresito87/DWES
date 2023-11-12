@@ -96,11 +96,13 @@ if (isset($_POST['idDetalleUsuario'])) {
     </thead>
     <tbody>
     <?php
-    try {
-        $seguimientos = seguimientoUsuario($pdo, $usuario['dni']);
-    } catch (PDOException $e) {
-        $error = $e->getMessage();
-        die("Error:. $error");
+    if (isset($usuario['dni'])) {
+        try {
+            $seguimientos = seguimientoUsuario($pdo, $usuario['dni']);
+        } catch (PDOException $e) {
+            $error = $e->getMessage();
+            die("Error:. $error");
+        }
     }
     if (empty($seguimientos)) {
         echo "<tr>";

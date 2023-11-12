@@ -86,7 +86,7 @@ function insertarSeguimientos(PDO $pdo, string $fechahora, string $medioSeguimie
 function actualizarInforme(PDO $pdo, int $idSeguimiento, string $informe): bool
 {
     $sql = <<<ENDSQL
-        UPDATE seguimiento SET contactado = 0, informe = :informe WHERE id = :id;
+        UPDATE seguimiento SET contactado = 1, informe = :informe WHERE id = :id;
     ENDSQL;
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':id', $idSeguimiento);

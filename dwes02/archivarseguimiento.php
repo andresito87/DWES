@@ -29,8 +29,7 @@ if ($_POST['idSeguimiento'] && isset($_POST['archivar']) && $_POST['archivar'] =
 
     <form action="archivarseguimiento.php" method="post">
         <label for="archivar">Marca la siguiente casilla para confirmar la operación de archivado</label>
-        <input type="checkbox" name="archivar" value="archivar">
-        </label>
+        <input type="checkbox" id="archivar" name="archivar" value="archivar">
         <input type="hidden" name="idSeguimiento" value="<?php echo $_POST['idSeguimiento'] ?>">
         <br>
         <input type="submit" value="ARCHIVAR">
