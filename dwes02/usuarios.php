@@ -15,19 +15,18 @@ de forma adecuada. Si son válidos y tienen un valor correcto, serán usados par
 la función usuarios retorne los usuarios señalados. Es importante que compruebes 
 y verifiques de forma adecuada si los datos recibidos vía $_POST son los esperados.*/
 if (isset($_POST['filtrar'])) {
-    $filtro = filter_input(INPUT_POST, 'filtro', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
-    $checkbox = filter_input(INPUT_POST, 'checkbox', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
-    if (isset($_POST['checkbox']) && $_POST['checkbox'] == 'on') {
+    $filtro = trim(filter_input(INPUT_POST, 'filtro', FILTER_SANITIZE_STRING));
+    $checkbox = filter_input(INPUT_POST, 'checkbox', FILTER_SANITIZE_STRING);
+    if (isset($_POST['checkbox']) && $_POST['checkbox'] == 'on' && !empty($filtro)) {
         $usuarios = usuarios($pdo, false, $filtro);
+    } else if (isset($_POST['checkbox'])) {
+        if ($_POST['checkbox'] == 'on') {
+            $usuarios = usuarios($pdo, false, '');
+        } else {
+            $usuarios = usuarios($pdo, true, '');
+        }
     } else {
         $usuarios = usuarios($pdo, true, $filtro);
-    }
-} else if (isset($_POST['checkbox'])) {
-    $checkbox = filter_input(INPUT_POST, 'checkbox', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
-    if ($_POST['checkbox'] == 'on') {
-        $usuarios = usuarios($pdo, false, '');
-    } else {
-        $usuarios = usuarios($pdo, true, '');
     }
 } else {
     $usuarios = usuarios($pdo, true, '');

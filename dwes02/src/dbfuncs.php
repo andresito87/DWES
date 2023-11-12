@@ -9,7 +9,7 @@ function usuarios(PDO $pdo, bool $activos, string $filtro): array
         $sql .= " WHERE activo = 0";
     }
     if ($filtro) {
-        $sql .= " AND nombre LIKE :filtro";
+        $sql .= " AND (nombre LIKE :filtro OR apellidos LIKE :filtro)";
     }
     $sql .= " ORDER BY ID";
     $stmt = $pdo->prepare($sql);

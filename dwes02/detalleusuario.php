@@ -140,10 +140,10 @@ if (isset($_POST['idDetalleUsuario'])) {
 <h1>Crear nuevo seguimiento</h1>
 <form class="nuevoSeguimiento" action="registrarseguimiento.php" method="post">
     <label for="medioSeguimiento">Fecha</label>
-    <input type="text" name="fechaSeguimiento" id="fechaSeguimiento">(formato: dd/mm/aaaa)</input>
+    <input type="text" name="fechaSeguimiento" id="fechaSeguimiento">(formato dd/mm/aaaa)</input>
     <br>
     <label for="medioSeguimiento">Hora</label>
-    <input type="text" name="horaSeguimiento" id="horaSeguimiento">(formato: hh:mm)</input>
+    <input type="text" name="horaSeguimiento" id="horaSeguimiento">(formato hh:mm)</input>
     <br>
     <label for="medioSeguimiento">Empleado</label>
     <select name="empleadoSeguimiento" id="empleadoSeguimiento">

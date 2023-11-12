@@ -7,7 +7,7 @@ function connect()
         $conn = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS, $opciones);
     } catch (PDOException $e) {
         $error = $e->getMessage();
-        die("Error:. $error");
+        die("Error de conexión a la Base de Datos: $error");
     }
     return $conn;
 }

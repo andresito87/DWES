@@ -5,26 +5,29 @@ require 'src/dbfuncs.php';
 $pdo = connect();
 $errores = [];
 if (isset($_POST['fechaSeguimiento'])) {
-    $fechaSeguimiento = filter_input(INPUT_POST, 'fechaSeguimiento', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $fechaSeguimiento = DateTime::createFromFormat('d/m/Y', $fechaSeguimiento);
-    $dia = $fechaSeguimiento->format('d');
-    $mes = $fechaSeguimiento->format('m');
-    $anio = $fechaSeguimiento->format('Y');
-    if (!$fechaSeguimiento
-        || !preg_match("/^\d{2}\/\d{2}\/\d{4}$/", $fechaSeguimiento->format('d/m/Y'))
-        || !checkdate($mes, $dia, $anio)) {
+    $fechaSeguimiento = filter_input(INPUT_POST, 'fechaSeguimiento', FILTER_SANITIZE_STRING);
+    if ($fechaSeguimiento = DateTime::createFromFormat('d/m/Y', $fechaSeguimiento)) {
+        $dia = $fechaSeguimiento->format('d');
+        $mes = $fechaSeguimiento->format('m');
+        $anio = $fechaSeguimiento->format('Y');
+        if (!preg_match("/^\d{2}\/\d{2}\/\d{4}$/", $fechaSeguimiento->format('d/m/Y'))
+            || !checkdate($mes, $dia, $anio)) {
+            $errores[] = "La fecha de seguimiento no es válida";
+        }
+    } else {
         $errores[] = "La fecha de seguimiento no es válida";
     }
+
 }
 if (isset($_POST['horaSeguimiento'])) {
-    $horaSeguimiento = filter_input(INPUT_POST, 'horaSeguimiento', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $horaSeguimiento = filter_input(INPUT_POST, 'horaSeguimiento', FILTER_SANITIZE_STRING);
     if (!preg_match("/^\d{2}:\d{2}$/", $horaSeguimiento)) {
         $errores[] = "La hora de seguimiento no es válida";
     }
 }
 
 if (isset($_POST['empleadoSeguimiento'])) {
-    $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_SANITIZE_STRING);
     $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_VALIDATE_INT);
     $empleados = listadoCoordinadoresOTrabSociales($pdo);
     if (!array_key_exists($empleadoSeguimiento, $empleados)) {
@@ -32,14 +35,14 @@ if (isset($_POST['empleadoSeguimiento'])) {
     }
 }
 if (isset($_POST['medioSeguimiento'])) {
-    $medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_STRING);
     $mediosValidos = ['TLF', 'EMAIL', 'PRESENCIAL', 'VIDEOCONF', 'OTRO'];
     if (!in_array($medioSeguimiento, $mediosValidos)) {
         $errores[] = "El medio de seguimiento no es válido";
     }
     if ($medioSeguimiento === 'OTRO') {
         if (isset($_POST['otroMedioSeguimiento']) && trim($_POST['otroMedioSeguimiento']) !== '') {
-            $otroMedioSeguimiento = filter_input(INPUT_POST, 'otroMedioSeguimiento', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $otroMedioSeguimiento = filter_input(INPUT_POST, 'otroMedioSeguimiento', FILTER_SANITIZE_STRING);
         } else {
             $errores[] = "El otro medio de seguimiento no es válido";
         }
@@ -55,10 +58,9 @@ if ($errores === []) {
     $insertado = insertarSeguimientos($pdo, $fechahora, $medioSeguimiento, $otroMedioSeguimiento ?? null, $contactado, $informe, $empleadosId, $usuariosId);
     if ($insertado) {
         echo "Se ha insertado el seguimiento correctamente";
-    } else {
-        $errores[] = "Error al insertar el seguimiento";
     }
-} else {
+}
+if ($errores !== []) {
     echo "<ul>";
     foreach ($errores as $error) {
         echo "<li>" . $error . "</li>";

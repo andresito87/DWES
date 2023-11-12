@@ -26,7 +26,7 @@ if (isset($_POST['idSeguimiento']) && !isset($_POST['informe'])) {
           </form>';
 } else if (isset($_POST['informe']) && $_POST['informe'] !== '') {
     //TODO:Con tantas comprobaciones, el código se hace muy largo y difícil de leer
-    $informe = filter_input(INPUT_POST, 'informe', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $informe = filter_input(INPUT_POST, 'informe', FILTER_SANITIZE_STRING);
     $informe=trim($informe);
     if(strlen($informe)>=5) {
         $informe = strip_tags($informe, '<B><STRONG><U><EM>');
