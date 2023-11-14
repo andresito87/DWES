@@ -18,12 +18,16 @@ if (isset($_POST['fechaSeguimiento'])) {
         $errores[] = "La fecha de seguimiento no es válida";
     }
 
+}else{
+    $errores[] = "La fecha de seguimiento no es válida";
 }
 if (isset($_POST['horaSeguimiento'])) {
     $horaSeguimiento = filter_input(INPUT_POST, 'horaSeguimiento', FILTER_SANITIZE_STRING);
     if (!preg_match("/^\d{2}:\d{2}$/", $horaSeguimiento)) {
         $errores[] = "La hora de seguimiento no es válida";
     }
+}else{
+    $errores[] = "La hora de seguimiento no es válida";
 }
 
 if (isset($_POST['empleadoSeguimiento'])) {
@@ -33,6 +37,8 @@ if (isset($_POST['empleadoSeguimiento'])) {
     if (!array_key_exists($empleadoSeguimiento, $empleados)) {
         $errores[] = "El empleado de seguimiento no es válido";
     }
+}else{
+    $errores[] = "El empleado de seguimiento no es válido";
 }
 if (isset($_POST['medioSeguimiento'])) {
     $medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_STRING);
@@ -47,6 +53,8 @@ if (isset($_POST['medioSeguimiento'])) {
             $errores[] = "El otro medio de seguimiento no es válido";
         }
     }
+}else{
+    $errores[] = "El medio de seguimiento no es válido";
 }
 
 if ($errores === []) {
