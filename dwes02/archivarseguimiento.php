@@ -14,28 +14,46 @@
 require 'src/conn.php';
 require 'src/dbfuncs.php';
 
-if ($_POST['idSeguimiento'] && isset($_POST['archivar']) && $_POST['archivar'] == 'archivar') {
+if (isset($_POST['idUsuario']) && isset($_POST['idSeguimiento'])) {
+    $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
     $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
 
-    $pdo = connect();
-    $archivar = archivarSeguimiento($pdo, $idSeguimiento);
-    if ($archivar) {
-        echo '<h2>Seguimiento archivado correctamente</h2>';
+    if (isset($_POST['archivar']) && $_POST['archivar'] == 'archivar') {
+
+        $pdo = connect();
+
+        try {
+            $archivar = archivarSeguimiento($pdo, $idSeguimiento);
+            if ($archivar) {
+                echo '<h2>Seguimiento archivado correctamente</h2>';
+            } else {
+                echo '<h2>Error al archivar el seguimiento</h2>';
+            }
+            echo "<form action='detalleusuario.php' method='post'>";
+            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+            echo "<input type='submit' value='Volver a detalles de usuario'>";
+            echo "</form>";
+        } catch (PDOException $e) {
+            $error = $e->getMessage();
+            die("Error:. $error");
+        }
+
     } else {
-        echo '<h2>Error al archivar el seguimiento</h2>';
+        ?>
+
+        <form action="archivarseguimiento.php" method="post">
+            <label for="archivar">Marca la siguiente casilla para confirmar la operación de archivado</label>
+            <input type="checkbox" id="archivar" name="archivar" value="archivar">
+            <input type="hidden" name="idUsuario" value="<?php echo $_POST['idUsuario'] ?>">
+            <input type="hidden" name="idSeguimiento" value="<?php echo $_POST['idSeguimiento'] ?>">
+            <br>
+            <input type="submit" value="ARCHIVAR">
+        </form>
+
+        <?php
     }
 } else {
-    ?>
-
-    <form action="archivarseguimiento.php" method="post">
-        <label for="archivar">Marca la siguiente casilla para confirmar la operación de archivado</label>
-        <input type="checkbox" id="archivar" name="archivar" value="archivar">
-        <input type="hidden" name="idSeguimiento" value="<?php echo $_POST['idSeguimiento'] ?>">
-        <br>
-        <input type="submit" value="ARCHIVAR">
-    </form>
-
-    <?php
+    echo "<p>Error en los datos suministrados</p>";
 }
 ?>
 

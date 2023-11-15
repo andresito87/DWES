@@ -87,7 +87,7 @@ $pdo = null;
                  echo "</tr>";
              }*/
 
-            if (is_array($usuarios) && !empty($usuarios))
+            if (isset($usuarios) && !empty($usuarios))
                 foreach ($usuarios as $usuario) {
                     echo "<tr>";
                     echo "<td>" . $usuario['id'] . "</td>";

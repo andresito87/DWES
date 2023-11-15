@@ -2,14 +2,15 @@
 require_once 'src/conn.php';
 require_once 'src/dbfuncs.php';
 
-
-$pdo = connect();
-
 if (isset($_POST['idDetalleUsuario'])) {
+    $pdo = connect();
     $id = filter_input(INPUT_POST, 'idDetalleUsuario', FILTER_VALIDATE_INT);
 
     try {
         $usuario = detallesUsuario($pdo, $id);
+        if (!$usuario) {
+            die("<p>No se ha encontrado el usuario</p>");
+        }
     } catch (PDOException $e) {
         $error = $e->getMessage();
         die("Error:. $error");
@@ -141,13 +142,13 @@ if (isset($_POST['idDetalleUsuario'])) {
 
 <h1>Crear nuevo seguimiento</h1>
 <form class="nuevoSeguimiento" action="registrarseguimiento.php" method="post">
-    <label for="medioSeguimiento">Fecha</label>
+    <label for="fechaSeguimiento">Fecha</label>
     <input type="text" name="fechaSeguimiento" id="fechaSeguimiento">(formato dd/mm/aaaa)</input>
     <br>
-    <label for="medioSeguimiento">Hora</label>
+    <label for="horaSeguimiento">Hora</label>
     <input type="text" name="horaSeguimiento" id="horaSeguimiento">(formato hh:mm)</input>
     <br>
-    <label for="medioSeguimiento">Empleado</label>
+    <label for="empleadoSeguimiento">Empleado</label>
     <select name="empleadoSeguimiento" id="empleadoSeguimiento">
         <?php
         $empleados = listadoCoordinadoresOTrabSociales($pdo);
@@ -172,7 +173,7 @@ if (isset($_POST['idDetalleUsuario'])) {
         <option value="OTRO">Otro</option>
     </select>
     <br>
-    <label for="medioSeguimiento">Otro medio de contacto</label>
+    <label for="otroMedioSeguimiento">Otro medio de contacto</label>
     <input type="text" name="otroMedioSeguimiento" id="otroMedioSeguimiento">
     <br>
     <input type="hidden" value="<?php echo $usuario['id'] ?>" name="idUsuario">

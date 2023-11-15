@@ -14,17 +14,17 @@ function usuarios(PDO $pdo, bool $activos, string $filtro): array
     $sql .= " ORDER BY ID";
     $stmt = $pdo->prepare($sql);
     if ($filtro) {
-        $stmt->bindValue(':filtro', "%$filtro%");
+        $stmt->bindValue(':filtro', "%$filtro%", PDO::PARAM_STR);
     }
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function detallesUsuario(PDO $pdo, int $id): array
+function detallesUsuario(PDO $pdo, int $id): array|bool
 {
     $sql = "SELECT * FROM usuarios WHERE id = :id";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':id', $id);
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -48,7 +48,7 @@ function seguimientoUsuario(PDO $pdo, string $DNI): array
             WHERE usuarios.dni=:dni 
     ENDSQL;
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':dni', $DNI);
+    $stmt->bindValue(':dni', $DNI, PDO::PARAM_STR);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -89,8 +89,8 @@ function actualizarInforme(PDO $pdo, int $idSeguimiento, string $informe): bool
         UPDATE seguimiento SET contactado = 1, informe = :informe WHERE id = :id;
     ENDSQL;
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':id', $idSeguimiento);
-    $stmt->bindValue(':informe', $informe);
+    $stmt->bindValue(':id', $idSeguimiento, PDO::PARAM_INT);
+    $stmt->bindValue(':informe', $informe, PDO::PARAM_STR);
     $stmt->execute();
     return $stmt->rowCount() === 1;
 }
@@ -102,7 +102,7 @@ function archivarSeguimiento(PDO $pdo, int $idSeguimiento): bool
         SELECT id, fechahora,medio, otro,contactado,informe,empleados_id,usuarios_id FROM seguimiento WHERE id=:id;
     ENDSQL;
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':id', $idSeguimiento);
+    $stmt->bindValue(':id', $idSeguimiento, PDO::PARAM_INT);
     $stmt->execute();
     $seguimiento = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$seguimiento) {
@@ -131,7 +131,7 @@ function archivarSeguimiento(PDO $pdo, int $idSeguimiento): bool
         DELETE FROM seguimiento WHERE id=:id;
     ENDSQL;
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':id', $idSeguimiento);
+    $stmt->bindValue(':id', $idSeguimiento, PDO::PARAM_INT);
     $stmt->execute();
     if ($stmt->rowCount() !== 1) {
         $pdo->rollBack();
