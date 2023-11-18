@@ -14,10 +14,9 @@
 require 'src/conn.php';
 require 'src/dbfuncs.php';
 
-if (isset($_POST['idUsuario']) && isset($_POST['idSeguimiento'])) {
-    $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
-    $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
-
+$idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
+$idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
+if (is_int($idUsuario) && is_int($idSeguimiento)) {
     if (isset($_POST['archivar']) && $_POST['archivar'] == 'archivar') {
         $pdo = connect();
         $archivar = archivarSeguimiento($pdo, $idSeguimiento);

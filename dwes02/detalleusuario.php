@@ -2,10 +2,9 @@
 require_once 'src/conn.php';
 require_once 'src/dbfuncs.php';
 
-if (isset($_POST['idDetalleUsuario'])) {
+$id = filter_input(INPUT_POST, 'idDetalleUsuario', FILTER_VALIDATE_INT);
+if (is_int($id)) {
     $pdo = connect();
-    $id = filter_input(INPUT_POST, 'idDetalleUsuario', FILTER_VALIDATE_INT);
-
     try {
         $usuario = detallesUsuario($pdo, $id);
         if (!$usuario) {
@@ -81,7 +80,6 @@ if (isset($_POST['idDetalleUsuario'])) {
 </table>
 
 <h1>Tabla de Seguimientos</h1>
-
 <table class="seguimientos">
     <thead>
     <tr>
@@ -166,7 +164,6 @@ if (isset($_POST['idDetalleUsuario'])) {
                 echo "<option value='" . $empleado['id'] . "'>" . $empleado['nombre'] . " " . $empleado['apellidos'] . "</option>";
             }
         }
-
         $pdo = null;
         ?>
     </select>
@@ -186,5 +183,6 @@ if (isset($_POST['idDetalleUsuario'])) {
     <input type="hidden" value="<?php echo $usuario['id'] ?>" name="idUsuario">
     <input type="submit" value="Registrar seguimiento">
 </form>
+<button class="volverAtras" onclick="window.location.href='usuarios.php'">Volver a Listado de Usuarios</button>
 </body>
 </html>

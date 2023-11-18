@@ -54,7 +54,7 @@ body {
     text-align: center;
 }
 
-.botonSeguimiento,.botonContactado {
+.botonSeguimiento, .botonContactado {
     background-color: #007bff;
     color: #fff;
     padding: 5px 10px;
@@ -93,7 +93,23 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    margin: 2px;
     font-weight: bold;
+    display: block;
+    margin: 0 auto;
+
+}
+
+.volverAtras {
+    background-color: darkgoldenrod;
+    color: #fff;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    align-items:self-end;
 }
 

@@ -14,10 +14,10 @@ try {
 if (isset($_POST['filtrar'])) {
     $filtro = trim(filter_input(INPUT_POST, 'filtro', FILTER_SANITIZE_STRING));
     $checkbox = filter_input(INPUT_POST, 'checkbox', FILTER_SANITIZE_STRING);
-    if (isset($_POST['checkbox']) && $_POST['checkbox'] == 'on' && !empty($filtro)) {
+    if (is_string($checkbox) && $checkbox == 'on' && !empty($filtro)) {
         $usuarios = usuarios($pdo, false, $filtro);
-    } else if (isset($_POST['checkbox'])) {
-        if ($_POST['checkbox'] == 'on') {
+    } else if (is_string($checkbox) && empty($filtro)) {
+        if ($checkbox == 'on') {
             $usuarios = usuarios($pdo, false, '');
         } else {
             $usuarios = usuarios($pdo, true, '');

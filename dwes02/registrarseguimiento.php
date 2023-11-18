@@ -15,14 +15,14 @@ require 'src/conn.php';
 require 'src/dbfuncs.php';
 
 $errores = [];
-if (isset($_POST['idUsuario'])) {
-    $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
-} else {
+
+$idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
+if ($idUsuario === false || !is_int($idUsuario) || trim($idUsuario) === '') {
     $errores[] = "Datos de usuario no válidos";
 }
-if (isset($_POST['fechaSeguimiento'])) {
-    $pdo = connect();
-    $fechaSeguimiento = filter_input(INPUT_POST, 'fechaSeguimiento', FILTER_SANITIZE_STRING);
+
+$fechaSeguimiento = filter_input(INPUT_POST, 'fechaSeguimiento', FILTER_SANITIZE_STRING);
+if ($fechaSeguimiento !== false && $fechaSeguimiento !== null && trim($fechaSeguimiento) !== '') {
     if ($fechaSeguimiento = DateTime::createFromFormat('d/m/Y', $fechaSeguimiento)) {
         $dia = $fechaSeguimiento->format('d');
         $mes = $fechaSeguimiento->format('m');
@@ -34,12 +34,12 @@ if (isset($_POST['fechaSeguimiento'])) {
     } else {
         $errores[] = "La fecha de seguimiento no es válida";
     }
-
 } else {
     $errores[] = "La fecha de seguimiento no es válida";
 }
-if (isset($_POST['horaSeguimiento'])) {
-    $horaSeguimiento = filter_input(INPUT_POST, 'horaSeguimiento', FILTER_SANITIZE_STRING);
+
+$horaSeguimiento = filter_input(INPUT_POST, 'horaSeguimiento', FILTER_SANITIZE_STRING);
+if ($horaSeguimiento !== false && $horaSeguimiento !== null && trim($horaSeguimiento) !== '') {
     if (!preg_match("/^\d{2}:\d{2}$/", $horaSeguimiento)) {
         $errores[] = "La hora de seguimiento no es válida";
     }
@@ -47,26 +47,15 @@ if (isset($_POST['horaSeguimiento'])) {
     $errores[] = "La hora de seguimiento no es válida";
 }
 
-if (isset($_POST['empleadoSeguimiento'])) {
-    $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_SANITIZE_STRING);
-    $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_VALIDATE_INT);
-    $empleados = listadoCoordinadoresOTrabSociales($pdo);
-    if (is_array($empleados) && !array_key_exists($empleadoSeguimiento, $empleados)) {
-        $errores[] = "El empleado para ese seguimiento no es válido";
-    }
-} else {
-    $errores[] = "El empleado para ese seguimiento no es válido";
-}
-if (isset($_POST['medioSeguimiento'])) {
-    $medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_STRING);
+$medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_STRING);
+if ($medioSeguimiento !== false && $medioSeguimiento !== null && trim($medioSeguimiento) !== '') {
     $mediosValidos = ['TLF', 'EMAIL', 'PRESENCIAL', 'VIDEOCONF', 'OTRO'];
     if (!in_array($medioSeguimiento, $mediosValidos)) {
         $errores[] = "El medio de seguimiento no es válido";
     }
     if ($medioSeguimiento === 'OTRO') {
-        if (isset($_POST['otroMedioSeguimiento']) && trim($_POST['otroMedioSeguimiento']) !== '') {
-            $otroMedioSeguimiento = filter_input(INPUT_POST, 'otroMedioSeguimiento', FILTER_SANITIZE_STRING);
-        } else {
+        $otroMedioSeguimiento = filter_input(INPUT_POST, 'otroMedioSeguimiento', FILTER_SANITIZE_STRING);
+        if ($otroMedioSeguimiento !== false || $otroMedioSeguimiento !== null || trim($otroMedioSeguimiento) !== '') {
             $errores[] = "El otro medio de seguimiento no es válido";
         }
     }
@@ -74,7 +63,17 @@ if (isset($_POST['medioSeguimiento'])) {
     $errores[] = "El medio de seguimiento no es válido";
 }
 
-if ($errores === []) {
+$pdo = null;
+$empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_VALIDATE_INT);
+if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($empleadoSeguimiento) !== '') {
+    $pdo = connect();
+    $empleados = listadoCoordinadoresOTrabSociales($pdo);
+    if (is_array($empleados) && (empty($empleados) || !array_key_exists($empleadoSeguimiento, $empleados))) {
+        $errores[] = "El empleado para ese seguimiento no es válido";
+    }
+}
+
+if (empty($errores)) {
     $fechahora = $fechaSeguimiento->format('Y-m-d') . " " . $horaSeguimiento;
     $contactado = false;
     $informe = null;
@@ -89,6 +88,7 @@ if ($errores === []) {
         echo "<p>Error al crear el seguimiento</p>";
     }
 }
+$pdo = null;
 if ($errores !== []) {
     echo "<ul>";
     foreach ($errores as $error) {

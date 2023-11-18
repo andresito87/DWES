@@ -13,10 +13,10 @@
 require 'src/conn.php';
 require 'src/dbfuncs.php';
 
-if (isset($_POST['idSeguimiento']) && isset($_POST['idUsuario'])) {
+$idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
+$idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
+if (is_int($idUsuario) && is_int($idSeguimiento)) {
     $pdo = connect();
-    $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
-    $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
     if (!isset($_POST['informe'])) {
         echo '<h1>Introduzca el informe de seguimiento:</h1>
            <form action="seguimientocontactado.php" method="post">
@@ -27,11 +27,11 @@ if (isset($_POST['idSeguimiento']) && isset($_POST['idUsuario'])) {
             <input type="submit" value="Confirmar contacto y añadir informe" name="enviarInforme">
           </form>';
     } else {
-        //TODO:Con tantas comprobaciones, el código se hace muy largo y difícil de leer
         $informe = filter_input(INPUT_POST, 'informe', FILTER_SANITIZE_STRING);
-        $informe = trim($informe);
         if (strlen($informe) >= 5) {
-            $informe = strip_tags($informe, '<B><STRONG><U><EM>');
+            //TODO: no funciona strip_tags
+          $informe = strip_tags($informe, '<B></B><STRONG></STRONG><U></U><EM></EM><b></b><strong></strong><u></u><em></em>');
+          echo "El informe introducido es: <br> $informe <br>";
         } else {
             echo "<form action='seguimientocontactado.php' method='post'>";
             echo "<input type='hidden' name='idUsuario' value='$idUsuario'>";
@@ -40,7 +40,7 @@ if (isset($_POST['idSeguimiento']) && isset($_POST['idUsuario'])) {
             echo "</form>";
             die("<p>El informe debe tener al menos 5 caracteres</p>");
         }
-        
+
         if ($idSeguimiento < 1 || $idUsuario < 1) {
             die("<p>Error en los datos suministrados</p>");
         }
