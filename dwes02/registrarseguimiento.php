@@ -10,7 +10,6 @@
 </head>
 <body>
 
-
 <?php
 require 'src/conn.php';
 require 'src/dbfuncs.php';
