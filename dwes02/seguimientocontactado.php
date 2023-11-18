@@ -40,26 +40,25 @@ if (isset($_POST['idSeguimiento']) && isset($_POST['idUsuario'])) {
             echo "</form>";
             die("<p>El informe debe tener al menos 5 caracteres</p>");
         }
-        $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
+        
         if ($idSeguimiento < 1 || $idUsuario < 1) {
             die("<p>Error en los datos suministrados</p>");
         }
 
-        try {
-            $seguimiento = actualizarInforme($pdo, $idSeguimiento, $informe);
-            if ($seguimiento) {
-                echo "<p>Se ha actualizado el informe correctamente</p>";
-            } else {
-                echo "<p>No se ha podido actualizar el informe</p>";
-            }
-            echo "<form action='detalleusuario.php' method='post'>";
-            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
-            echo "<input type='submit' value='Volver a detalles de usuario'>";
-            echo "</form>";
-        } catch (PDOException $e) {
-            $error = $e->getMessage();
-            die("Error:. $error");
+        $seguimiento = actualizarInforme($pdo, $idSeguimiento, $informe);
+        if ($seguimiento === 1) {
+            echo "<h2>Seguimiento actualizado correctamente</h2>";
+        } else if ($seguimiento === 0) {
+            echo "<h2>Los datos suministrados no corresponden con ninguno de nuestros registros</h2>";
+        } else {
+            echo "<h2>Error al actualizar el seguimiento</h2>";
         }
+
+        echo "<form action='detalleusuario.php' method='post'>";
+        echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+        echo "<input type='submit' value='Volver a detalles de usuario'>";
+        echo "</form>";
+
     }
 } else {
     echo "<p>Error en los datos suministrados</p>";

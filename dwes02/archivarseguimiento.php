@@ -19,25 +19,19 @@ if (isset($_POST['idUsuario']) && isset($_POST['idSeguimiento'])) {
     $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
 
     if (isset($_POST['archivar']) && $_POST['archivar'] == 'archivar') {
-
         $pdo = connect();
-
-        try {
-            $archivar = archivarSeguimiento($pdo, $idSeguimiento);
-            if ($archivar) {
-                echo '<h2>Seguimiento archivado correctamente</h2>';
-            } else {
-                echo '<h2>Error al archivar el seguimiento</h2>';
-            }
-            echo "<form action='detalleusuario.php' method='post'>";
-            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
-            echo "<input type='submit' value='Volver a detalles de usuario'>";
-            echo "</form>";
-        } catch (PDOException $e) {
-            $error = $e->getMessage();
-            die("Error:. $error");
+        $archivar = archivarSeguimiento($pdo, $idSeguimiento);
+        if ($archivar === -1) {
+            echo '<h2>Los datos suministrados no corresponden con ninguno de nuestros registros</h2>';
+        } else if ($archivar) {
+            echo '<h2>Seguimiento archivado correctamente</h2>';
+        } else {
+            echo '<h2>Error al archivar el seguimiento</h2>';
         }
-
+        echo "<form action='detalleusuario.php' method='post'>";
+        echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+        echo "<input type='submit' value='Volver a detalles de usuario'>";
+        echo "</form>";
     } else {
         ?>
 

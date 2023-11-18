@@ -52,11 +52,11 @@ if (isset($_POST['empleadoSeguimiento'])) {
     $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_SANITIZE_STRING);
     $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_VALIDATE_INT);
     $empleados = listadoCoordinadoresOTrabSociales($pdo);
-    if (!array_key_exists($empleadoSeguimiento, $empleados)) {
-        $errores[] = "El empleado de seguimiento no es válido";
+    if (is_array($empleados) && !array_key_exists($empleadoSeguimiento, $empleados)) {
+        $errores[] = "El empleado para ese seguimiento no es válido";
     }
 } else {
-    $errores[] = "El empleado de seguimiento no es válido";
+    $errores[] = "El empleado para ese seguimiento no es válido";
 }
 if (isset($_POST['medioSeguimiento'])) {
     $medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_STRING);
@@ -82,8 +82,12 @@ if ($errores === []) {
     $empleadosId = $empleadoSeguimiento;
     $usuariosId = $_POST['idUsuario'];
     $insertado = insertarSeguimientos($pdo, $fechahora, $medioSeguimiento, $otroMedioSeguimiento ?? null, $contactado, $informe, $empleadosId, $usuariosId);
-    if ($insertado) {
-        echo "Se ha insertado el seguimiento correctamente";
+    if ($insertado === 1) {
+        echo "<p>Se ha creado el seguimiento correctamente</p>";
+    } else if ($insertado === 0) {
+        echo "<p>Los datos suministrados no corresponden con ninguno de nuestros registros</p>";
+    } else {
+        echo "<p>Error al crear el seguimiento</p>";
     }
 }
 if ($errores !== []) {

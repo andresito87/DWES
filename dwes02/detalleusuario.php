@@ -97,6 +97,7 @@ if (isset($_POST['idDetalleUsuario'])) {
     </thead>
     <tbody>
     <?php
+    $seguimientos = [];
     if (isset($usuario['dni'])) {
         try {
             $seguimientos = seguimientoUsuario($pdo, $usuario['dni']);
@@ -105,9 +106,13 @@ if (isset($_POST['idDetalleUsuario'])) {
             die("Error:. $error");
         }
     }
-    if (empty($seguimientos)) {
+    if (is_array($seguimientos) && empty($seguimientos)) {
         echo "<tr>";
         echo "<td class='sinRegistros' colspan='8'>No hay seguimientos para este usuario</td>";
+        echo "</tr>";
+    } else if (!is_array($seguimientos) && !$seguimientos) {
+        echo "<tr>";
+        echo "<td class='sinRegistros' colspan='8'>Error al obtener los seguimientos</td>";
         echo "</tr>";
     } else {
         foreach (seguimientoUsuario($pdo, $usuario['dni']) as $seguimiento) {
@@ -152,8 +157,10 @@ if (isset($_POST['idDetalleUsuario'])) {
     <select name="empleadoSeguimiento" id="empleadoSeguimiento">
         <?php
         $empleados = listadoCoordinadoresOTrabSociales($pdo);
-        if (empty($empleados)) {
+        if (is_array($empleados) && empty($empleados)) {
             die("<p>No hay empleados disponibles</p>");
+        } else if (!is_array($empleados) && !$empleados) {
+            die("<p>Error al obtener el listado de empleados</p>");
         } else {
             foreach ($empleados as $empleado) {
                 echo "<option value='" . $empleado['id'] . "'>" . $empleado['nombre'] . " " . $empleado['apellidos'] . "</option>";
