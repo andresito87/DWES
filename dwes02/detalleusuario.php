@@ -118,9 +118,9 @@ if (is_int($id)) {
             echo "<td>" . $seguimiento['nombre_empleado'] . "</td>";
             echo "<td>" . $seguimiento['apellidos_empleado'] . "</td>";
             echo "<td>" . $seguimiento['id_seguimiento'] . "</td>";
-            echo "<td>" . $seguimiento['fechahora_seguimiento'] . "</td>";
-            echo "<td>" . $seguimiento['medio_seguimiento'] . "</td>";
-            echo "<td>" . $seguimiento['contactado_seguimiento'] . "</td>";
+            echo "<td>" . date('d/m/Y', strtotime($seguimiento['fechahora_seguimiento'])) . "<br>" . date('H:i', strtotime($seguimiento['fechahora_seguimiento'])) . "</td>";
+            echo "<td>" . $seguimiento['medio_seguimiento'] . ($seguimiento['otro_seguimiento'] === null ? "" : "(" . $seguimiento['otro_seguimiento'] . ")") . "</td>";
+            echo "<td>" . ($seguimiento['contactado_seguimiento'] === 1 ? "Sí" : "No") . "</td>";
             echo "<td>" . $seguimiento['informe_seguimiento'] . "</td>";
             echo "<td>";
             echo "<form action='archivarseguimiento.php' method='post'>";

@@ -55,7 +55,7 @@ if ($medioSeguimiento !== false && $medioSeguimiento !== null && trim($medioSegu
     }
     if ($medioSeguimiento === 'OTRO') {
         $otroMedioSeguimiento = filter_input(INPUT_POST, 'otroMedioSeguimiento', FILTER_SANITIZE_STRING);
-        if ($otroMedioSeguimiento !== false || $otroMedioSeguimiento !== null || trim($otroMedioSeguimiento) !== '') {
+        if (!is_string($otroMedioSeguimiento) || trim($otroMedioSeguimiento) === '') {
             $errores[] = "El otro medio de seguimiento no es válido";
         }
     }

@@ -92,7 +92,6 @@ function seguimientoUsuario(PDO $pdo, string $DNI): array|bool
     $stmt->bindValue(':dni', $DNI, PDO::PARAM_STR);
     $resultado = -1;
     try {
-
         if ($stmt->execute()) {
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }

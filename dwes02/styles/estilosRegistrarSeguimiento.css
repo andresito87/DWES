@@ -8,7 +8,7 @@ body{
 }
 
 input[type="submit"]{
-    background-color: #1e90ff;
+    background-color: darkgoldenrod;
     color: white;
     border: none;
     border-radius: 5px;
