@@ -9,7 +9,7 @@
  * @author andres
  * @date 2023/11/18
  */
-function usuarios(PDO $pdo, bool $activos, string $filtro): array|int
+function usuarios(PDO $pdo, bool $activos, string $filtro): array|bool
 {
     $sql = "SELECT * FROM usuarios";
     if ($activos) {
@@ -18,14 +18,14 @@ function usuarios(PDO $pdo, bool $activos, string $filtro): array|int
         $sql .= " WHERE activo = 0";
     }
     if ($filtro) {
-        $sql .= " AND (nombre LIKE :filtro OR apellidos LIKE :filtro)";
+        $sql .= " AND CONCAT(nombre, ' ', apellidos) LIKE :filtro";
     }
     $sql .= " ORDER BY ID";
     $stmt = $pdo->prepare($sql);
     if ($filtro) {
         $stmt->bindValue(':filtro', "%$filtro%", PDO::PARAM_STR);
     }
-    $resultado = -1;
+    $resultado = false;
     try {
         if ($stmt->execute()) {
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -50,7 +50,7 @@ function detallesUsuario(PDO $pdo, int $id): array|bool
     $sql = "SELECT * FROM usuarios WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-    $resultado = -1;
+    $resultado = false;
     try {
         if ($stmt->execute()) {
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -90,7 +90,7 @@ function seguimientoUsuario(PDO $pdo, string $DNI): array|bool
     ENDSQL;
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':dni', $DNI, PDO::PARAM_STR);
-    $resultado = -1;
+    $resultado = false;
     try {
         if ($stmt->execute()) {
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -117,7 +117,6 @@ function listadoCoordinadoresOTrabSociales(PDO $pdo): array|bool
             find_in_set('trasoc',roles)>0
     ENDSQL;
     $stmt = $pdo->prepare($sql);
-    $resultado = -1;
     try {
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

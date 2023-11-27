@@ -71,14 +71,7 @@ body {
     font-weight: bold;
 }
 
-.nuevoSeguimiento input {
-    margin: 5px;
-    padding: 5px;
-    border: 1px solid grey;
-    border-radius: 5px;
-}
-
-.nuevoSeguimiento select {
+.nuevoSeguimiento input, .nuevoSeguimiento select {
     margin: 5px;
     padding: 5px;
     border: 1px solid grey;

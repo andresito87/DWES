@@ -15,7 +15,7 @@ require 'src/dbfuncs.php';
 
 $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
 $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
-if (is_int($idUsuario) && is_int($idSeguimiento)) {
+if (is_int($idUsuario) && is_int($idSeguimiento) && $idUsuario > 0 && $idSeguimiento > 0) {
     $pdo = connect();
     if (!isset($_POST['informe'])) {
         echo '<h1>Introduzca el informe de seguimiento:</h1>
@@ -27,11 +27,16 @@ if (is_int($idUsuario) && is_int($idSeguimiento)) {
             <input type="submit" value="Confirmar contacto y añadir informe" name="enviarInforme">
           </form>';
     } else {
-        $informe = filter_input(INPUT_POST, 'informe', FILTER_SANITIZE_STRING);
+        //Filtro con el filtro FILTER_SANITIZE_SPECIAL_CHARS para evitar que se introduzcan caracteres especiales pero
+        //permitiendo que se introduzcan etiquetas html
+        $informe = filter_input(INPUT_POST, 'informe', FILTER_SANITIZE_SPECIAL_CHARS);
         if (strlen($informe) >= 5) {
-            //TODO: no funciona strip_tags
-          $informe = strip_tags($informe, '<B></B><STRONG></STRONG><U></U><EM></EM><b></b><strong></strong><u></u><em></em>');
-          echo "El informe introducido es: <br> $informe <br>";
+            //Decodifico las etiquetas html para que la función strip_tags las pueda eliminar si es necesario
+            $informe = htmlspecialchars_decode($informe);
+            //Elimino todas las etiquetas html excepto <b><strong><u><em>
+            $informe = strip_tags($informe, '<p><i><b><strong><u><em>');
+            //Decodifico las etiquetas html para que se muestre su valor literal
+            //$informe = htmlspecialchars_decode($informe);
         } else {
             echo "<form action='seguimientocontactado.php' method='post'>";
             echo "<input type='hidden' name='idUsuario' value='$idUsuario'>";
@@ -41,13 +46,9 @@ if (is_int($idUsuario) && is_int($idSeguimiento)) {
             die("<p>El informe debe tener al menos 5 caracteres</p>");
         }
 
-        if ($idSeguimiento < 1 || $idUsuario < 1) {
-            die("<p>Error en los datos suministrados</p>");
-        }
-
         $seguimiento = actualizarInforme($pdo, $idSeguimiento, $informe);
         if ($seguimiento === 1) {
-            echo "<h2>Seguimiento actualizado correctamente</h2>";
+            echo "<h2>Informe de seguimiento actualizado correctamente</h2>";
         } else if ($seguimiento === 0) {
             echo "<h2>Los datos suministrados no corresponden con ninguno de nuestros registros</h2>";
         } else {
@@ -62,8 +63,10 @@ if (is_int($idUsuario) && is_int($idSeguimiento)) {
     }
 } else {
     echo "<p>Error en los datos suministrados</p>";
+    echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
 }
 ?>
+
 </body>
 </html>
 

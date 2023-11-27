@@ -1,15 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="styles/estilosRegistrarSeguimiento.css">
-    <title>Registar Nuevo Seguimiento</title>
-</head>
-<body>
-
 <?php
 require 'src/conn.php';
 require 'src/dbfuncs.php';
@@ -17,7 +5,7 @@ require 'src/dbfuncs.php';
 $errores = [];
 
 $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
-if ($idUsuario === false || !is_int($idUsuario) || trim($idUsuario) === '') {
+if ($idUsuario === false || !is_int($idUsuario) || trim($idUsuario) === '' || $idUsuario <= 0) {
     $errores[] = "Datos de usuario no válidos";
 }
 
@@ -71,35 +59,63 @@ if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($emp
     if (is_array($empleados) && (empty($empleados) || !array_key_exists($empleadoSeguimiento, $empleados))) {
         $errores[] = "El empleado para ese seguimiento no es válido";
     }
+} else {
+    $errores[] = "Error en los datos del empleado";
 }
-
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="styles/estilosRegistrarSeguimiento.css">
+    <title>Registar Nuevo Seguimiento</title>
+</head>
+<body>
+<?php
+$insertado = -1;
 if (empty($errores)) {
     $fechahora = $fechaSeguimiento->format('Y-m-d') . " " . $horaSeguimiento;
     $contactado = false;
     $informe = null;
-    $empleadosId = $empleadoSeguimiento;
     $usuariosId = $_POST['idUsuario'];
-    $insertado = insertarSeguimientos($pdo, $fechahora, $medioSeguimiento, $otroMedioSeguimiento ?? null, $contactado, $informe, $empleadosId, $usuariosId);
+    $insertado = insertarSeguimientos($pdo, $fechahora, $medioSeguimiento, $otroMedioSeguimiento ?? null, $contactado, $informe, $empleadoSeguimiento, $usuariosId);
     if ($insertado === 1) {
         echo "<p>Se ha creado el seguimiento correctamente</p>";
-    } else if ($insertado === 0) {
+        echo "<form action='detalleusuario.php' method='post'>";
+        echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+        echo "<input type='submit' value='Volver a detalles de usuario'>";
+        echo "</form>";
+    } else if (!$insertado) {
         echo "<p>Los datos suministrados no corresponden con ninguno de nuestros registros</p>";
+        echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
     } else {
         echo "<p>Error al crear el seguimiento</p>";
     }
-}
-$pdo = null;
-if ($errores !== []) {
+} else {
+    $mostrarBotonVolverAListadoUsuarios = false;
     echo "<ul>";
     foreach ($errores as $error) {
         echo "<li>" . $error . "</li>";
+        if ($error === "Error en los datos del empleado"
+            || $error === "El empleado para ese seguimiento no es válido"
+            || $error === "Datos de usuario no válidos") {
+            $mostrarBotonVolverAListadoUsuarios = true;
+        }
     }
     echo "</ul>";
+    if (!$mostrarBotonVolverAListadoUsuarios) {
+        echo "<form action='detalleusuario.php' method='post'>";
+        echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+        echo "<input type='submit' value='Volver a detalles de usuario'>";
+        echo "</form>";
+    } else {
+        echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
+    }
 }
-echo "<form action='detalleusuario.php' method='post'>";
-echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
-echo "<input type='submit' value='Volver a detalles de usuario'>";
-echo "</form>";
+$pdo = null;
 ?>
 
 </body>

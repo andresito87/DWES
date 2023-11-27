@@ -8,7 +8,7 @@ body{
 }
 
 input[type="submit"]{
-    background-color: darkgoldenrod;
+    background-color: #1e90ff;
     color: white;
     border: none;
     border-radius: 5px;
@@ -16,4 +16,19 @@ input[type="submit"]{
     margin-top: 10px;
     font-weight: bold;
     font-size: 14px;
+    cursor: pointer;
+}
+
+.volverAtras {
+    background-color: darkgoldenrod;
+    color: #fff;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    align-items:self-end;
+    cursor: pointer;
 }
