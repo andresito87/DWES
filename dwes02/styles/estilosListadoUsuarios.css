@@ -69,6 +69,10 @@ thead th{
     font-size: 12px;
 }
 
+table td form input{
+   margin-top: 15px;
+}
+
 table td span{
     font-weight: bold;
 }

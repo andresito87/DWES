@@ -84,6 +84,7 @@ $pdo = null;
          echo "</tr>";
      }*/
 
+    // Con foreach: Mostar los usuarios en una tabla
     if (!empty($usuarios))
         foreach ($usuarios as $usuario) {
             echo "<tr>";

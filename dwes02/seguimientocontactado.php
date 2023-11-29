@@ -33,7 +33,7 @@ if (is_int($idUsuario) && is_int($idSeguimiento) && $idUsuario > 0 && $idSeguimi
         if (strlen($informe) >= 5) {
             //Decodifico las etiquetas html para que la función strip_tags las pueda eliminar si es necesario
             $informe = htmlspecialchars_decode($informe);
-            //Elimino todas las etiquetas html excepto <b><strong><u><em>
+            //Elimino todas las etiquetas html excepto <p><i><b><strong><u><em>
             $informe = strip_tags($informe, '<p><i><b><strong><u><em>');
             //Decodifico las etiquetas html para que se muestre su valor literal
             //$informe = htmlspecialchars_decode($informe);
