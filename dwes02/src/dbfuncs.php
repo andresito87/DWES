@@ -2,9 +2,9 @@
 /**
  * @description Funcion para obtener la lista de usuarios aplicando filtros
  * @file dbfuncs.php
- * @param PDO $pdo
- * @param bool $activos
- * @param string $filtro
+ * @param PDO $pdo Conexión a la base de datos
+ * @param bool $activos true para obtener solo los usuarios activos, false para obtener solo los usuarios inactivos
+ * @param string $filtro cadena de texto para filtrar por nombre y apellidos
  * @return array|int array con los usuarios o false si hay error
  * @author andres
  * @date 2023/11/18
@@ -39,8 +39,8 @@ function usuarios(PDO $pdo, bool $activos, string $filtro): array|bool
 /**
  * @description Funcion para obtener los detalles de un usuario
  * @file dbfuncs.php
- * @param PDO $pdo
- * @param int $id
+ * @param PDO $pdo Conexión a la base de datos
+ * @param int $id id del usuario
  * @return array|bool array con los detalles del usuario o false si hay error
  * @author andres
  * @date 2023/11/18
@@ -64,8 +64,8 @@ function detallesUsuario(PDO $pdo, int $id): array|bool
 /**
  * @description Funcion para obtener los seguimientos de un usuario
  * @file dbfuncs.php
- * @param PDO $pdo
- * @param string $DNI
+ * @param PDO $pdo Conexión a la base de datos
+ * @param string $DNI DNI del usuario
  * @return array|bool array con los seguimientos del usuario o false si hay error
  * @author andres
  * @date 2023/11/18
@@ -104,7 +104,7 @@ function seguimientoUsuario(PDO $pdo, string $DNI): array|bool
 /**
  * @description Funcion para obtener los empleados que son coordinadores o trabajadores sociales
  * @file dbfuncs.php
- * @param PDO $pdo
+ * @param PDO $pdo Conexión a la base de datos
  * @return array|bool array con los empleados o false si hay error
  * @author andres
  * @date 2023/11/18
@@ -130,14 +130,14 @@ function listadoCoordinadoresOTrabSociales(PDO $pdo): array|bool
 /**
  * @description Funcion para insertar un seguimiento en la base de datos
  * @file dbfuncs.php
- * @param PDO $pdo
- * @param string $fechahora
- * @param string $medioSeguimiento
- * @param string|null $otroMedioSeguimiento
- * @param string $contactadoSeguimiento
- * @param string|null $informeSeguimiento
- * @param int $empleadosId
- * @param int $usuariosId
+ * @param PDO $pdo Conexión a la base de datos
+ * @param string $fechahora fecha y hora del seguimiento
+ * @param string $medioSeguimiento medio de seguimiento
+ * @param string|null $otroMedioSeguimiento otro medio de seguimiento
+ * @param string $contactadoSeguimiento si se ha contactado o no
+ * @param string|null $informeSeguimiento informe del seguimiento
+ * @param int $empleadosId id del empleado que va a realizar el seguimiento
+ * @param int $usuariosId id del usuario al que se le va a realizar el seguimiento
  * @return bool|int false si hay error, 0 si no se ha insertado ningún registro o
  * el número de registros insertados si ha ido bien
  * @author andres
@@ -171,9 +171,9 @@ function insertarSeguimientos(PDO $pdo, string $fechahora, string $medioSeguimie
 /**
  * @description Funcion para actualizar el informe de un seguimiento
  * @file dbfuncs.php
- * @param PDO $pdo
- * @param int $idSeguimiento
- * @param string $informe
+ * @param PDO $pdo Conexión a la base de datos
+ * @param int $idSeguimiento id del seguimiento
+ * @param string $informe informe del seguimiento
  * @return bool|int false si hay error, 0 si no se ha actualizado ningún registro o
  * el número de registros actualizados si ha ido bien
  * @author andres
@@ -202,8 +202,8 @@ function actualizarInforme(PDO $pdo, int $idSeguimiento, string $informe): bool|
 /**
  * @description Funcion para archivar un seguimiento, usando una transacción
  * @file dbfuncs.php
- * @param PDO $pdo
- * @param int $idSeguimiento
+ * @param PDO $pdo Conexión a la base de datos
+ * @param int $idSeguimiento id del seguimiento
  * @return bool|int -1 si se han suministrado datos incorrectos, false si hay error o true si ha ido bien
  * @author andres
  * @date 2023/11/18
@@ -217,6 +217,7 @@ function archivarSeguimiento(PDO $pdo, int $idSeguimiento): bool|int
     $stmt->bindValue(':id', $idSeguimiento, PDO::PARAM_INT);
     $pdo->beginTransaction();
     try {
+        $seguimiento=[];
         if($stmt->execute()) {
             $seguimiento = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$seguimiento) {
