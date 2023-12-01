@@ -9,14 +9,20 @@ if ($idUsuario === false || !is_int($idUsuario) || trim($idUsuario) === '' || $i
     $errores[] = "Datos de usuario no válidos";
 }
 
-$fechaSeguimiento = filter_input(INPUT_POST, 'fechaSeguimiento', FILTER_SANITIZE_STRING);
+$fechaSeguimiento = filter_input(INPUT_POST, 'fechaSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
 if ($fechaSeguimiento !== false && $fechaSeguimiento !== null && trim($fechaSeguimiento) !== '') {
-    if ($fechaSeguimiento = DateTime::createFromFormat('d/m/Y', $fechaSeguimiento)) {
-        $dia = $fechaSeguimiento->format('d');
-        $mes = $fechaSeguimiento->format('m');
-        $anio = $fechaSeguimiento->format('Y');
-        if (!preg_match("/^\d{2}\/\d{2}\/\d{4}$/", $fechaSeguimiento->format('d/m/Y'))
-            || !checkdate($mes, $dia, $anio)) {
+    if (preg_match("/^\d{2}\/\d{2}\/\d{4}$/", $fechaSeguimiento)) {
+        $fechaSeguimiento = explode('/', $fechaSeguimiento);
+        $dia = $fechaSeguimiento[0];
+        $mes = $fechaSeguimiento[1];
+        $anio = $fechaSeguimiento[2];
+        if (checkdate($mes, $dia, $anio)) {
+            try {
+                $fechaSeguimiento = new DateTime($anio . '-' . $mes . '-' . $dia);
+            } catch (Exception $e) {
+                $errores[] = "La fecha de seguimiento no es válida";
+            }
+        } else {
             $errores[] = "La fecha de seguimiento no es válida";
         }
     } else {
@@ -26,23 +32,23 @@ if ($fechaSeguimiento !== false && $fechaSeguimiento !== null && trim($fechaSegu
     $errores[] = "La fecha de seguimiento no es válida";
 }
 
-$horaSeguimiento = filter_input(INPUT_POST, 'horaSeguimiento', FILTER_SANITIZE_STRING);
+$horaSeguimiento = filter_input(INPUT_POST, 'horaSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
 if ($horaSeguimiento !== false && $horaSeguimiento !== null && trim($horaSeguimiento) !== '') {
-    if (!preg_match("/^\d{2}:\d{2}$/", $horaSeguimiento)) {
+    if (!preg_match("/^\d{2}:\d{2}$/", $horaSeguimiento) || $horaSeguimiento > '23:59' || $horaSeguimiento < '00:00') {
         $errores[] = "La hora de seguimiento no es válida";
     }
 } else {
     $errores[] = "La hora de seguimiento no es válida";
 }
 
-$medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_STRING);
+$medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
 if ($medioSeguimiento !== false && $medioSeguimiento !== null && trim($medioSeguimiento) !== '') {
     $mediosValidos = ['TLF', 'EMAIL', 'PRESENCIAL', 'VIDEOCONF', 'OTRO'];
     if (!in_array($medioSeguimiento, $mediosValidos)) {
         $errores[] = "El medio de seguimiento no es válido";
     }
     if ($medioSeguimiento === 'OTRO') {
-        $otroMedioSeguimiento = filter_input(INPUT_POST, 'otroMedioSeguimiento', FILTER_SANITIZE_STRING);
+        $otroMedioSeguimiento = filter_input(INPUT_POST, 'otroMedioSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!is_string($otroMedioSeguimiento) || trim($otroMedioSeguimiento) === '') {
             $errores[] = "El otro medio de seguimiento no es válido";
         }
@@ -56,7 +62,14 @@ $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_VA
 if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($empleadoSeguimiento) !== '') {
     $pdo = connect();
     $empleados = listadoCoordinadoresOTrabSociales($pdo);
-    if (is_array($empleados) && (empty($empleados) || !array_key_exists($empleadoSeguimiento, $empleados))) {
+    $empleadoEncontrado = false;
+    foreach ($empleados as $empleado) {
+        if ($empleado['id'] === $empleadoSeguimiento) {
+            $empleadoEncontrado = true;
+            break;
+        }
+    }
+    if (is_array($empleados) && (empty($empleados)) || !$empleadoEncontrado) {
         $errores[] = "El empleado para ese seguimiento no es válido";
     }
 } else {
@@ -65,6 +78,7 @@ if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($emp
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -73,6 +87,7 @@ if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($emp
     <link rel="stylesheet" href="styles/estilosRegistrarSeguimiento.css">
     <title>Registar Nuevo Seguimiento</title>
 </head>
+
 <body>
 <?php
 $insertado = -1;
@@ -99,9 +114,11 @@ if (empty($errores)) {
     echo "<ul>";
     foreach ($errores as $error) {
         echo "<li>" . $error . "</li>";
-        if ($error === "Error en los datos del empleado"
+        if (
+            $error === "Error en los datos del empleado"
             || $error === "El empleado para ese seguimiento no es válido"
-            || $error === "Datos de usuario no válidos") {
+            || $error === "Datos de usuario no válidos"
+        ) {
             $mostrarBotonVolverAListadoUsuarios = true;
         }
     }
@@ -119,4 +136,5 @@ $pdo = null;
 ?>
 
 </body>
+
 </html>

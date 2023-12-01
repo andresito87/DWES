@@ -134,7 +134,7 @@ function listadoCoordinadoresOTrabSociales(PDO $pdo): array|bool
  * @param string $fechahora fecha y hora del seguimiento
  * @param string $medioSeguimiento medio de seguimiento
  * @param string|null $otroMedioSeguimiento otro medio de seguimiento
- * @param string $contactadoSeguimiento si se ha contactado o no
+ * @param bool $contactadoSeguimiento si se ha contactado es true y sino false
  * @param string|null $informeSeguimiento informe del seguimiento
  * @param int $empleadosId id del empleado que va a realizar el seguimiento
  * @param int $usuariosId id del usuario al que se le va a realizar el seguimiento
@@ -143,7 +143,7 @@ function listadoCoordinadoresOTrabSociales(PDO $pdo): array|bool
  * @author andres
  * @date 2023/11/18
  */
-function insertarSeguimientos(PDO $pdo, string $fechahora, string $medioSeguimiento, string|null $otroMedioSeguimiento, string $contactadoSeguimiento, string|null $informeSeguimiento, int $empleadosId, int $usuariosId): bool|int
+function insertarSeguimientos(PDO $pdo, string $fechahora, string $medioSeguimiento, string|null $otroMedioSeguimiento, bool $contactadoSeguimiento, string|null $informeSeguimiento, int $empleadosId, int $usuariosId): bool|int
 {
     $sql = <<<ENDSQL
         INSERT INTO seguimiento (fechahora, medio, otro, contactado, informe, usuarios_id, empleados_id) 
@@ -153,10 +153,10 @@ function insertarSeguimientos(PDO $pdo, string $fechahora, string $medioSeguimie
     $stmt->bindValue(':fechahora', $fechahora);
     $stmt->bindValue(':medio', $medioSeguimiento);
     $stmt->bindValue(':otro', $otroMedioSeguimiento);
-    $stmt->bindValue(':contactado', $contactadoSeguimiento);
+    $stmt->bindValue(':contactado', $contactadoSeguimiento, PDO::PARAM_BOOL);
     $stmt->bindValue(':informe', $informeSeguimiento);
-    $stmt->bindValue(':empleados_id', $empleadosId);
-    $stmt->bindValue(':usuarios_id', $usuariosId);
+    $stmt->bindValue(':empleados_id', $empleadosId, PDO::PARAM_INT);
+    $stmt->bindValue(':usuarios_id', $usuariosId, PDO::PARAM_INT);
     $resultado = 0;
     try {
         if ($stmt->execute()) {
@@ -186,7 +186,7 @@ function actualizarInforme(PDO $pdo, int $idSeguimiento, string $informe): bool|
     ENDSQL;
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':id', $idSeguimiento, PDO::PARAM_INT);
-    $stmt->bindValue(':informe', $informe, PDO::PARAM_STR);
+    $stmt->bindValue(':informe', $informe);
     $resultado = -1;
     try {
         if ($stmt->execute()) {
@@ -217,8 +217,8 @@ function archivarSeguimiento(PDO $pdo, int $idSeguimiento): bool|int
     $stmt->bindValue(':id', $idSeguimiento, PDO::PARAM_INT);
     $pdo->beginTransaction();
     try {
-        $seguimiento=[];
-        if($stmt->execute()) {
+        $seguimiento = [];
+        if ($stmt->execute()) {
             $seguimiento = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$seguimiento) {
                 $pdo->rollBack();
@@ -234,14 +234,14 @@ function archivarSeguimiento(PDO $pdo, int $idSeguimiento): bool|int
         VALUES (:id, :fechahora, :medio, :otro, :contactado, :informe, :empleados_id, :usuarios_id);
     ENDSQL;
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':id', $seguimiento['id']);
+        $stmt->bindValue(':id', $seguimiento['id'], PDO::PARAM_INT);
         $stmt->bindValue(':fechahora', $seguimiento['fechahora']);
         $stmt->bindValue(':medio', $seguimiento['medio']);
         $stmt->bindValue(':otro', $seguimiento['otro']);
-        $stmt->bindValue(':contactado', $seguimiento['contactado']);
+        $stmt->bindValue(':contactado', $seguimiento['contactado'], PDO::PARAM_BOOL);
         $stmt->bindValue(':informe', $seguimiento['informe']);
-        $stmt->bindValue(':empleados_id', $seguimiento['empleados_id']);
-        $stmt->bindValue(':usuarios_id', $seguimiento['usuarios_id']);
+        $stmt->bindValue(':empleados_id', $seguimiento['empleados_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':usuarios_id', $seguimiento['usuarios_id'], PDO::PARAM_INT);
 
         if (!$stmt->execute()) {
             $pdo->rollBack();
