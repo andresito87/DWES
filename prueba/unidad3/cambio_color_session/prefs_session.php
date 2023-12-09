@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <html>
 
 <head>
@@ -14,21 +16,21 @@
         'blue' => "#0000ff"
     );
 
-    $backgroundName = $_POST['background'];
-    $foregroundName = $_POST['foreground'];
+    $bg = $colors[$_POST['background']];
+    $fg = $colors[$_POST['foreground']];
 
-    setcookie('bg', $colors[$backgroundName]);
-    setcookie('fg', $colors[$foregroundName]);
+    $_SESSION['bg'] = $bg;
+    $_SESSION['fg'] = $fg;
     ?>
 
     <p>Thank you. Your preferences have been changed to:<br />
         Background:
-        <?php echo $backgroundName; ?><br />
+        <?php echo $_POST['background']; ?><br />
         Foreground:
-        <?php echo $foregroundName; ?>
+        <?php echo $_POST['foreground']; ?>
     </p>
 
-    <p>Click <a href="prefs_demo.php">here</a> to see the preferences
+    <p>Click <a href="prefs_session_demo.php">here</a> to see the preferences
         in action.</p>
 
 </body>

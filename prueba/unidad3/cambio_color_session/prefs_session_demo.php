@@ -1,12 +1,13 @@
+<?php
+session_start();
+$backgroundName = $_SESSION['bg'];
+$foregroundName = $_SESSION['fg'];
+?>
 <html>
 
 <head>
     <title>Front Door</title>
 </head>
-<?php
-$backgroundName = $_COOKIE['bg'];
-$foregroundName = $_COOKIE['fg'];
-?>
 
 <body bgcolor="<?php echo $backgroundName; ?>" text="<?php echo $foregroundName; ?>">
 

@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <form action="prefs.php" method="post">
+    <form action="prefs_session.php" method="post">
         <p>Background:
             <select name="background">
                 <option value="black">Black</option>
