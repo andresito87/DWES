@@ -1,3 +1,8 @@
+<?php
+require_once 'src/conn.php';
+require_once 'src/dbfuncs.php';
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -12,9 +17,6 @@
 
 <body>
     <?php
-    require 'src/conn.php';
-    require 'src/dbfuncs.php';
-
     $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
     $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
     if (is_int($idUsuario) && is_int($idSeguimiento) && $idUsuario > 0 && $idSeguimiento > 0) {
@@ -43,7 +45,7 @@
                 echo "<form action='seguimientocontactado.php' method='post'>";
                 echo "<input type='hidden' name='idUsuario' value='$idUsuario'>";
                 echo "<input type='hidden' name='idSeguimiento' value='$idSeguimiento'>";
-                echo "<input type='submit' value='Volver a detalles de usuario'>";
+                echo "<input type='submit' value='Volver Atrás'>";
                 echo "</form>";
                 die("<p>El informe debe tener al menos 5 caracteres</p>");
             }
