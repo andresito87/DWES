@@ -13,15 +13,16 @@ function usuarios(PDO $pdo, bool $activos, string $filtro): array|bool
 {
     $sql = "SELECT * FROM usuarios";
     if ($activos) {
-        $sql .= " WHERE activo = 1";
+        $sql .= " WHERE activo = :activo";
     } else {
-        $sql .= " WHERE activo = 0";
+        $sql .= " WHERE activo = :activo";
     }
     if ($filtro) {
         $sql .= " AND CONCAT(nombre, ' ', apellidos) LIKE :filtro";
     }
     $sql .= " ORDER BY ID";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':activo', $activos, PDO::PARAM_BOOL);
     if ($filtro) {
         $stmt->bindValue(':filtro', "%$filtro%", PDO::PARAM_STR);
     }
@@ -152,11 +153,20 @@ function insertarSeguimientos(PDO $pdo, string $fechahora, string $medioSeguimie
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':fechahora', $fechahora);
     $stmt->bindValue(':medio', $medioSeguimiento);
-    $stmt->bindValue(':otro', $otroMedioSeguimiento);
     $stmt->bindValue(':contactado', $contactadoSeguimiento, PDO::PARAM_BOOL);
-    $stmt->bindValue(':informe', $informeSeguimiento);
     $stmt->bindValue(':empleados_id', $empleadosId, PDO::PARAM_INT);
     $stmt->bindValue(':usuarios_id', $usuariosId, PDO::PARAM_INT);
+    if ($otroMedioSeguimiento === null) {
+        $stmt->bindValue(':otro', null, PDO::PARAM_NULL);
+    } else {
+        $stmt->bindValue(':otro', $otroMedioSeguimiento);
+    }
+    if ($informeSeguimiento === null) {
+        $stmt->bindValue(':informe', null, PDO::PARAM_NULL);
+    } else {
+        $stmt->bindValue(':informe', $informeSeguimiento);
+    }
+
     $resultado = 0;
     try {
         if ($stmt->execute()) {
