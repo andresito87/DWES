@@ -50,8 +50,6 @@
             // Si no se ha seleccionado ninguna sección, se muestra la primera(Inicio)
             readfile("contenidos/" . $secciones[0]["archivo"]);
         }
-
-        //Link to repository: https://github.com/andresito87/DWES/tree/main/dwes01/ejercicio2
         ?>
     </main>
     <footer>

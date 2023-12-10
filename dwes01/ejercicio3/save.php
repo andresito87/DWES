@@ -4,6 +4,60 @@
 if (!isset($_POST["Terminar"])) {
     header("Location: index.php");
 }
+
+$errores = [];
+$datos_validos = [
+    "codigo_postal" => "/^\d{5}$/",
+    "sexo" => ["M", "F", "O", "N"],
+    "curso" => ["1ESO", "2ESO", "3ESO"],
+    "rama" => ["BCH", "FP"],
+    "asgs" => ["LCL", "M", "BG", "GH", "FQ", "I"],
+    "tiempolibre" => ["deportes", "musica", "danza", "art", "vjuegos", "television", "dom", "lectura"]
+];
+
+if (!isset($_POST["codigo_postal"]) || !preg_match($datos_validos["codigo_postal"], $_POST["codigo_postal"])) {
+    $errores[] = "El código postal no es válido";
+}
+if (!isset($_POST["sexo"]) || !in_array($_POST["sexo"], $datos_validos["sexo"])) {
+    $errores[] = "El sexo no es válido";
+}
+if (!isset($_POST["curso"]) || !in_array($_POST["curso"], $datos_validos["curso"])) {
+    $errores[] = "El curso no es válido";
+}
+if (!isset($_POST["rama"]) || !in_array($_POST["rama"], $datos_validos["rama"])) {
+    $errores[] = "La rama no es válida";
+}
+//Comprobamos que las asignaturas existen y forman un array
+if (isset($_POST["asgs"]) && is_array($_POST["asgs"]) && count($_POST["asgs"]) > 0) {
+    if (count($_POST["asgs"]) <= 7) {
+        foreach ($_POST["asgs"] as $asg) {
+            if ($asg === "BG" && $_POST["curso"] === "2ESO") {
+                $errores[] = "Asignatura Biología y Geología no matriculable en 2º ESO";
+                break;
+            }
+
+            if (!in_array($asg, $datos_validos["asgs"])) {
+                $errores[] = "Asignatura inválida encontrada, revise el formulario";
+                break;
+            }
+        }
+    } else {
+        $errores[] = "Has seleccionado demasiadas asignaturas";
+    }
+}
+//Comprobamos que los tiempos libres existen y forman un array
+if (isset($_POST['tiempolibre']) && is_array($_POST['tiempolibre'])) {
+    if (count($_POST['tiempolibre']) <= 8) {
+        foreach ($_POST['tiempolibre'] as $opcion_tiempo_libre) {
+            if (!in_array($opcion_tiempo_libre, $datos_validos['tiempolibre'])) {
+                $errores[] = "Opción de tiempo libre inválida encontrada";
+                break;
+            }
+        }
+    } else {
+        $errores[] = "Has seleccionado demasiadas opciones de tiempo libre";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,61 +71,8 @@ if (!isset($_POST["Terminar"])) {
 <body>
     <h1>Resumen del proceso</h1>
     <?php
-    $error = false;
-    if (!isset($_POST["codigo_postal"]) || !preg_match("/^\d{5}$/", $_POST["codigo_postal"])) {
-        echo "El código postal no es válido <BR>";
-        $error = true;
-    }
-    if (!isset($_POST["sexo"]) || ($_POST["sexo"] !== "M" && $_POST["sexo"] !== "F" && $_POST["sexo"] !== "O" && $_POST["sexo"] !== "N")) {
-        echo "El sexo no es válido <BR>";
-        $error = true;
-    }
-    if (!isset($_POST["curso"]) || ($_POST["curso"] !== "1ESO" && $_POST["curso"] !== "2ESO" && $_POST["curso"] !== "3ESO")) {
-        echo "El curso no es válido <BR>";
-        $error = true;
-    }
-    if (!isset($_POST["rama"]) || ($_POST["rama"] !== "BCH" && $_POST["rama"] !== "FP")) {
-        echo "La rama no es válida";
-        $error = true;
-    }
-    //Comprobamos que las asignaturas existen y forman un array
-    if (isset($_POST["asgs"]) && is_array($_POST["asgs"])) {
-        if (count($_POST["asgs"]) <= 7) {
-            foreach ($_POST["asgs"] as $asg) {
-                if ($asg === "BG" && $_POST["curso"] === "2ESO") {
-                    echo "Asignatura Biología y Geología no matriculable en 2º ESO";
-                    $error = true;
-                    break;
-                }
-
-                if ($asg !== "LCL" && $asg !== "M" && $asg !== "BG" && $asg !== "GH" && $asg !== "FQ" && $asg !== "I") {
-                    echo "Asignatura inválida encontrada, revise el formulario <BR>";
-                    $error = true;
-                    break;
-                }
-            }
-        } else {
-            echo "Has seleccionado demasiadas asignaturas <BR>";
-            $error = true;
-        }
-    }
-    //Comprobamos que los tiempos libres existen y forman un array
-    if (isset($_POST['tiempolibre']) && is_array($_POST['tiempolibre'])) {
-        if (count($_POST['tiempolibre']) <= 8) {
-            foreach ($_POST['tiempolibre'] as $tiempo) {
-                if ($tiempo !== "deportes" && $tiempo !== "musica" && $tiempo !== "danza" && $tiempo !== "art" && $tiempo !== "vjuegos" && $tiempo !== "television" && $tiempo !== "dom" && $tiempo !== "lectura") {
-                    echo "Opción de tiempo libre inválida <BR>";
-                    $error = true;
-                    break;
-                }
-            }
-        } else {
-            echo "Has seleccionado demasiadas opciones de tiempo libre <BR>";
-            $error = true;
-        }
-    }
     // Si no hay errores, mostramos el resumen de los datos introducidos
-    if (!$error) {
+    if (!$errores) {
         echo "<h2>Resumen: </h2>";
         echo "Código postal: " . $_POST["codigo_postal"] . "<BR>";
         echo "Sexo: " . $_POST["sexo"] . "<BR>";
@@ -114,14 +115,18 @@ if (!isset($_POST["Terminar"])) {
     else {
         ?>
         <h2>Por favor, revise los errores y vuelva a intentarlo</h2>
-        <h3>Los datos no se han guardado</h3>
-        <form action="index.php" method="post">
-            <input type="submit" name="Volver" value="Volver">
-        </form>
-        <?php
+        <ul>
+            <?php
+            foreach ($errores as $error) {
+                echo "<li>$error</li>";
+            }
+            ?>
+            <h3>Los datos no se han guardado</h3>
+            <form action="index.php" method="post">
+                <input type="submit" name="Volver" value="Volver">
+            </form>
+            <?php
     }
-
-    //Link to repository: https://github.com/andresito87/DWES/tree/main/dwes01/ejercicio3
     ?>
 </body>
 

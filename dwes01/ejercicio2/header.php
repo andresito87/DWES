@@ -1,4 +1,4 @@
-<img src="./assets/logo.avif" alt="Logo">
+<img src="./assets/logo.png" alt="Logo">
 <h1>Respira</h1>
 <nav>
     <?php
