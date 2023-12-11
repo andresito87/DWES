@@ -22,10 +22,11 @@ else {
     }
 
     // Preparamos la consulta utilizando consultas preparadas y SHA256
+    $contrasena = hash('sha256', $_SERVER['PHP_AUTH_PW']);
     $sql = "SELECT usuario FROM usuarios WHERE usuario = :usuario AND contrasena = :hashContrasena";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':usuario', $_SERVER['PHP_AUTH_USER'], PDO::PARAM_STR);
-    $stmt->bindParam(':hashContrasena', hash('sha256', $_SERVER['PHP_AUTH_PW']), PDO::PARAM_STR);
+    $stmt->bindParam(':hashContrasena', $contrasena, PDO::PARAM_STR);
     $stmt->execute();
 
     // Si no existe, se vuelven a pedir las credenciales
