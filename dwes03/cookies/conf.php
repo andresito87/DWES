@@ -1,5 +1,6 @@
 <?php
 define("SECCION_DEFECTO", "Inicio"); //Contendrá el nombre de la sección por defecto
+define("MAX_SECCIONES", 5); //Contendrá el número máximo de secciones
 $secciones = [];
 //PRIMERA SECCIÓN
 $secciones[] = [

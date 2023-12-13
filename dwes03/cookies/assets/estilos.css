@@ -67,3 +67,30 @@ footer {
     bottom: 0;
     background-color: #35b5ff;
 }
+
+footer p {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+footer p span {
+    font-size: larger;
+}
+
+footer #secciones_visitadas {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+}
+
+footer #secciones_visitadas a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.1rem;
+    background-color: #343333;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    margin-right: 2em;
+}
