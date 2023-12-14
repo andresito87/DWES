@@ -1,4 +1,6 @@
 <?php
+//Zona horaria
+date_default_timezone_set('Europe/Madrid');
 echo "<p>Fecha y hora del documento: ";
 //Muestra la fecha de modificación del archivo en formato dd/mm/aaaa
 echo "<span>" . date("d/m/Y H:m", filemtime("footer.php")) . "</span></p>";
@@ -11,16 +13,20 @@ if (!isset($_COOKIE["lista_ultimos_sitios"]) || !isset($_COOKIE["hash_lista_ulti
         $link_seccion_visitada = "./index.php?ver=" . urlencode($_GET["ver"]);
         $fecha_hora_visita = date("d/m/Y H:m");
         $datos_visita[] = [$seccion_visitada, $link_seccion_visitada, $fecha_hora_visita];
-        setcookie('lista_ultimos_sitios', serialize($datos_visita), time() + 600);
-        setcookie('hash_lista_ultimos_sitios', hash('sha256', serialize($datos_visita)), time() + 600);
+        setcookie('lista_ultimos_sitios', serialize($datos_visita), time() + 3600);
+        setcookie('hash_lista_ultimos_sitios', hash('sha256', serialize($datos_visita) . SALT), time() + 3600);
     }
+    echo "<p>Últimas páginas visitadas:</p>";
+    echo "<div id=\"secciones_visitadas\">";
+    echo "<a href='" . $link_seccion_visitada . "'>" . $seccion_visitada . " (" . $fecha_hora_visita . ") </a><br>";
+    echo "</div>";
 } else {
     //Si existe la cookie, se añade el nuevo sitio
-    if (hash('sha256', $_COOKIE['lista_ultimos_sitios']) === $_COOKIE['hash_lista_ultimos_sitios']) {
+    if (hash('sha256', $_COOKIE['lista_ultimos_sitios'] . SALT) === $_COOKIE['hash_lista_ultimos_sitios']) {
         //Si coincide el hash, se añade el nuevo sitio
         $seccion_visitada = $secciones[array_search($_GET["ver"], array_column($secciones, "link"))]["nombre"];
         $link_seccion_visitada = "./index.php?ver=" . urlencode($_GET["ver"]);
-        $fecha_hora_visita = date("d/m/Y h:m");
+        $fecha_hora_visita = date("d/m/Y H:m");
         $datos_visita[] = [$seccion_visitada, $link_seccion_visitada, $fecha_hora_visita];
         $lista_ultimos_sitios = @unserialize($_COOKIE['lista_ultimos_sitios']);
         if (!in_array($seccion_visitada, array_column($lista_ultimos_sitios, 0)) && count($lista_ultimos_sitios) < MAX_SECCIONES) {
@@ -35,21 +41,25 @@ if (!isset($_COOKIE["lista_ultimos_sitios"]) || !isset($_COOKIE["hash_lista_ulti
             //Si la lista está llena, se elimina el último elemento y se añade al principio
             $lista_ultimos_sitios = array_merge($datos_visita, array_slice($lista_ultimos_sitios, 0, MAX_SECCIONES - 1));
         }
-        setcookie('lista_ultimos_sitios', serialize($lista_ultimos_sitios), time() + 600);
-        setcookie('hash_lista_ultimos_sitios', hash('sha256', serialize($lista_ultimos_sitios)), time() + 600);
+        setcookie('lista_ultimos_sitios', serialize($lista_ultimos_sitios), time() + 3600);
+        setcookie('hash_lista_ultimos_sitios', hash('sha256', serialize($lista_ultimos_sitios) . SALT), time() + 3600);
+        echo "<p>Últimas páginas visitadas:</p>";
+        echo "<div id=\"secciones_visitadas\">";
+        foreach ($lista_ultimos_sitios as $sitio) {
+            echo "<a href='" . $sitio[1] . "'>" . $sitio[0] . " (" . $sitio[2] . ") </a><br>";
+        }
     } else {
         //Si no coincide el hash, se resetea la cookie con la sección actual
-        $seccion_visitada = $_GET["ver"];
+        $seccion_visitada = $secciones[array_search($_GET["ver"], array_column($secciones, "link"))]["nombre"];
         $link_seccion_visitada = "./index.php?ver=" . urlencode($_GET["ver"]);
-        $fecha_hora_visita = date("d/m/Y h:m");
+        $fecha_hora_visita = date("d/m/Y H:m");
         $datos_visita[] = [$seccion_visitada, $link_seccion_visitada, $fecha_hora_visita];
-        setcookie('lista_ultimos_sitios', serialize($datos_visita), time() + 600);
-        setcookie('hash_lista_ultimos_sitios', hash('sha256', serialize($datos_visita)), time() + 600);
-    }
-    echo "<p>Últimas páginas visitadas:</p>";
-    echo "<div id=\"secciones_visitadas\">";
-    foreach ($lista_ultimos_sitios as $sitio) {
-        echo "<a href='" . $sitio[1] . "'>" . $sitio[0] . " (" . $sitio[2] . ") </a><br>";
+        setcookie('lista_ultimos_sitios', serialize($datos_visita), time() + 3600);
+        setcookie('hash_lista_ultimos_sitios', hash('sha256', serialize($datos_visita) . SALT), time() + 3600);
+        echo "<p>Últimas páginas visitadas:</p>";
+        echo "<div id=\"secciones_visitadas\">";
+        echo "<a href='" . $link_seccion_visitada . "'>" . $seccion_visitada . " (" . $fecha_hora_visita . ") </a><br>";
+        echo "</div>";
     }
     echo "</div>";
 }

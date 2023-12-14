@@ -1,6 +1,7 @@
 <?php
 define("SECCION_DEFECTO", "Inicio"); //Contendrá el nombre de la sección por defecto
 define("MAX_SECCIONES", 5); //Contendrá el número máximo de secciones
+define("SALT", "dwes_tarea03"); //Contendrá la sal para encriptar las cookies
 $secciones = [];
 //PRIMERA SECCIÓN
 $secciones[] = [
