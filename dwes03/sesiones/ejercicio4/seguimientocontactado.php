@@ -1,6 +1,7 @@
 <?php
 require_once 'src/conn.php';
 require_once 'src/dbfuncs.php';
+require 'session_control.php';
 ?>
 
 <!DOCTYPE html>

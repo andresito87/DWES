@@ -1,6 +1,8 @@
 <?php
 require_once 'src/conn.php';
 require_once 'src/dbfuncs.php';
+require 'session_control.php';
+
 
 $pdo = connect();
 try {

@@ -1,6 +1,7 @@
 <?php
 require 'src/conn.php';
 require 'src/dbfuncs.php';
+require 'session_control.php';
 
 $errores = [];
 

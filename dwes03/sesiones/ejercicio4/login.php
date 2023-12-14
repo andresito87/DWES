@@ -1,0 +1,96 @@
+<?php
+require_once './src/userauth.php';
+require_once './etc/conf.php';
+
+// Recuperamos la información de la sesión si el usuario ya se habia autentificado
+session_start();
+$mostrar_formulario_login = true;
+if (isset($_SESSION['dni'])) {
+    $mostrar_formulario_login = false;
+}
+
+//Comprobamos si el usuario lleva más de 120 segundos inactivo
+if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso'] > MAXIMA_INACTIVIDAD)) {
+    session_destroy();
+    header("Location: ./login.php"); // Redirigimos al usuario a la página de login
+}
+
+// Comprobamos si ya se ha enviado el formulario
+if (isset($_POST['enviar']) && !isset($_SESSION['dni'])) {
+    //Obtenemos los datos enviados por POST y los volcamos a variables
+
+    $dni = filter_input(INPUT_POST, 'dni', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $password = filter_input(INPUT_POST, 'password');
+
+    //Si el dni o la password esta vacío, mandamos un mensaje
+    if (empty($dni) || empty($password)) {
+        $error = "Debes introducir un dni y una contraseña";
+    } else {
+        $es_contraseña_valida = verificacion_contrasena($dni, $password);
+
+        //Si el numero de filas es distinto de false, es que existe ese usuario
+        if ($es_contraseña_valida) {
+            //Creamos la variable de usuario con el nombre del usuario
+            $_SESSION['dni'] = [$es_contraseña_valida['id'], $es_contraseña_valida['dni'], $es_contraseña_valida['nombre'], $es_contraseña_valida['apellidos'], $es_contraseña_valida['roles']];
+            //no mostramos el formulario de login
+            $mostrar_formulario_login = false;
+        } else {
+            // Si las credenciales no son válidas, se muestra un mensaje de error
+            $error = "DNI o contraseña no válidos!";
+        }
+    }
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Formulario de Login</title>
+    <link href="./styles/estilosLogin.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <?php
+    if ($mostrar_formulario_login) {
+        ?>
+        <h1>Formulario de Login</h1>
+        <div id='login'>
+            <form action='login.php' method='post'>
+                <fieldset>
+                    <div><span class='error'>
+                            <?php echo (isset($error) ? $error : ""); ?>
+                        </span></div>
+                    <div class='campo'>
+                        <label for='dni'>DNI:</label><br />
+                        <input type='text' name='dni' id='dni' maxlength="50" /><br />
+                    </div>
+                    <div class='campo'>
+                        <label for='password'>Password:</label><br />
+                        <input type='password' name='password' id='password' maxlength="50" /><br />
+                    </div>
+
+                    <div class='campo'>
+                        <input type='submit' name='enviar' value='Enviar' />
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <?php
+    } else {
+        //Guardamos en la sesión la fecha y hora del login satisfactorio
+        $_SESSION['ultimo_acceso'] = time();
+
+        //Mostramos el mensaje de bienvenida
+        echo '<div id="bienvenida">';
+        echo 'Bienvenido, ' . $_SESSION["dni"][2] . " " . $_SESSION["dni"][3] . '. Haz clic aquí para <a href="./usuarios.php">ver los usuarios</a>.';
+        echo "<br>";
+        echo "Hora de inicio de sesión: " . date("d-m-Y H:i:s", $_SESSION['ultimo_acceso']);
+        echo '</div>';
+    }
+    ?>
+</body>
+
+</html>
