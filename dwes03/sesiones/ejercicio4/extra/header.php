@@ -12,7 +12,7 @@ if (isset($_SESSION['ultimo_detalle_usuario']) && (verificacion_rol($_SESSION['d
 ?>
 
 <header>
-    <p>
+    <div id='header'>
         <?php
         echo $nombre_apellidos . " [ROLES: " . $rol . "]";
         if ($mostrar_link_detalle_ultimo_usuario) {
@@ -20,7 +20,7 @@ if (isset($_SESSION['ultimo_detalle_usuario']) && (verificacion_rol($_SESSION['d
             echo "<a href='./detalleusuario.php'> Ver detalles último usuario consultado</a>";
         }
         echo " | ";
-        echo " <a href='./logout.php'>Cerrar sesión</a>";
+        echo " <a href='./logout.php'>Salir</a>";
         ?>
-    </p>
+    </div>
 </header>

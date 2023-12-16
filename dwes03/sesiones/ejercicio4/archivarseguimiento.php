@@ -3,8 +3,9 @@ require_once 'src/conn.php';
 require_once 'src/dbfuncs.php';
 require 'session_control.php';
 require_once './src/userauth.php';
+require_once 'extra/header.php';
 
-if (verificacion_rol($_SESSION['dni'], 'coord1')) {
+if (verificacion_rol($_SESSION['dni'], 'coord')) {
     ?>
 
     <!DOCTYPE html>
@@ -20,41 +21,41 @@ if (verificacion_rol($_SESSION['dni'], 'coord1')) {
     </head>
 
     <body>
-
-        <?php
-        $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
-        $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
-        if (is_int($idUsuario) && is_int($idSeguimiento)) {
-            if (isset($_POST['archivar']) && $_POST['archivar'] === 'archivar') {
-                $pdo = connect();
-                $archivar = archivarSeguimiento($pdo, $idSeguimiento);
-                if ($archivar === -1) {
-                    echo '<h2>Los datos suministrados no corresponden con ninguno de nuestros registros</h2>';
-                } else if ($archivar) {
-                    echo '<h2>Seguimiento archivado correctamente</h2>';
+        <div id='contenido'>
+            <?php
+            $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
+            $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
+            if (is_int($idUsuario) && is_int($idSeguimiento)) {
+                if (isset($_POST['archivar']) && $_POST['archivar'] === 'archivar') {
+                    $pdo = connect();
+                    $archivar = archivarSeguimiento($pdo, $idSeguimiento);
+                    if ($archivar === -1) {
+                        echo '<h2>Los datos suministrados no corresponden con ninguno de nuestros registros</h2>';
+                    } else if ($archivar) {
+                        echo '<h2>Seguimiento archivado correctamente</h2>';
+                    } else {
+                        echo '<h2>Error al archivar el seguimiento</h2>';
+                    }
                 } else {
-                    echo '<h2>Error al archivar el seguimiento</h2>';
+                    ?>
+                    <form action="archivarseguimiento.php" method="post">
+                        <label for="archivar">Marca la siguiente casilla para confirmar la operación de archivado</label>
+                        <input type="checkbox" id="archivar" name="archivar" value="archivar">
+                        <input type="hidden" name="idUsuario" value="<?php echo $_POST['idUsuario'] ?>">
+                        <input type="hidden" name="idSeguimiento" value="<?php echo $_POST['idSeguimiento'] ?>">
+                        <br>
+                        <input type="submit" value="ARCHIVAR">
+                    </form>
+                    <?php
                 }
+                echo "<form action='detalleusuario.php' method='post'>";
+                echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+                echo "<input type='submit' value='Volver a detalles de usuario'>";
             } else {
-                ?>
-                <form action="archivarseguimiento.php" method="post">
-                    <label for="archivar">Marca la siguiente casilla para confirmar la operación de archivado</label>
-                    <input type="checkbox" id="archivar" name="archivar" value="archivar">
-                    <input type="hidden" name="idUsuario" value="<?php echo $_POST['idUsuario'] ?>">
-                    <input type="hidden" name="idSeguimiento" value="<?php echo $_POST['idSeguimiento'] ?>">
-                    <br>
-                    <input type="submit" value="ARCHIVAR">
-                </form>
-                <?php
+                echo "<p>Error en los datos suministrados</p>";
             }
-            echo "<form action='detalleusuario.php' method='post'>";
-            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
-            echo "<input type='submit' value='Volver a detalles de usuario'>";
-        } else {
-            echo "<p>Error en los datos suministrados</p>";
-        }
-        ?>
-
+            ?>
+        </div>
     </body>
 
     </html>

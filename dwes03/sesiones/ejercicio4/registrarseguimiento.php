@@ -2,6 +2,8 @@
 require 'src/conn.php';
 require 'src/dbfuncs.php';
 require 'session_control.php';
+require_once 'src/userauth.php';
+require_once 'extra/header.php';
 
 $errores = [];
 
@@ -90,53 +92,54 @@ if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($emp
 </head>
 
 <body>
-    <?php
-    $insertado = -1;
-    if (empty($errores)) {
-        $fechahora = $fechaSeguimiento->format('Y-m-d') . " " . $horaSeguimiento;
-        $contactado = false;
-        $informe = null;
-        $otroMedioSeguimiento ??= null;
-        $usuariosId = $_POST['idUsuario'];
-        $insertado = insertarSeguimientos($pdo, $fechahora, $medioSeguimiento, $otroMedioSeguimiento, $contactado, $informe, $empleadoSeguimiento, $usuariosId);
-        if ($insertado === 1) {
-            echo "<p>Se ha creado el seguimiento correctamente</p>";
-            echo "<form action='detalleusuario.php' method='post'>";
-            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
-            echo "<input type='submit' value='Volver a detalles de usuario'>";
-            echo "</form>";
-        } else if (!$insertado) {
-            echo "<p>Los datos suministrados no corresponden con ninguno de nuestros registros</p>";
-            echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
+    <div id="contenido">
+        <?php
+        $insertado = -1;
+        if (empty($errores)) {
+            $fechahora = $fechaSeguimiento->format('Y-m-d') . " " . $horaSeguimiento;
+            $contactado = false;
+            $informe = null;
+            $otroMedioSeguimiento ??= null;
+            $usuariosId = $_POST['idUsuario'];
+            $insertado = insertarSeguimientos($pdo, $fechahora, $medioSeguimiento, $otroMedioSeguimiento, $contactado, $informe, $empleadoSeguimiento, $usuariosId);
+            if ($insertado === 1) {
+                echo "<p>Se ha creado el seguimiento correctamente</p>";
+                echo "<form action='detalleusuario.php' method='post'>";
+                echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+                echo "<input type='submit' value='Volver a detalles de usuario'>";
+                echo "</form>";
+            } else if (!$insertado) {
+                echo "<p>Los datos suministrados no corresponden con ninguno de nuestros registros</p>";
+                echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
+            } else {
+                echo "<p>Error al crear el seguimiento</p>";
+            }
         } else {
-            echo "<p>Error al crear el seguimiento</p>";
-        }
-    } else {
-        $mostrarBotonVolverAListadoUsuarios = false;
-        echo "<ul>";
-        foreach ($errores as $error) {
-            echo "<li>" . $error . "</li>";
-            if (
-                $error === "Error en los datos del empleado"
-                || $error === "El empleado para ese seguimiento no es válido"
-                || $error === "Datos de usuario no válidos"
-            ) {
-                $mostrarBotonVolverAListadoUsuarios = true;
+            $mostrarBotonVolverAListadoUsuarios = false;
+            echo "<ul>";
+            foreach ($errores as $error) {
+                echo "<li>" . $error . "</li>";
+                if (
+                    $error === "Error en los datos del empleado"
+                    || $error === "El empleado para ese seguimiento no es válido"
+                    || $error === "Datos de usuario no válidos"
+                ) {
+                    $mostrarBotonVolverAListadoUsuarios = true;
+                }
+            }
+            echo "</ul>";
+            if (!$mostrarBotonVolverAListadoUsuarios) {
+                echo "<form action='detalleusuario.php' method='post'>";
+                echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+                echo "<input type='submit' value='Volver a detalles de usuario'>";
+                echo "</form>";
+            } else {
+                echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
             }
         }
-        echo "</ul>";
-        if (!$mostrarBotonVolverAListadoUsuarios) {
-            echo "<form action='detalleusuario.php' method='post'>";
-            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
-            echo "<input type='submit' value='Volver a detalles de usuario'>";
-            echo "</form>";
-        } else {
-            echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
-        }
-    }
-    $pdo = null;
-    ?>
-
+        $pdo = null;
+        ?>
+    </div>
 </body>
 
 </html>
