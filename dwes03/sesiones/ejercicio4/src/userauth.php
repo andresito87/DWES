@@ -33,8 +33,9 @@ function verificacion_contrasena($dni, $password): array|bool
     return isset($error) ? false : $fila;
 }
 
-function verificacion_rol()
+function verificacion_rol($empleado, $rol): bool
 {
+    return $empleado[4] == $rol;
 }
 
 function verificacion_empleado_asignado_a_seguimiento()

@@ -3,7 +3,9 @@ require_once './src/userauth.php';
 require_once './etc/conf.php';
 
 // Recuperamos la información de la sesión si el usuario ya se habia autentificado
-session_start();
+if (!isset($_SESSION)) {
+    session_start();
+}
 $mostrar_formulario_login = true;
 if (isset($_SESSION['dni'])) {
     $mostrar_formulario_login = false;
@@ -56,7 +58,7 @@ if (isset($_POST['enviar']) && !isset($_SESSION['dni'])) {
     <?php
     if ($mostrar_formulario_login) {
         ?>
-        <h1>Formulario de Login</h1>
+        <h1>Formulario de login</h1>
         <div id='login'>
             <form action='login.php' method='post'>
                 <fieldset>
@@ -73,7 +75,7 @@ if (isset($_POST['enviar']) && !isset($_SESSION['dni'])) {
                     </div>
 
                     <div class='campo'>
-                        <input type='submit' name='enviar' value='Enviar' />
+                        <input type='submit' name='enviar' value='¡Entrar!' />
                     </div>
                 </fieldset>
             </form>
@@ -86,8 +88,6 @@ if (isset($_POST['enviar']) && !isset($_SESSION['dni'])) {
         //Mostramos el mensaje de bienvenida
         echo '<div id="bienvenida">';
         echo 'Bienvenido, ' . $_SESSION["dni"][2] . " " . $_SESSION["dni"][3] . '. Haz clic aquí para <a href="./usuarios.php">ver los usuarios</a>.';
-        echo "<br>";
-        echo "Hora de inicio de sesión: " . date("d-m-Y H:i:s", $_SESSION['ultimo_acceso']);
         echo '</div>';
     }
     ?>

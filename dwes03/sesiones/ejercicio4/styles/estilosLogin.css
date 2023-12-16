@@ -6,6 +6,39 @@ body {
     align-items: center;
 }
 
+#login form {
+    width: 20em;
+    margin: 15px;
+    padding: 15px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+#login form fieldset {
+    border: none;
+}
+
+#login form .campo {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+
+#login form input[type="submit"] {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: #cfcfcf;
+    cursor: pointer;
+}
+
 #bienvenida {
     margin: 15px;
     padding: 15px;
