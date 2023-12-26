@@ -1,20 +1,17 @@
 <?php
 require_once './src/userauth.php';
 require_once './etc/conf.php';
+$mensaje = require 'session_control.php';
 
-// Recuperamos la información de la sesión si el usuario ya se habia autentificado
-if (!isset($_SESSION)) {
-    session_start();
-}
 $mostrar_formulario_login = true;
+$mostrar_aviso_usuario_autenticado = false;
 if (isset($_SESSION['dni'])) {
     $mostrar_formulario_login = false;
+    $mostrar_aviso_usuario_autenticado = true;
 }
 
-//Comprobamos si el usuario lleva más de 120 segundos inactivo
-if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso'] > MAXIMA_INACTIVIDAD)) {
-    session_destroy();
-    header("Location: ./login.php"); // Redirigimos al usuario a la página de login
+if ($mostrar_aviso_usuario_autenticado) {
+    echo $mensaje;
 }
 
 // Comprobamos si ya se ha enviado el formulario

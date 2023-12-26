@@ -7,9 +7,9 @@ require_once 'extra/header.php';
 
 
 //Recuperamos la información de la sesión si el usuario ya se habia autentificado */
-if (!isset($_SESSION['dni'])) {
-    session_start();
-}
+// if (!isset($_SESSION['dni'])) {
+//     session_start();
+// }
 
 //comprobamos si el rol del usuario es admin, coordinador, trabajador social o educador social
 if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc') || verificacion_rol($_SESSION['dni'], 'edusoc')) {
@@ -24,18 +24,30 @@ if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['d
     }
 
     //Verificacion y filtrado de datos
+    $filtro = "";
+    $checkbox = true;
     if (isset($_POST['filtrar'])) {
         $filtro = trim(filter_input(INPUT_POST, 'filtro', FILTER_SANITIZE_SPECIAL_CHARS));
         $checkbox = filter_input(INPUT_POST, 'checkbox', FILTER_SANITIZE_SPECIAL_CHARS);
         if (is_string($checkbox) && $checkbox == 'on' && !empty($filtro)) {
             $usuarios = usuarios($pdo, false, $filtro);
+            $checkbox = false;
         } else if (is_string($checkbox) && $checkbox == 'on' && empty($filtro)) {
             $usuarios = usuarios($pdo, false, '');
+            $checkbox = false;
         } else if (is_string($checkbox) && $checkbox != 'on' && !empty($filtro)) {
             $usuarios = usuarios($pdo, true, '');
         } else {
             $usuarios = usuarios($pdo, true, $filtro);
         }
+        $_SESSION['filtro'] = $filtro;
+        $_SESSION['checkbox'] = $checkbox;
+    } else if (isset($_SESSION['filtro']) && isset($_SESSION['checkbox'])) {
+        $usuarios = usuarios($pdo, $_SESSION['checkbox'], $_SESSION['filtro']);
+    } else if (!isset($_SESSION['filtro']) && isset($_SESSION['checkbox'])) {
+        $usuarios = usuarios($pdo, $_SESSION['checkbox'], '');
+    } else if (isset($_SESSION['filtro']) && !isset($_SESSION['checkbox'])) {
+        $usuarios = usuarios($pdo, true, $_SESSION['filtro']);
     } else {
         $usuarios = usuarios($pdo, true, '');
     }
@@ -110,8 +122,9 @@ if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['d
               </form></td>';
                         echo "</tr>";
                     } else {
+                    $filtro = isset($_SESSION['filtro']) ? $_SESSION['filtro'] : $filtro;
                     echo "<tr>";
-                    echo "<td colspan='6'>No hay ninguna coincidencia con \"<span>$filtro</span>\"</td>";
+                    echo "<td colspan='6'>No hay ninguna coincidencia con \"<span>" . $filtro . "</span>\"</td>";
                     echo "</tr>";
                 }
 
@@ -123,7 +136,7 @@ if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['d
     </html>
     <?php
 } else {
-    session_destroy();
+    session_unset();
     header("Location: ./login.php"); // Redirigimos al usuario a la página de login
     exit;
 }

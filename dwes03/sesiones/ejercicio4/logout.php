@@ -5,5 +5,19 @@ session_start();
 
 if (isset($_SESSION['dni'])) {
     session_unset(); // Y la eliminamos
-    header("Location: ./login.php"); // Redirigimos al usuario a la página de login
 }
+?>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respira - Salir</title>
+</head>
+
+<body>
+    <a href="./login.php">Volver a la página de login del portal de empleado de la Asociación Respira</a>
+</body>
+
+</html>
