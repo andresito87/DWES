@@ -6,7 +6,7 @@ require_once 'src/userauth.php';
 require_once 'extra/header.php';
 
 $es_usuario_autorizado = false;
-if (verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
+if (verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc')) {
     $es_usuario_autorizado = true;
 }
 ?>
@@ -62,20 +62,23 @@ if (verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['d
                 die();
             }
 
-            /*TODO: comprobar que el usuario que está intentando actualizar el seguimiento es el mismo que lo creó*/
-
-            $seguimiento = actualizarInforme($pdo, $idSeguimiento, $informe);
-            if ($seguimiento === 1) {
-                echo "<h2>Informe de seguimiento actualizado correctamente</h2>";
-            } else if ($seguimiento === 0) {
-                echo "<h2>Los datos suministrados no corresponden con ninguno de nuestros registros</h2>";
+            //Comprobamos que el usuario que está intentando actualizar el seguimiento es el mismo que lo creó
+            if (verificacion_empleado_asignado_a_seguimiento($pdo, $idSeguimiento)) {
+                $seguimiento = actualizarInforme($pdo, $idSeguimiento, $informe);
+                if ($seguimiento === 1) {
+                    echo "<h2>Informe de seguimiento actualizado correctamente</h2>";
+                } else if ($seguimiento === 0) {
+                    echo "<h2>Los datos suministrados no corresponden con ninguno de nuestros registros</h2>";
+                } else {
+                    echo "<h2>Error al actualizar el seguimiento</h2>";
+                }
+                echo "<form action='detalleusuario.php' method='post'>";
+                echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+                echo "<input type='submit' value='Volver a detalles de usuario'>";
+                echo "</form>";
             } else {
-                echo "<h2>Error al actualizar el seguimiento</h2>";
+                echo "<h2>ERROR: solo puede modificar el informe el autor original.</h2>";
             }
-            echo "<form action='detalleusuario.php' method='post'>";
-            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
-            echo "<input type='submit' value='Volver a detalles de usuario'>";
-            echo "</form>";
         }
     } else {
         echo "<h2>Error en los datos suministrados</h2>";

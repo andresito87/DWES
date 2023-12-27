@@ -3,7 +3,7 @@
 // Recuperamos la información de la sesión
 session_start();
 
-if (isset($_SESSION['dni'])) {
+if (isset($_SESSION['auth'])) {
     session_unset(); // Y la eliminamos
 }
 ?>

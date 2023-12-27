@@ -5,7 +5,7 @@ $mensaje = require 'session_control.php';
 
 $mostrar_formulario_login = true;
 $mostrar_aviso_usuario_autenticado = false;
-if (isset($_SESSION['dni'])) {
+if (isset($_SESSION['auth'])) {
     $mostrar_formulario_login = false;
     $mostrar_aviso_usuario_autenticado = true;
 }
@@ -15,7 +15,7 @@ if ($mostrar_aviso_usuario_autenticado) {
 }
 
 // Comprobamos si ya se ha enviado el formulario
-if (isset($_POST['enviar']) && !isset($_SESSION['dni'])) {
+if (isset($_POST['enviar']) && !isset($_SESSION['auth'])) {
     //Obtenemos los datos enviados por POST y los volcamos a variables
 
     $dni = filter_input(INPUT_POST, 'dni', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -25,13 +25,18 @@ if (isset($_POST['enviar']) && !isset($_SESSION['dni'])) {
     if (empty($dni) || empty($password)) {
         $error = "Debes introducir un dni y una contraseña";
     } else {
-        $es_contraseña_valida = verificacion_contrasena($dni, $password);
+        $usuario = recuperar_usuario_valido($dni);
 
         //Si el numero de filas es distinto de false, es que existe ese usuario
-        if ($es_contraseña_valida) {
+        if ($usuario) {
             //Creamos la variable de usuario con el nombre del usuario
-            $_SESSION['dni'] = [$es_contraseña_valida['id'], $es_contraseña_valida['dni'], $es_contraseña_valida['nombre'], $es_contraseña_valida['apellidos'], $es_contraseña_valida['roles']];
-            //no mostramos el formulario de login
+            $_SESSION['auth'] = [
+                'id' => $usuario['id'],
+                'dni' => $usuario['dni'],
+                'nombre' => $usuario['nombre'],
+                'apellidos' => $usuario['apellidos'],
+                'roles' => $usuario['roles']
+            ];
             $mostrar_formulario_login = false;
         } else {
             // Si las credenciales no son válidas, se muestra un mensaje de error
@@ -89,7 +94,7 @@ if (isset($_POST['enviar']) && !isset($_SESSION['dni'])) {
         if (isset($_SESSION['filtro'])) {
             unset($_SESSION['filtro']);
         }
-        echo 'Bienvenido, ' . $_SESSION["dni"][2] . " " . $_SESSION["dni"][3] . '. Haz clic aquí para <a href="./usuarios.php">ver los usuarios</a>.';
+        echo 'Bienvenido, ' . $_SESSION['auth']['nombre'] . " " . $_SESSION['auth']['apellidos'] . '. Haz clic aquí para <a href="./usuarios.php">ver los usuarios</a>.';
         echo '</div>';
     }
     ?>

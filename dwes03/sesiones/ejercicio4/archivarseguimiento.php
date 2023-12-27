@@ -5,7 +5,7 @@ require 'session_control.php';
 require_once './src/userauth.php';
 require_once 'extra/header.php';
 
-if (verificacion_rol($_SESSION['dni'], 'coord')) {
+if (verificacion_rol_de_sesion('coord')) {
     ?>
 
     <!DOCTYPE html>

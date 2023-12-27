@@ -8,11 +8,11 @@ require_once 'extra/header.php';
 $pdo = 0;
 $usuario = [];
 $es_usuario_autorizado = false;
-if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
+if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc')) {
     $es_usuario_autorizado = true;
     if (isset($_POST['idDetalleUsuario'])) {
         $id = filter_input(INPUT_POST, 'idDetalleUsuario', FILTER_VALIDATE_INT);
-    } else if (isset($_SESSION['ultimo_detalle_usuario']) && (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc'))) {
+    } else if (isset($_SESSION['ultimo_detalle_usuario']) && (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc'))) {
         $id = $_SESSION['ultimo_detalle_usuario'];
     } else {
         $id = -1;
@@ -29,7 +29,6 @@ if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['d
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +99,7 @@ if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['d
             </table>
             <?php
             // Si el usuario es un coordinador o trabajador social se mostrará la tabla de seguimientos y el formulario para crear un nuevo seguimiento
-            if (verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
+            if (verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc')) {
                 ?>
                 <h1>Tabla de Seguimientos</h1>
                 <table class="seguimientos">
@@ -178,7 +177,7 @@ if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['d
                     <input type="text" name="horaSeguimiento" id="horaSeguimiento">(formato hh:mm)</input>
                     <br>
                     <?php
-                    if (verificacion_rol($_SESSION['dni'], 'coord')) {
+                    if (verificacion_rol_de_sesion('coord')) {
                         ?>
                         <label for="empleadoSeguimiento">Empleado</label>
                         <select name="empleadoSeguimiento" id="empleadoSeguimiento">

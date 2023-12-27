@@ -8,14 +8,14 @@ require_once 'extra/header.php';
 $errores = [];
 $es_usuario_autorizado = false;
 
-if (verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
+if (verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc')) {
     $es_usuario_autorizado = true;
     $es_coordinador = false;
-    if (verificacion_rol($_SESSION['dni'], 'coord')) {
+    if (verificacion_rol_de_sesion('coord')) {
         $es_coordinador = true;
     }
     // $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
-    $idUsuario = $_SESSION['dni'][0];
+    $idUsuario = $_SESSION['auth']['id'];
     if ($idUsuario === false || !is_int($idUsuario) || trim($idUsuario) === '' || $idUsuario <= 0) {
         $errores[] = "Datos de usuario no válidos";
     }
@@ -72,7 +72,7 @@ if (verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['d
     if ($es_coordinador) {
         $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_VALIDATE_INT);
     } else {
-        $empleadoSeguimiento = $_SESSION['dni'][0];
+        $empleadoSeguimiento = $_SESSION['auth']['id'];
     }
     if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($empleadoSeguimiento) !== '') {
         $pdo = connect();

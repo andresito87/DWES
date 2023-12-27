@@ -2,7 +2,7 @@
 
 require_once './src/conn.php';
 
-function verificacion_contrasena($dni, $password): array|bool
+function recuperar_usuario_valido($dni): array|bool
 {
     //Conectamos a la base de datos para comenzar las comprobaciones del usuario
     $con = connect();
@@ -33,11 +33,18 @@ function verificacion_contrasena($dni, $password): array|bool
     return isset($error) ? false : $fila;
 }
 
-function verificacion_rol($empleado, $rol): bool
+function verificacion_rol_de_sesion($rol): bool
 {
-    return $empleado[4] == $rol;
+    return $_SESSION['auth']['roles'] == $rol;
 }
 
-function verificacion_empleado_asignado_a_seguimiento()
+function verificacion_empleado_asignado_a_seguimiento($pdo, $idSeguimiento): bool
 {
+    $sql = "SELECT empleados_id FROM seguimiento WHERE id=:idSeguimiento";
+    $resultado = $pdo->prepare($sql);
+    $resultado->bindValue(":idSeguimiento", $idSeguimiento);
+    $resultado->execute();
+    $idEmpleado = $resultado->fetch();
+    $resultado = null;
+    return $idEmpleado[0] == $_SESSION['auth']['id'];
 }
