@@ -4,6 +4,11 @@ require_once 'src/dbfuncs.php';
 require 'session_control.php';
 require_once 'src/userauth.php';
 require_once 'extra/header.php';
+
+$es_usuario_autorizado = false;
+if (verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
+    $es_usuario_autorizado = true;
+}
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +25,9 @@ require_once 'extra/header.php';
 
 <body>
     <?php
+    if (!$es_usuario_autorizado) {
+        die("<h1>No tienes permisos para acceder a esta página</h1>");
+    }
     $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
     $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
     if (is_int($idUsuario) && is_int($idSeguimiento) && $idUsuario > 0 && $idSeguimiento > 0) {
@@ -45,13 +53,16 @@ require_once 'extra/header.php';
                 //Decodifico las etiquetas html para que se muestre su valor literal
                 //$informe = htmlspecialchars_decode($informe);
             } else {
+                echo "<h2>El informe debe tener al menos 5 caracteres</h2>";
                 echo "<form action='seguimientocontactado.php' method='post'>";
                 echo "<input type='hidden' name='idUsuario' value='$idUsuario'>";
                 echo "<input type='hidden' name='idSeguimiento' value='$idSeguimiento'>";
                 echo "<input type='submit' value='Volver Atrás'>";
                 echo "</form>";
-                die("<p>El informe debe tener al menos 5 caracteres</p>");
+                die();
             }
+
+            /*TODO: comprobar que el usuario que está intentando actualizar el seguimiento es el mismo que lo creó*/
 
             $seguimiento = actualizarInforme($pdo, $idSeguimiento, $informe);
             if ($seguimiento === 1) {
@@ -61,16 +72,13 @@ require_once 'extra/header.php';
             } else {
                 echo "<h2>Error al actualizar el seguimiento</h2>";
             }
-
             echo "<form action='detalleusuario.php' method='post'>";
             echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
             echo "<input type='submit' value='Volver a detalles de usuario'>";
             echo "</form>";
-
         }
     } else {
-        echo "<p>Error en los datos suministrados</p>";
-        echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
+        echo "<h2>Error en los datos suministrados</h2>";
     }
     ?>
 

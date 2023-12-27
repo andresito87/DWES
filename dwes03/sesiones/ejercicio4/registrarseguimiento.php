@@ -6,23 +6,34 @@ require_once 'src/userauth.php';
 require_once 'extra/header.php';
 
 $errores = [];
+$es_usuario_autorizado = false;
 
-$idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
-if ($idUsuario === false || !is_int($idUsuario) || trim($idUsuario) === '' || $idUsuario <= 0) {
-    $errores[] = "Datos de usuario no válidos";
-}
+if (verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
+    $es_usuario_autorizado = true;
+    $es_coordinador = false;
+    if (verificacion_rol($_SESSION['dni'], 'coord')) {
+        $es_coordinador = true;
+    }
+    // $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
+    $idUsuario = $_SESSION['dni'][0];
+    if ($idUsuario === false || !is_int($idUsuario) || trim($idUsuario) === '' || $idUsuario <= 0) {
+        $errores[] = "Datos de usuario no válidos";
+    }
 
-$fechaSeguimiento = filter_input(INPUT_POST, 'fechaSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
-if ($fechaSeguimiento !== false && $fechaSeguimiento !== null && trim($fechaSeguimiento) !== '') {
-    if (preg_match("/^\d{2}\/\d{2}\/\d{4}$/", $fechaSeguimiento)) {
-        $fechaSeguimiento = explode('/', $fechaSeguimiento);
-        $dia = $fechaSeguimiento[0];
-        $mes = $fechaSeguimiento[1];
-        $anio = $fechaSeguimiento[2];
-        if (checkdate($mes, $dia, $anio)) {
-            try {
-                $fechaSeguimiento = new DateTime($anio . '-' . $mes . '-' . $dia);
-            } catch (Exception $e) {
+    $fechaSeguimiento = filter_input(INPUT_POST, 'fechaSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
+    if ($fechaSeguimiento !== false && $fechaSeguimiento !== null && trim($fechaSeguimiento) !== '') {
+        if (preg_match("/^\d{2}\/\d{2}\/\d{4}$/", $fechaSeguimiento)) {
+            $fechaSeguimiento = explode('/', $fechaSeguimiento);
+            $dia = $fechaSeguimiento[0];
+            $mes = $fechaSeguimiento[1];
+            $anio = $fechaSeguimiento[2];
+            if (checkdate($mes, $dia, $anio)) {
+                try {
+                    $fechaSeguimiento = new DateTime($anio . '-' . $mes . '-' . $dia);
+                } catch (Exception $e) {
+                    $errores[] = "La fecha de seguimiento no es válida";
+                }
+            } else {
                 $errores[] = "La fecha de seguimiento no es válida";
             }
         } else {
@@ -31,52 +42,54 @@ if ($fechaSeguimiento !== false && $fechaSeguimiento !== null && trim($fechaSegu
     } else {
         $errores[] = "La fecha de seguimiento no es válida";
     }
-} else {
-    $errores[] = "La fecha de seguimiento no es válida";
-}
 
-$horaSeguimiento = filter_input(INPUT_POST, 'horaSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
-if ($horaSeguimiento !== false && $horaSeguimiento !== null && trim($horaSeguimiento) !== '') {
-    if (!preg_match("/^\d{2}:\d{2}$/", $horaSeguimiento) || $horaSeguimiento > '23:59' || $horaSeguimiento < '00:00') {
+    $horaSeguimiento = filter_input(INPUT_POST, 'horaSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
+    if ($horaSeguimiento !== false && $horaSeguimiento !== null && trim($horaSeguimiento) !== '') {
+        if (!preg_match("/^\d{2}:\d{2}$/", $horaSeguimiento) || $horaSeguimiento > '23:59' || $horaSeguimiento < '00:00') {
+            $errores[] = "La hora de seguimiento no es válida";
+        }
+    } else {
         $errores[] = "La hora de seguimiento no es válida";
     }
-} else {
-    $errores[] = "La hora de seguimiento no es válida";
-}
 
-$medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
-if ($medioSeguimiento !== false && $medioSeguimiento !== null && trim($medioSeguimiento) !== '') {
-    $mediosValidos = ['TLF', 'EMAIL', 'PRESENCIAL', 'VIDEOCONF', 'OTRO'];
-    if (!in_array($medioSeguimiento, $mediosValidos)) {
+    $medioSeguimiento = filter_input(INPUT_POST, 'medioSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
+    if ($medioSeguimiento !== false && $medioSeguimiento !== null && trim($medioSeguimiento) !== '') {
+        $mediosValidos = ['TLF', 'EMAIL', 'PRESENCIAL', 'VIDEOCONF', 'OTRO'];
+        if (!in_array($medioSeguimiento, $mediosValidos)) {
+            $errores[] = "El medio de seguimiento no es válido";
+        }
+        if ($medioSeguimiento === 'OTRO') {
+            $otroMedioSeguimiento = filter_input(INPUT_POST, 'otroMedioSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
+            if (!is_string($otroMedioSeguimiento) || trim($otroMedioSeguimiento) === '') {
+                $errores[] = "El otro medio de seguimiento no es válido";
+            }
+        }
+    } else {
         $errores[] = "El medio de seguimiento no es válido";
     }
-    if ($medioSeguimiento === 'OTRO') {
-        $otroMedioSeguimiento = filter_input(INPUT_POST, 'otroMedioSeguimiento', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!is_string($otroMedioSeguimiento) || trim($otroMedioSeguimiento) === '') {
-            $errores[] = "El otro medio de seguimiento no es válido";
-        }
-    }
-} else {
-    $errores[] = "El medio de seguimiento no es válido";
-}
 
-$pdo = null;
-$empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_VALIDATE_INT);
-if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($empleadoSeguimiento) !== '') {
-    $pdo = connect();
-    $empleados = listadoCoordinadoresOTrabSociales($pdo);
-    $empleadoEncontrado = false;
-    foreach ($empleados as $empleado) {
-        if ($empleado['id'] === $empleadoSeguimiento) {
-            $empleadoEncontrado = true;
-            break;
+    $pdo = null;
+    if ($es_coordinador) {
+        $empleadoSeguimiento = filter_input(INPUT_POST, 'empleadoSeguimiento', FILTER_VALIDATE_INT);
+    } else {
+        $empleadoSeguimiento = $_SESSION['dni'][0];
+    }
+    if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($empleadoSeguimiento) !== '') {
+        $pdo = connect();
+        $empleados = listadoCoordinadoresOTrabSociales($pdo);
+        $empleadoEncontrado = false;
+        foreach ($empleados as $empleado) {
+            if ($empleado['id'] === $empleadoSeguimiento) {
+                $empleadoEncontrado = true;
+                break;
+            }
         }
+        if (is_array($empleados) && (empty($empleados)) || !$empleadoEncontrado) {
+            $errores[] = "El empleado para ese seguimiento no es válido";
+        }
+    } else {
+        $errores[] = "Error en los datos del empleado";
     }
-    if (is_array($empleados) && (empty($empleados)) || !$empleadoEncontrado) {
-        $errores[] = "El empleado para ese seguimiento no es válido";
-    }
-} else {
-    $errores[] = "Error en los datos del empleado";
 }
 ?>
 <!DOCTYPE html>
@@ -92,54 +105,61 @@ if ($empleadoSeguimiento !== false && $empleadoSeguimiento !== null && trim($emp
 </head>
 
 <body>
-    <div id="contenido">
-        <?php
-        $insertado = -1;
-        if (empty($errores)) {
-            $fechahora = $fechaSeguimiento->format('Y-m-d') . " " . $horaSeguimiento;
-            $contactado = false;
-            $informe = null;
-            $otroMedioSeguimiento ??= null;
-            $usuariosId = $_POST['idUsuario'];
-            $insertado = insertarSeguimientos($pdo, $fechahora, $medioSeguimiento, $otroMedioSeguimiento, $contactado, $informe, $empleadoSeguimiento, $usuariosId);
-            if ($insertado === 1) {
-                echo "<p>Se ha creado el seguimiento correctamente</p>";
-                echo "<form action='detalleusuario.php' method='post'>";
-                echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
-                echo "<input type='submit' value='Volver a detalles de usuario'>";
-                echo "</form>";
-            } else if (!$insertado) {
-                echo "<p>Los datos suministrados no corresponden con ninguno de nuestros registros</p>";
-                echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
-            } else {
-                echo "<p>Error al crear el seguimiento</p>";
-            }
+
+    <?php
+    $insertado = -1;
+
+    if (empty($errores) && $es_usuario_autorizado) {
+        echo '<div id="contenido">';
+        $fechahora = $fechaSeguimiento->format('Y-m-d') . " " . $horaSeguimiento;
+        $contactado = false;
+        $informe = null;
+        $otroMedioSeguimiento ??= null;
+        $usuariosId = $_POST['idUsuario'];
+        $insertado = insertarSeguimientos($pdo, $fechahora, $medioSeguimiento, $otroMedioSeguimiento, $contactado, $informe, $empleadoSeguimiento, $usuariosId);
+        if ($insertado === 1) {
+            echo "<p>Se ha creado el seguimiento correctamente</p>";
+            echo "<form action='detalleusuario.php' method='post'>";
+            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+            echo "<input type='submit' value='Volver a detalles de usuario'>";
+            echo "</form>";
+        } else if (!$insertado) {
+            echo "<p>Los datos suministrados no corresponden con ninguno de nuestros registros</p>";
+            echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
         } else {
-            $mostrarBotonVolverAListadoUsuarios = false;
-            echo "<ul>";
-            foreach ($errores as $error) {
-                echo "<li>" . $error . "</li>";
-                if (
-                    $error === "Error en los datos del empleado"
-                    || $error === "El empleado para ese seguimiento no es válido"
-                    || $error === "Datos de usuario no válidos"
-                ) {
-                    $mostrarBotonVolverAListadoUsuarios = true;
-                }
-            }
-            echo "</ul>";
-            if (!$mostrarBotonVolverAListadoUsuarios) {
-                echo "<form action='detalleusuario.php' method='post'>";
-                echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
-                echo "<input type='submit' value='Volver a detalles de usuario'>";
-                echo "</form>";
-            } else {
-                echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
+            echo "<p>Error al crear el seguimiento</p>";
+        }
+        echo "</div>";
+    } else if ($es_usuario_autorizado) {
+        echo '<div id="contenido">';
+        $mostrarBotonVolverAListadoUsuarios = false;
+        echo "<ul>";
+        foreach ($errores as $error) {
+            echo "<li>" . $error . "</li>";
+            if (
+                $error === "Error en los datos del empleado"
+                || $error === "El empleado para ese seguimiento no es válido"
+                || $error === "Datos de usuario no válidos"
+            ) {
+                $mostrarBotonVolverAListadoUsuarios = true;
             }
         }
-        $pdo = null;
-        ?>
-    </div>
+        echo "</ul>";
+        if (!$mostrarBotonVolverAListadoUsuarios) {
+            echo "<form action='detalleusuario.php' method='post'>";
+            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+            echo "<input type='submit' value='Volver a detalles de usuario'>";
+            echo "</form>";
+        } else {
+            echo '<button class="volverAtras" onclick="window.location.href=\'usuarios.php\'">Volver a Listado de Usuarios</button>';
+        }
+        echo "</div>";
+    } else {
+        echo "<h2>No tiene permisos para realizar esta acción</h2>";
+    }
+    $pdo = null;
+    ?>
+
 </body>
 
 </html>

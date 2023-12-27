@@ -5,24 +5,28 @@ require 'session_control.php';
 require_once './src/userauth.php';
 require_once 'extra/header.php';
 
-
 $pdo = 0;
 $usuario = [];
+$es_usuario_autorizado = false;
+if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
+    $es_usuario_autorizado = true;
+    if (isset($_POST['idDetalleUsuario'])) {
+        $id = filter_input(INPUT_POST, 'idDetalleUsuario', FILTER_VALIDATE_INT);
+    } else if (isset($_SESSION['ultimo_detalle_usuario']) && (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc'))) {
+        $id = $_SESSION['ultimo_detalle_usuario'];
+    } else {
+        $id = -1;
+    }
 
-if (isset($_POST['idDetalleUsuario'])) {
-    $id = filter_input(INPUT_POST, 'idDetalleUsuario', FILTER_VALIDATE_INT);
-} else {
-    $id = $_SESSION['ultimo_detalle_usuario'];
-}
-
-if (is_int($id) && $id > 0) {
-    $pdo = connect();
-    try {
-        $usuario = detallesUsuario($pdo, $id);
-        $_SESSION['ultimo_detalle_usuario'] = $id;
-    } catch (PDOException $e) {
-        $error = $e->getMessage();
-        die("Error:. $error");
+    if (is_int($id) && $id > 0) {
+        $pdo = connect();
+        try {
+            $usuario = detallesUsuario($pdo, $id);
+            $_SESSION['ultimo_detalle_usuario'] = $id;
+        } catch (PDOException $e) {
+            $error = $e->getMessage();
+            die("Error:. $error");
+        }
     }
 }
 
@@ -42,7 +46,7 @@ if (is_int($id) && $id > 0) {
 
 <body>
     <?php
-    if (isset($_SESSION['roles']) && (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc'))) {
+    if ($es_usuario_autorizado) {
         if (is_array($usuario) && !empty($usuario)) {
             ?>
             <h1>Detalles de Usuario</h1>
@@ -95,75 +99,73 @@ if (is_int($id) && $id > 0) {
                 ?>
             </table>
             <?php
-            // Si el usuario es un admin, coordinador o trabajador social se mostrará la tabla de seguimientos y el formulario para crear un nuevo seguimiento
-            if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
-                // Si el usuario es un coordinador o trabajador social se mostrará la tabla de seguimientos y el formulario para crear un nuevo seguimiento
-                if (verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
-                    ?>
-                    <h1>Tabla de Seguimientos</h1>
-                    <table class="seguimientos">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Empleado</th>
-                                <th>Apellidos del Empleado</th>
-                                <th>ID de Seguimiento</th>
-                                <th>Fecha y Hora del Seguimiento</th>
-                                <th>Medio de Seguimiento</th>
-                                <th>Contactado</th>
-                                <th>Informe de Seguimiento</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $seguimientos = [];
-                            if (isset($usuario['dni']) && is_string($usuario['dni']) && $pdo !== 0) {
-                                try {
-                                    $seguimientos = seguimientoUsuario($pdo, $usuario['dni']);
-                                } catch (PDOException $e) {
-                                    $error = $e->getMessage();
-                                    die("Error:. $error");
-                                }
-                            } else {
-                                die("Error en los datos suministrados");
+            // Si el usuario es un coordinador o trabajador social se mostrará la tabla de seguimientos y el formulario para crear un nuevo seguimiento
+            if (verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
+                ?>
+                <h1>Tabla de Seguimientos</h1>
+                <table class="seguimientos">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Empleado</th>
+                            <th>Apellidos del Empleado</th>
+                            <th>ID de Seguimiento</th>
+                            <th>Fecha y Hora del Seguimiento</th>
+                            <th>Medio de Seguimiento</th>
+                            <th>Contactado</th>
+                            <th>Informe de Seguimiento</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $seguimientos = [];
+                        if (isset($usuario['dni']) && is_string($usuario['dni']) && $pdo !== 0) {
+                            try {
+                                $seguimientos = seguimientoUsuario($pdo, $usuario['dni']);
+                            } catch (PDOException $e) {
+                                $error = $e->getMessage();
+                                die("Error:. $error");
                             }
-                            if (is_array($seguimientos) && empty($seguimientos)) {
+                        } else {
+                            die("Error en los datos suministrados");
+                        }
+                        if (is_array($seguimientos) && empty($seguimientos)) {
+                            echo "<tr>";
+                            echo "<td class='sinRegistros' colspan='8'>No hay seguimientos para este usuario</td>";
+                            echo "</tr>";
+                        } else if (!is_array($seguimientos) && !$seguimientos) {
+                            echo "<tr>";
+                            echo "<td class='sinRegistros' colspan='8'>Error al obtener los seguimientos</td>";
+                            echo "</tr>";
+                        } else {
+                            foreach (seguimientoUsuario($pdo, $usuario['dni']) as $seguimiento) {
                                 echo "<tr>";
-                                echo "<td class='sinRegistros' colspan='8'>No hay seguimientos para este usuario</td>";
-                                echo "</tr>";
-                            } else if (!is_array($seguimientos) && !$seguimientos) {
-                                echo "<tr>";
-                                echo "<td class='sinRegistros' colspan='8'>Error al obtener los seguimientos</td>";
-                                echo "</tr>";
-                            } else {
-                                foreach (seguimientoUsuario($pdo, $usuario['dni']) as $seguimiento) {
-                                    echo "<tr>";
-                                    echo "<td>" . $seguimiento['nombre_empleado'] . "</td>";
-                                    echo "<td>" . $seguimiento['apellidos_empleado'] . "</td>";
-                                    echo "<td>" . $seguimiento['id_seguimiento'] . "</td>";
-                                    echo "<td>" . date('d/m/Y', strtotime($seguimiento['fechahora_seguimiento'])) . "<br>" . date('H:i', strtotime($seguimiento['fechahora_seguimiento'])) . "</td>";
-                                    echo "<td>" . $seguimiento['medio_seguimiento'] . ($seguimiento['otro_seguimiento'] === null ? "" : "(" . $seguimiento['otro_seguimiento'] . ")") . "</td>";
-                                    echo "<td>" . ($seguimiento['contactado_seguimiento'] === 1 ? "Sí" : "No") . "</td>";
-                                    echo "<td>" . $seguimiento['informe_seguimiento'] . "</td>";
-                                    echo "<td>";
-                                    echo "<form action='archivarseguimiento.php' method='post'>";
+                                echo "<td>" . $seguimiento['nombre_empleado'] . "</td>";
+                                echo "<td>" . $seguimiento['apellidos_empleado'] . "</td>";
+                                echo "<td>" . $seguimiento['id_seguimiento'] . "</td>";
+                                echo "<td>" . date('d/m/Y', strtotime($seguimiento['fechahora_seguimiento'])) . "<br>" . date('H:i', strtotime($seguimiento['fechahora_seguimiento'])) . "</td>";
+                                echo "<td>" . $seguimiento['medio_seguimiento'] . ($seguimiento['otro_seguimiento'] === null ? "" : "(" . $seguimiento['otro_seguimiento'] . ")") . "</td>";
+                                echo "<td>" . ($seguimiento['contactado_seguimiento'] === 1 ? "Sí" : "No") . "</td>";
+                                echo "<td>" . $seguimiento['informe_seguimiento'] . "</td>";
+                                echo "<td>";
+                                echo "<form action='archivarseguimiento.php' method='post'>";
+                                echo "<input type='hidden' name='idUsuario' value='" . $usuario['id'] . "'>";
+                                echo "<input type='hidden' name='idSeguimiento' value='" . $seguimiento['id_seguimiento'] . "'>";
+                                echo "<input type='submit' class='botonSeguimiento' value='Archivar seguimiento'>";
+                                echo "</form>";
+                                if (!$seguimiento["contactado_seguimiento"]) {
+                                    echo "<form action='seguimientocontactado.php' method='post'>";
                                     echo "<input type='hidden' name='idUsuario' value='" . $usuario['id'] . "'>";
                                     echo "<input type='hidden' name='idSeguimiento' value='" . $seguimiento['id_seguimiento'] . "'>";
-                                    echo "<input type='submit' class='botonSeguimiento' value='Archivar seguimiento'>";
+                                    echo "<input type='submit' class='botonContactado' value='Contactado'>";
                                     echo "</form>";
-                                    if (!$seguimiento["contactado_seguimiento"]) {
-                                        echo "<form action='seguimientocontactado.php' method='post'>";
-                                        echo "<input type='hidden' name='idUsuario' value='" . $usuario['id'] . "'>";
-                                        echo "<input type='hidden' name='idSeguimiento' value='" . $seguimiento['id_seguimiento'] . "'>";
-                                        echo "<input type='submit' class='botonContactado' value='Contactado'>";
-                                        echo "</form>";
-                                    }
-                                    echo "</td>";
-                                    echo "</tr>";
                                 }
+                                echo "</td>";
+                                echo "</tr>";
                             }
-                }
-                ?>
+                        }
+
+                        ?>
                     </tbody>
                 </table>
 
@@ -175,23 +177,29 @@ if (is_int($id) && $id > 0) {
                     <label for="horaSeguimiento">Hora</label>
                     <input type="text" name="horaSeguimiento" id="horaSeguimiento">(formato hh:mm)</input>
                     <br>
-                    <label for="empleadoSeguimiento">Empleado</label>
-                    <select name="empleadoSeguimiento" id="empleadoSeguimiento">
-                        <?php
-                        $empleados = listadoCoordinadoresOTrabSociales($pdo);
-                        if (is_array($empleados) && empty($empleados)) {
-                            die("<p>No hay empleados disponibles</p>");
-                        } else if (!is_array($empleados) && !$empleados) {
-                            die("<p>Error al obtener el listado de empleados</p>");
-                        } else {
-                            foreach ($empleados as $empleado) {
-                                echo "<option value='" . $empleado['id'] . "'>" . $empleado['nombre'] . " " . $empleado['apellidos'] . "</option>";
-                            }
-                        }
-                        $pdo = null;
+                    <?php
+                    if (verificacion_rol($_SESSION['dni'], 'coord')) {
                         ?>
-                    </select>
-                    <br>
+                        <label for="empleadoSeguimiento">Empleado</label>
+                        <select name="empleadoSeguimiento" id="empleadoSeguimiento">
+                            <?php
+                            $empleados = listadoCoordinadoresOTrabSociales($pdo);
+                            if (is_array($empleados) && empty($empleados)) {
+                                die("<p>No hay empleados disponibles</p>");
+                            } else if (!is_array($empleados) && !$empleados) {
+                                die("<p>Error al obtener el listado de empleados</p>");
+                            } else {
+                                foreach ($empleados as $empleado) {
+                                    echo "<option value='" . $empleado['id'] . "'>" . $empleado['nombre'] . " " . $empleado['apellidos'] . "</option>";
+                                }
+                            }
+                            $pdo = null;
+                            ?>
+                        </select>
+                        <br>
+                        <?php
+                    }
+                    ?>
                     <label for="medioSeguimiento">Medio de contacto</label>
                     <select name="medioSeguimiento" id="medioSeguimiento">
                         <option value="TLF">Teléfono</option>
@@ -213,10 +221,10 @@ if (is_int($id) && $id > 0) {
             echo "<h2>Error en los datos suministrados</h2>";
         }
     } else {
-        echo "<h2>No tienes permisos para ver esta página</h2>";
+        echo "<h2>No tienes permisos para acceder a esta página</h2>";
     }
+
     ?>
-    <button class="volverAtras" onclick="window.location.href='usuarios.php'">Volver a Listado de Usuarios</button>
 </body>
 
 </html>

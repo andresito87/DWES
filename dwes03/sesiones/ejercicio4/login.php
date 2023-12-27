@@ -84,6 +84,11 @@ if (isset($_POST['enviar']) && !isset($_SESSION['dni'])) {
 
         //Mostramos el mensaje de bienvenida
         echo '<div id="bienvenida">';
+        // El usuario habria filtrado la lista de usuarios, antes de intentar 
+        //loguearse de nuevo. Por tanto, borramos el filtro
+        if (isset($_SESSION['filtro'])) {
+            unset($_SESSION['filtro']);
+        }
         echo 'Bienvenido, ' . $_SESSION["dni"][2] . " " . $_SESSION["dni"][3] . '. Haz clic aquí para <a href="./usuarios.php">ver los usuarios</a>.';
         echo '</div>';
     }

@@ -6,14 +6,12 @@ require_once 'src/userauth.php';
 require_once 'extra/header.php';
 
 
-//Recuperamos la información de la sesión si el usuario ya se habia autentificado */
-// if (!isset($_SESSION['dni'])) {
-//     session_start();
-// }
-
 //comprobamos si el rol del usuario es admin, coordinador, trabajador social o educador social
+$mostrar_boton_ver_detalle = false;
 if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc') || verificacion_rol($_SESSION['dni'], 'edusoc')) {
-
+    if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['dni'], 'coord') || verificacion_rol($_SESSION['dni'], 'trasoc')) {
+        $mostrar_boton_ver_detalle = true;
+    }
     //Conexión a la base de datos y recuperación de los usuarios
     $pdo = connect();
     try {
@@ -88,7 +86,11 @@ if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['d
                 <th>Fecha de Nacimiento</th>
                 <th>Nombre</th>
                 <th>Apellidos</th>
-                <th>Acciones</th>
+                <?php
+                if ($mostrar_boton_ver_detalle) {
+                    echo "<th>Acciones</th>";
+                }
+                ?>
             </thead>
             <tbody>
                 <?php
@@ -116,10 +118,12 @@ if (verificacion_rol($_SESSION['dni'], 'admin') || verificacion_rol($_SESSION['d
                         echo "<td>" . $usuario['fnacim'] . "</td>";
                         echo "<td>" . $usuario['nombre'] . "</td>";
                         echo "<td>" . $usuario['apellidos'] . "</td>";
-                        echo '<td><form id="form_' . $usuario['id'] . '" action="detalleusuario.php" method="post">
+                        if ($mostrar_boton_ver_detalle) {
+                            echo '<td><form id="form_' . $usuario['id'] . '" action="detalleusuario.php" method="post">
                 <input type="hidden" name="idDetalleUsuario" value="' . $usuario['id'] . '"/>
-                <input type="submit" class="inputDetalle" value="Ver Detalle" name="detalle"/>
-              </form></td>';
+                <input type="submit" class="inputDetalle" value="Ver Detalle" name="detalle"/>';
+                        }
+                        echo "</form></td>";
                         echo "</tr>";
                     } else {
                     $filtro = isset($_SESSION['filtro']) ? $_SESSION['filtro'] : $filtro;
