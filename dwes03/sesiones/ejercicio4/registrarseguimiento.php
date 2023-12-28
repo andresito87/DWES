@@ -1,9 +1,9 @@
 <?php
-require 'src/conn.php';
-require 'src/dbfuncs.php';
-require 'session_control.php';
-require_once 'src/userauth.php';
-require_once 'extra/header.php';
+require_once __DIR__ . '/src/conn.php';
+require_once __DIR__ . '/src/dbfuncs.php';
+require_once __DIR__ . '/session_control.php';
+require_once __DIR__ . '/src/userauth.php';
+require_once __DIR__ . '/extra/header.php';
 
 $errores = [];
 $es_usuario_autorizado = false;
@@ -14,7 +14,7 @@ if (verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc'))
     if (verificacion_rol_de_sesion('coord')) {
         $es_coordinador = true;
     }
-    // $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
+
     $idUsuario = $_SESSION['auth']['id'];
     if ($idUsuario === false || !is_int($idUsuario) || trim($idUsuario) === '' || $idUsuario <= 0) {
         $errores[] = "Datos de usuario no válidos";

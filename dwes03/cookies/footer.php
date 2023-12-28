@@ -3,7 +3,7 @@
 date_default_timezone_set('Europe/Madrid');
 echo "<p>Fecha y hora del documento: ";
 //Muestra la fecha de modificación del archivo en formato dd/mm/aaaa
-echo "<span>" . date("d/m/Y H:m", filemtime("footer.php")) . "</span></p>";
+echo "<span>" . date("d/m/Y H:m", filemtime($archivo_html)) . "</span></p>";
 
 if (isset($_GET["ver"]) && in_array($_GET["ver"], array_column($secciones, "link"))) {
     if (!isset($_COOKIE["lista_ultimos_sitios"]) || !isset($_COOKIE["hash_lista_ultimos_sitios"])) {

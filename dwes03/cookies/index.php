@@ -39,16 +39,18 @@
                 if ($seccion["link"] === $_GET["ver"]) {
                     readfile("contenidos/" . $seccion["archivo"]);
                     $seccion_encontrada = true;
+                    $archivo_html = "contenidos/" . $seccion["archivo"];
                     break;
                 }
             }
-            //si se modifica el parámetro ver y no se encuentra la sección, se muestra la primera
+            //si se modifica el parámetro ver y no se encuentra la sección, se muestra la primera por defecto
             if (!$seccion_encontrada) {
-                header("Location: index.php?ver=sección+1");
+                header("Location: index.php?ver=" . urlencode($secciones[array_search(SECCION_DEFECTO, $secciones)]["link"]));
             }
         } else {
             // Si no se ha seleccionado ninguna sección, se muestra la primera(Inicio)
             readfile("contenidos/" . $secciones[0]["archivo"]);
+            $archivo_html = "contenidos/" . $secciones[0]["archivo"];
         }
         ?>
     </main>

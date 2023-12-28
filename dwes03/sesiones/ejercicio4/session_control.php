@@ -1,6 +1,6 @@
 <?php
 
-if (!isset($_SESSION)) {
+if (!isset($_SESSION['auth'])) {
     session_start(); // Iniciamos la sesión
 }
 
@@ -10,7 +10,7 @@ if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso'] > 
     // Si ha pasado el tiempo de inactividad, destruye la sesión y vuelve al login
     require 'logout.php';
     header("Location: ./login.php"); // Redirigimos al usuario a la página de login
-} else if (isset($_SESSION['auth'])) {
+} else if (isset($_SESSION['ultimo_acceso']) && isset($_SESSION['auth'])) {
     $error = "El empleado ya está autenticado";
     $_SESSION['ultimo_acceso'] = time();
 } else {

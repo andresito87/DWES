@@ -2,7 +2,7 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-$nombre_apellidos = $_SESSION['auth']['dni'] . " " . $_SESSION['auth']['apellidos'];
+$nombre_apellidos = $_SESSION['auth']['nombre'] . " " . $_SESSION['auth']['apellidos'];
 $rol = $_SESSION['auth']['roles'];
 $mostrar_link_detalle_ultimo_usuario = false;
 if (isset($_SESSION['ultimo_detalle_usuario']) && (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc'))) {

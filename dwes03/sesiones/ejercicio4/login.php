@@ -1,7 +1,7 @@
 <?php
-require_once './src/userauth.php';
-require_once './etc/conf.php';
-$mensaje = require 'session_control.php';
+require_once __DIR__ . '/src/userauth.php';
+require_once __DIR__ . '/etc/conf.php';
+$mensaje = require_once __DIR__ . '/session_control.php';
 
 $mostrar_formulario_login = true;
 $mostrar_aviso_usuario_autenticado = false;

@@ -1,18 +1,19 @@
 <?php
-require_once 'src/conn.php';
-require_once 'src/dbfuncs.php';
-require 'session_control.php';
-require_once './src/userauth.php';
-require_once 'extra/header.php';
+require_once __DIR__ . '/src/conn.php';
+require_once __DIR__ . '/src/dbfuncs.php';
+require_once __DIR__ . '/session_control.php';
+require_once __DIR__ . '/src/userauth.php';
+require_once __DIR__ . '/extra/header.php';
 
 $pdo = 0;
 $usuario = [];
+$errores = [];
 $es_usuario_autorizado = false;
 if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc')) {
     $es_usuario_autorizado = true;
     if (isset($_POST['idDetalleUsuario'])) {
         $id = filter_input(INPUT_POST, 'idDetalleUsuario', FILTER_VALIDATE_INT);
-    } else if (isset($_SESSION['ultimo_detalle_usuario']) && (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc'))) {
+    } else if (isset($_SESSION['ultimo_detalle_usuario'])) {
         $id = $_SESSION['ultimo_detalle_usuario'];
     } else {
         $id = -1;
@@ -27,6 +28,8 @@ if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') |
             $error = $e->getMessage();
             die("Error:. $error");
         }
+    } else {
+        die("Error en los datos suministrados");
     }
 }
 ?>

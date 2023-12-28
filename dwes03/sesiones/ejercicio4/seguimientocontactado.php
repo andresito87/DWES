@@ -1,9 +1,9 @@
 <?php
-require_once 'src/conn.php';
-require_once 'src/dbfuncs.php';
-require 'session_control.php';
-require_once 'src/userauth.php';
-require_once 'extra/header.php';
+require_once __DIR__ . '/src/conn.php';
+require_once __DIR__ . '/src/dbfuncs.php';
+require_once __DIR__ . '/session_control.php';
+require_once __DIR__ . '/src/userauth.php';
+require_once __DIR__ . '/extra/header.php';
 
 $es_usuario_autorizado = false;
 if (verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc')) {

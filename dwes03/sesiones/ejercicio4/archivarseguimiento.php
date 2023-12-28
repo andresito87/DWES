@@ -1,28 +1,27 @@
 <?php
-require_once 'src/conn.php';
-require_once 'src/dbfuncs.php';
-require 'session_control.php';
-require_once './src/userauth.php';
-require_once 'extra/header.php';
+require_once __DIR__ . '/src/conn.php';
+require_once __DIR__ . '/src/dbfuncs.php';
+require_once __DIR__ . '/session_control.php';
+require_once __DIR__ . '/src/userauth.php';
+require_once __DIR__ . 'extra/header.php';
+?>
 
-if (verificacion_rol_de_sesion('coord')) {
-    ?>
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/html">
 
-    <!DOCTYPE html>
-    <html lang="es" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="styles/estilosSeguimientoContactado.css">
+    <title>Archivar Seguimiento</title>
+</head>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="styles/estilosSeguimientoContactado.css">
-        <title>Archivar Seguimiento</title>
-    </head>
-
-    <body>
-        <div id='contenido'>
-            <?php
+<body>
+    <div id='contenido'>
+        <?php
+        if (verificacion_rol_de_sesion('coord')) {
             $idUsuario = filter_input(INPUT_POST, 'idUsuario', FILTER_VALIDATE_INT);
             $idSeguimiento = filter_input(INPUT_POST, 'idSeguimiento', FILTER_VALIDATE_INT);
             if (is_int($idUsuario) && is_int($idSeguimiento)) {
@@ -54,10 +53,11 @@ if (verificacion_rol_de_sesion('coord')) {
             } else {
                 echo "<p>Error en los datos suministrados</p>";
             }
-            ?>
-        </div>
-    </body>
+        } else {
+            echo "<h2>No tiene permisos para realizar esta acción</h2>";
+        }
+        ?>
+    </div>
+</body>
 
-    </html>
-    <?php
-}
+</html>
