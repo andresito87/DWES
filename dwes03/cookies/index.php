@@ -1,3 +1,10 @@
+<?php
+//Hago un require de footer.php para poder evitar el warning que generaría el uso de echo
+//en este archivo antes de setear las cookies en footer.php
+//He podido corregirlo gracias a desplegar la aplicación en un contenedor de Docker, 
+//en Xampp no se mostraba el warning, demasiado permisivo con los errores
+$contenido_html = require_once "footer.php";
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -57,7 +64,7 @@
     <footer>
         <!-- Se incluye el footer -->
         <?php
-        require_once "footer.php";
+        echo $contenido_html;
         ?>
         </p>
     </footer>

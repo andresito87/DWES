@@ -1,23 +1,18 @@
 <?php
 require_once __DIR__ . '/src/userauth.php';
 require_once __DIR__ . '/etc/conf.php';
-$mensaje = require_once __DIR__ . '/session_control.php';
 
 $mostrar_formulario_login = true;
 $mostrar_aviso_usuario_autenticado = false;
+session_start(); // Iniciamos la sesión
 if (isset($_SESSION['auth'])) {
     $mostrar_formulario_login = false;
     $mostrar_aviso_usuario_autenticado = true;
 }
 
-if ($mostrar_aviso_usuario_autenticado) {
-    echo $mensaje;
-}
-
 // Comprobamos si ya se ha enviado el formulario
-if (isset($_POST['enviar']) && !isset($_SESSION['auth'])) {
+if (isset($_POST['enviar'])) {
     //Obtenemos los datos enviados por POST y los volcamos a variables
-
     $dni = filter_input(INPUT_POST, 'dni', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $password = filter_input(INPUT_POST, 'password');
 
@@ -25,11 +20,10 @@ if (isset($_POST['enviar']) && !isset($_SESSION['auth'])) {
     if (empty($dni) || empty($password)) {
         $error = "Debes introducir un dni y una contraseña";
     } else {
-        $usuario = recuperar_usuario_valido($dni);
-
+        $usuario = recuperar_usuario_valido($dni, $password);
         //Si el numero de filas es distinto de false, es que existe ese usuario
         if ($usuario) {
-            //Creamos la variable de usuario con el nombre del usuario
+            //Cargamos en la sesión los datos del usuario
             $_SESSION['auth'] = [
                 'id' => $usuario['id'],
                 'dni' => $usuario['dni'],
@@ -44,7 +38,6 @@ if (isset($_POST['enviar']) && !isset($_SESSION['auth'])) {
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +58,9 @@ if (isset($_POST['enviar']) && !isset($_SESSION['auth'])) {
             <form action='login.php' method='post'>
                 <fieldset>
                     <div><span class='error'>
-                            <?php echo (isset($error) ? $error : ""); ?>
+                            <?php
+                            echo (isset($error) ? $error : "");
+                            ?>
                         </span></div>
                     <div class='campo'>
                         <label for='dni'>DNI:</label><br />
@@ -89,12 +84,10 @@ if (isset($_POST['enviar']) && !isset($_SESSION['auth'])) {
 
         //Mostramos el mensaje de bienvenida
         echo '<div id="bienvenida">';
-        // El usuario habria filtrado la lista de usuarios, antes de intentar 
-        //loguearse de nuevo. Por tanto, borramos el filtro
-        if (isset($_SESSION['filtro'])) {
-            unset($_SESSION['filtro']);
+        if ($mostrar_aviso_usuario_autenticado && isset($_SESSION['auth'])) {
+            echo "<p>El usuario ya está autenticado</p>";
         }
-        echo 'Bienvenido, ' . $_SESSION['auth']['nombre'] . " " . $_SESSION['auth']['apellidos'] . '. Haz clic aquí para <a href="./usuarios.php">ver los usuarios</a>.';
+        echo 'Bienvenido, ' . $_SESSION['auth']['nombre'] . ' ' . $_SESSION['auth']['apellidos'] . '. Haz clic aquí para <a href="./usuarios.php">ver los usuarios</a>.';
         echo '</div>';
     }
     ?>

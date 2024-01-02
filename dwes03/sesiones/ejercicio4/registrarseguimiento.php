@@ -8,7 +8,9 @@ require_once __DIR__ . '/extra/header.php';
 $errores = [];
 $es_usuario_autorizado = false;
 
+
 if (verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc')) {
+
     $es_usuario_autorizado = true;
     $es_coordinador = false;
     if (verificacion_rol_de_sesion('coord')) {
@@ -16,7 +18,7 @@ if (verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc'))
     }
 
     $idUsuario = $_SESSION['auth']['id'];
-    if ($idUsuario === false || !is_int($idUsuario) || trim($idUsuario) === '' || $idUsuario <= 0) {
+    if ($idUsuario === false || trim($idUsuario) === '' || $idUsuario <= 0) {
         $errores[] = "Datos de usuario no válidos";
     }
 
@@ -79,12 +81,13 @@ if (verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc'))
         $empleados = listadoCoordinadoresOTrabSociales($pdo);
         $empleadoEncontrado = false;
         foreach ($empleados as $empleado) {
-            if ($empleado['id'] === $empleadoSeguimiento) {
+            if ($empleado['id'] == $empleadoSeguimiento) {
                 $empleadoEncontrado = true;
                 break;
             }
         }
         if (is_array($empleados) && (empty($empleados)) || !$empleadoEncontrado) {
+            var_dump($empleados);
             $errores[] = "El empleado para ese seguimiento no es válido";
         }
     } else {
@@ -120,7 +123,7 @@ if (verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc'))
         if ($insertado === 1) {
             echo "<p>Se ha creado el seguimiento correctamente</p>";
             echo "<form action='detalleusuario.php' method='post'>";
-            echo "<input type='hidden' name='idDetalleUsuario' value='$idUsuario'>";
+            echo "<input type='hidden' name='idDetalleUsuario' value='$usuariosId'>";
             echo "<input type='submit' value='Volver a detalles de usuario'>";
             echo "</form>";
         } else if (!$insertado) {

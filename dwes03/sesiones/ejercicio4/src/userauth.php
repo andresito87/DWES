@@ -1,8 +1,7 @@
 <?php
-
 require_once './src/conn.php';
 
-function recuperar_usuario_valido($dni): array|bool
+function recuperar_usuario_valido($dni, $password): array|bool
 {
     //Conectamos a la base de datos para comenzar las comprobaciones del usuario
     $con = connect();
@@ -15,7 +14,7 @@ function recuperar_usuario_valido($dni): array|bool
         $resultado = $con->prepare($sql);
         //Parametros de la consulta
         $resultado->bindValue(":dni", $dni);
-        $password_invertida_salpimentada = hash('sha256', $dni . 'test' . strrev($dni . 'test') . '495k5ndikakzFSKZssd');
+        $password_invertida_salpimentada = hash('sha256', $dni . $password . strrev($dni . $password) . '495k5ndikakzFSKZssd');
         $resultado->bindValue(":pass", $password_invertida_salpimentada);
         //Ejecutamos la consulta
         if ($resultado->execute()) {

@@ -166,7 +166,6 @@ if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') |
                                 echo "</tr>";
                             }
                         }
-
                         ?>
                     </tbody>
                 </table>

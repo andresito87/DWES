@@ -1,11 +1,13 @@
 <?php
-//Zona horaria
-date_default_timezone_set('Europe/Madrid');
-echo "<p>Fecha y hora del documento: ";
-//Muestra la fecha de modificación del archivo en formato dd/mm/aaaa
-echo "<span>" . date("d/m/Y H:m", filemtime($archivo_html)) . "</span></p>";
-
+require_once "conf.php";
+$archivo_html = "";
 if (isset($_GET["ver"]) && in_array($_GET["ver"], array_column($secciones, "link"))) {
+    //Zona horaria
+    date_default_timezone_set('Europe/Madrid');
+    $archivo_html = "contenidos/" . $secciones[array_search($_GET["ver"], array_column($secciones, "link"))]["archivo"];
+    $contenido_html = "<p>Fecha y hora del documento: ";
+    //Muestra la fecha de modificación del archivo en formato dd/mm/aaaa
+    $contenido_html .= "<span>" . date("d/m/Y H:m", filemtime($archivo_html)) . "</span></p>";
     if (!isset($_COOKIE["lista_ultimos_sitios"]) || !isset($_COOKIE["hash_lista_ultimos_sitios"])) {
         //Si no existe la cookie, se crea
         $seccion_visitada = $secciones[array_search($_GET["ver"], array_column($secciones, "link"))]["nombre"];
@@ -15,10 +17,10 @@ if (isset($_GET["ver"]) && in_array($_GET["ver"], array_column($secciones, "link
         setcookie('lista_ultimos_sitios', serialize($datos_visita), time() + 3600);
         setcookie('hash_lista_ultimos_sitios', hash('sha256', serialize($datos_visita) . SALT), time() + 3600);
 
-        echo "<p>Últimas páginas visitadas:</p>";
-        echo "<div id=\"secciones_visitadas\">";
-        echo "<a href='" . $link_seccion_visitada . "'>" . $seccion_visitada . " (" . $fecha_hora_visita . ") </a><br>";
-        echo "</div>";
+        $contenido_html .= "<p>Últimas páginas visitadas:</p>";
+        $contenido_html .= "<div id=\"secciones_visitadas\">";
+        $contenido_html .= "<a href='" . $link_seccion_visitada . "'>" . $seccion_visitada . " (" . $fecha_hora_visita . ") </a><br>";
+        $contenido_html .= "</div>";
     } else {
         //Si existe la cookie, se añade el nuevo sitio
         if (hash('sha256', $_COOKIE['lista_ultimos_sitios'] . SALT) === $_COOKIE['hash_lista_ultimos_sitios']) {
@@ -42,10 +44,10 @@ if (isset($_GET["ver"]) && in_array($_GET["ver"], array_column($secciones, "link
             }
             setcookie('lista_ultimos_sitios', serialize($lista_ultimos_sitios), time() + 3600);
             setcookie('hash_lista_ultimos_sitios', hash('sha256', serialize($lista_ultimos_sitios) . SALT), time() + 3600);
-            echo "<p>Últimas páginas visitadas:</p>";
-            echo "<div id=\"secciones_visitadas\">";
+            $contenido_html .= "<p>Últimas páginas visitadas:</p>";
+            $contenido_html .= "<div id=\"secciones_visitadas\">";
             foreach ($lista_ultimos_sitios as $sitio) {
-                echo "<a href='" . $sitio[1] . "'>" . $sitio[0] . " (" . $sitio[2] . ") </a><br>";
+                $contenido_html .= "<a href='" . $sitio[1] . "'>" . $sitio[0] . " (" . $sitio[2] . ") </a><br>";
             }
         } else {
             //Si no coincide el hash, se resetea la cookie con la sección actual
@@ -55,12 +57,16 @@ if (isset($_GET["ver"]) && in_array($_GET["ver"], array_column($secciones, "link
             $datos_visita[] = [$seccion_visitada, $link_seccion_visitada, $fecha_hora_visita];
             setcookie('lista_ultimos_sitios', serialize($datos_visita), time() + 3600);
             setcookie('hash_lista_ultimos_sitios', hash('sha256', serialize($datos_visita) . SALT), time() + 3600);
-            echo "<p>Últimas páginas visitadas:</p>";
-            echo "<div id=\"secciones_visitadas\">";
-            echo "<a href='" . $link_seccion_visitada . "'>" . $seccion_visitada . " (" . $fecha_hora_visita . ") </a><br>";
-            echo "</div>";
+            $contenido_html .= "<p>Últimas páginas visitadas:</p>";
+            $contenido_html .= "<div id=\"secciones_visitadas\">";
+            $contenido_html .= "<a href='" . $link_seccion_visitada . "'>" . $seccion_visitada . " (" . $fecha_hora_visita . ") </a><br>";
+            $contenido_html .= "</div>";
         }
     }
-    echo "</div>";
+    $contenido_html .= "</div>";
+    return $contenido_html;
+} else {
+    header("Location: index.php?ver=" . urlencode($secciones[array_search(SECCION_DEFECTO, $secciones)]["link"]));
 }
+
 ?>

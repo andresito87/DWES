@@ -5,7 +5,6 @@ require_once __DIR__ . '/session_control.php';
 require_once __DIR__ . '/src/userauth.php';
 require_once __DIR__ . '/extra/header.php';
 
-
 //comprobamos si el rol del usuario es admin, coordinador, trabajador social o educador social
 $mostrar_boton_ver_detalle = false;
 if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') || verificacion_rol_de_sesion('trasoc') || verificacion_rol_de_sesion('edusoc')) {
