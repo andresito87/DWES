@@ -22,7 +22,7 @@ if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') |
 
     //Verificacion y filtrado de datos
     $filtro = "";
-    $checkbox = true;
+    $checkbox = "";
     if (isset($_POST['filtrar'])) {
         $filtro = trim(filter_input(INPUT_POST, 'filtro', FILTER_SANITIZE_SPECIAL_CHARS));
         $checkbox = filter_input(INPUT_POST, 'checkbox', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -67,10 +67,17 @@ if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') |
             <h2>Filtrar datos</h2>
             <form action="usuarios.php" method="post">
                 <label for="checkbox">Mostrar usuarios inactivos:</label>
-                <input type="checkbox" id="checkbox" name="checkbox">(si no se marca, se mostrarán los usuarios activos)
-                <br>
+                <input type="checkbox" id="checkbox" name="checkbox" <?php
+                if (isset($_SESSION['checkbox']) == 'on')
+                    echo "checked";
+                ?>>(si no se marca, se mostrarán los usuarios activos) <br>
                 <label for="busqueda">Filtrar usuarios:</label>
-                <input type="text" id="busqueda" name="filtro" placeholder="Nombre y Apellidos">
+                <input type="text" id="busqueda" name="filtro" placeholder="<?php
+                if (isset($_SESSION['filtro']))
+                    echo $_SESSION['filtro'];
+                else
+                    echo "Nombre y Apellidos";
+                ?>">
                 <br>
                 <input type="submit" value="¡Filtrar!" name="filtrar">
             </form>
@@ -93,21 +100,6 @@ if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') |
             </thead>
             <tbody>
                 <?php
-
-                /* Con While y fetch:
-                while ($usuario = $usuarios->fetch(PDO::FETCH_ASSOC)) {
-                     echo "<tr>";
-                     echo "<td>" . $usuario['id'] . "</td>";
-                     echo "<td>" . $usuario['dni'] . "</td>";
-                     echo "<td>" . $usuario['fnacim'] . "</td>";
-                     echo "<td>" . $usuario['nombre'] . "</td>";
-                     echo "<td>" . $usuario['apellidos'] . "</td>";
-                     echo '<td><form id="form" action="detalleusuario.php" method="post">
-                             <input type="hidden" name="id" value="' . $usuario['id'] . '"/>
-                             <input type="submit" class="inputDetalle" value="Ver Detalle" name="detalle"/></td>';
-                     echo "</tr>";
-                 }*/
-
                 // Con foreach: Mostar los usuarios en una tabla
                 if (!empty($usuarios))
                     foreach ($usuarios as $usuario) {
@@ -138,8 +130,4 @@ if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') |
 
     </html>
     <?php
-} else {
-    session_unset();
-    header("Location: ./login.php"); // Redirigimos al usuario a la página de login
-    exit;
 }
