@@ -6,6 +6,7 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
+// Comprobamos si la sesión ha expirado o ha sido cerrada
 $es_session_expirada = false;
 if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso'] > MAXIMA_INACTIVIDAD)) {
     $es_session_expirada = true;

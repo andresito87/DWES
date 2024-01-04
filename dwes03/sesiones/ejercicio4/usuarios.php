@@ -111,8 +111,8 @@ if (verificacion_rol_de_sesion('admin') || verificacion_rol_de_sesion('coord') |
                         echo "<td>" . $usuario['apellidos'] . "</td>";
                         if ($mostrar_boton_ver_detalle) {
                             echo '<td><form id="form_' . $usuario['id'] . '" action="detalleusuario.php" method="post">
-                <input type="hidden" name="idDetalleUsuario" value="' . $usuario['id'] . '"/>
-                <input type="submit" class="inputDetalle" value="Ver Detalle" name="detalle"/>';
+                                    <input type="hidden" name="idDetalleUsuario" value="' . $usuario['id'] . '"/>
+                                    <input type="submit" class="inputDetalle" value="Ver Detalle" name="detalle"/>';
                         }
                         echo "</form></td>";
                         echo "</tr>";
