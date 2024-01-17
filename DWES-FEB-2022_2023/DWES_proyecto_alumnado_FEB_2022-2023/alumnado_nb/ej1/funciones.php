@@ -1,5 +1,5 @@
 <?php
-
+require_once('./vars.php');
 /**
  * Función que, a partir de la lista de participantes, ubicada en la variable de ámbito global 
  * $participantes, genera un array de $n candidatos finalistas de manera aleatoria
