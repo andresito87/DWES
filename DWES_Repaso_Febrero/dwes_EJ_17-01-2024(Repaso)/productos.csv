@@ -1,0 +1,22 @@
+ID,Nombre,Precio,Categoría
+1,Producto A,25.99,Electrónica
+2,Producto B,12.49,Ropa
+3,Producto C,7.99,Hogar
+4,Producto D,45.00,Electrónica
+5,Producto E,19.99,Ropa
+6,Producto F,35.50,Hogar
+7,Producto G,8.75,Electrónica
+8,Producto H,14.99,Ropa
+9,Producto I,22.00,Hogar
+10,Producto J,18.25,Electrónica
+11,Producto K,10.49,Ropa
+12,Producto L,5.99,Hogar
+13,Producto M,30.00,Electrónica
+14,Producto N,16.75,Ropa
+15,Producto O,12.99,Hogar
+16,Producto P,27.50,Electrónica
+17,Producto Q,11.99,Ropa
+18,Producto R,9.25,Hogar
+19,Producto S,40.00,Electrónica
+20,Producto T,14.75,Ropa
+21,Producto T,,
