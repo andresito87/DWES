@@ -26,55 +26,63 @@ CREATE TABLE recordatorios (
 require_once('funciones.php');
 $con = require_once('conexion_BD.php');
 
-if (isset($_POST['modificar'])) {
-    $id = filter_input(INPUT_POST, 'id');
+$id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+$recordar_hasta = filter_input(INPUT_POST, 'recordar_hasta');
+$titulo = filter_input(INPUT_POST, 'titulo');
+$detalle = filter_input(INPUT_POST, 'detalle');
+$accion = filter_input(INPUT_POST, 'accion');
+
+//Para cargar los datos del registro a modificar
+if (isset($_POST['accion'])) {
     $datos_recordatorio = obtener_recordatorio($con, $id);
 }
-if (isset($_POST['eliminar'])) {
-    $id = filter_input(INPUT_POST, 'id');
-    eliminar_recordatorio($con, $id);
+
+$errores = [];
+$recordar_hasta = DateTime::createFromFormat('d/m/Y H:i', $recordar_hasta);
+if ($recordar_hasta == false || $recordar_hasta::getLastErrors()) {
+    $errores[] = "Error en la fecha introducida";
 }
 
-if (isset($_POST['enviar']) && isset($_POST['id']) && $_POST['id'] == "") {
-    $errores = [];
-    $recordar_hasta = filter_input(INPUT_POST, 'recordar_hasta');
-    $recordar_hasta = DateTime::createFromFormat('Y-m-d', $recordar_hasta);
-    if (!$recordar_hasta || $recordar_hasta::getLastErrors()['warning_count'] != 0 || $recordar_hasta::getLastErrors()['error_count'] != 0) {
-        $errores[] = "Error en la fecha introducida";
-    }
+if ($titulo == null) {
+    $errores[] = "El titulo está vacío";
+}
 
-    $titulo = filter_input(INPUT_POST, 'titulo');
-    if ($titulo == null) {
-        $errores[] = "El titulo está vacío";
-    }
+$detalle = filter_input(INPUT_POST, 'detalle');
 
-    $detalle = filter_input(INPUT_POST, 'detalle');
-
-    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+if (
+    isset($_POST['enviar']) && $_POST['enviar'] == "Enviar" &&
+    !isset($_POST['id'])
+) {
     if (empty($errores)) {
         $recordatorio['id'] = $id;
         $recordatorio['recordar_hasta'] =
-            $recordar_hasta->format('Y-m-d'); //Convertir objeto DateTime a cadena
+            $recordar_hasta->format('Y-m-d H:i:s'); //Convertir objeto DateTime a cadena. Formato usado MySql
         $recordatorio['titulo'] = $titulo;
         $recordatorio['detalle'] = $detalle;
-
         agregar_recordatorio($con, $recordatorio);
     } else {
-        var_dump($errores);
+        echo "Errores:<br>";
+        foreach ($errores as $key => $error) {
+            echo $error . "<br>";
+        }
     }
-}
-if (isset($_POST['enviar']) && isset($_POST['id']) && $_POST['id'] == "") {
-    if (!empty($id) && $id != null) {
-        actualizar_recordatorio($con, $recordatorio);
-    }
+} else if (isset($_POST['modificar']) && $_POST['modificar'] == "Modificar") {
+    $recordatorio['recordar_hasta'] = $_POST['recordar_hasta'];
+    $recordatorio['titulo'] = $titulo;
+    $recordatorio['detalle'] = $detalle;
+    actualizar_recordatorio($con, $id, $recordatorio);
+} else if (isset($_POST['accion']) && $_POST['accion'] == "eliminar") {
+    eliminar_recordatorio($con, $id);
+    header("Location: recordatorios.php");
 }
 
-$recordatorios = obtener_recordatorios($con);
+//$recordatorios = obtener_recordatorios($con, true); //Recordatorios del pasado
+$recordatorios = obtener_recordatorios($con); //Recordatorios del presente y futuro
 
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -88,10 +96,11 @@ $recordatorios = obtener_recordatorios($con);
             <thead>
                 <tr>
                     <td>ID</td>
-                    <td>Recordar hasta</td>
+                    <td>Recordar hasta <strong>(Dia/Mes/Año Horas:Minutos)</strong></td>
                     <td>Titulo</td>
                     <td>Detalle</td>
                     <td>Modificar</td>
+                    <td>Eliminar</td>
                 </tr>
             </thead>
             <tbody>
@@ -104,11 +113,15 @@ $recordatorios = obtener_recordatorios($con);
                         <td>
                             <form action="" method="post">
                                 <input type="hidden" value="<?= isset($values['id']) ? $values['id'] : '' ?>" name="id">
-                                <input type="submit" value="Modificar" name="modificar">
+                                <input type="hidden" name="accion" value="modificar">
+                                <input type="submit" value="Modificar">
                             </form>
+                        </td>
+                        <td>
                             <form action="" method="post">
                                 <input type="hidden" value="<?= isset($values['id']) ? $values['id'] : '' ?>" name="id">
-                                <input type="submit" value="Eliminar" name="eliminar">
+                                <input type="hidden" name="accion" value="eliminar">
+                                <input type="submit" value="Eliminar">
                             </form>
                         </td>
                     </tr>
@@ -117,11 +130,14 @@ $recordatorios = obtener_recordatorios($con);
         </table>
     <?php endif; ?>
     <form action="" method="post">
-        <label for="recordar_hasta">Recordar hasta: <input type="text" name="recordar_hasta" id="recordar_hasta" value="<?= isset($datos_recordatorio['recordar_hasta']) ? DateTime::createFromFormat('Y-m-d H:m:s', $datos_recordatorio['recordar_hasta'])->format('Y-m-d') : "" ?>"><br>
+        <label for="recordar_hasta">Recordar hasta (Dia/Mes/Año Horas:Minutos): <input type="text" name="recordar_hasta" id="recordar_hasta" value="<?= isset($datos_recordatorio['recordar_hasta']) ? DateTime::createFromFormat('Y-m-d H:m:s', $datos_recordatorio['recordar_hasta'])->format('Y-m-d H:i') : "" ?>"><br>
             <label for="titulo">Título: <input type="text" name="titulo" id="titulo" value="<?= isset($datos_recordatorio['titulo']) ? $datos_recordatorio['titulo'] : "" ?>"></label><br>
             <label for="detalles">Detalles: <input type="text" name="detalle" id="detalle" value="<?= isset($datos_recordatorio['detalle']) ? $datos_recordatorio['detalle'] : "" ?>">
-                <input type="hidden" name="id" id="id" value="<?= isset($datos_recordatorio['id']) ? $datos_recordatorio['id'] : "" ?>"></label><br>
-            <input type="submit" value="Enviar" name="enviar">
+                <?php if (isset($_POST['accion'])) { ?>
+                    <input type="hidden" name="id" id="id" value="<?php echo $_POST['id'] ?>"></label><br>
+        <?php }
+        ?>
+        <input type="submit" value="<?php echo (isset($_POST['accion']) && $_POST['accion'] == "modificar") ? "Modificar" : "Enviar" ?>" name="<?php echo (isset($_POST['accion']) && $_POST['accion'] == "modificar") ? "modificar" : "enviar" ?>">
     </form>
 </body>
 

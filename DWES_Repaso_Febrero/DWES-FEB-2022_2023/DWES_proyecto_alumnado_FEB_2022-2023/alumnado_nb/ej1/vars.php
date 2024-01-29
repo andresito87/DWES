@@ -34,3 +34,5 @@ $participantes = array(
     'imagen_url' => './img/PeterParker.jpg',
   ),
 );
+
+return $participantes;

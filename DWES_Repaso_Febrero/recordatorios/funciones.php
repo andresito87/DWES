@@ -16,9 +16,10 @@ function obtener_recordatorio($PDO, $id)
     return $resultado;
 }
 
-function obtener_recordatorios($PDO)
+function obtener_recordatorios($PDO, $caducados = false)
 {
-    $sql = 'SELECT * FROM recordatorios';
+    $fragmento_SQL = $caducados ? "recordar_hasta<now()" : "recordar_hasta>=now()";
+    $sql = "SELECT * FROM recordatorios WHERE $fragmento_SQL;";
 
     $stmt = $PDO->prepare($sql);
     $resultado = false;
@@ -70,22 +71,21 @@ function agregar_recordatorio($PDO, $recordatorio)
     return $resultado;
 }
 
-function actualizar_recordatorio($PDO, $recordatorio)
+function actualizar_recordatorio($PDO, $id, $recordatorio)
 {
-    $sql = 'UPDATE recordatorios SET recordar_hasta = :recordar_hasta, titulo = :informe, detalle= :detalle WHERE id = :id';
-
-    $stmt = $PDO->prepare($sql);
-    $stmt->bindValue(':id', $recordatorio['id'], PDO::PARAM_INT);
-    $stmt->bindValue(':recordar_hasta', $recordatorio['recordar_hasta']);
-    $stmt->bindValue(':titulo', $recordatorio['titulo']);
-    $stmt->bindValue(':detalle', $recordatorio['detalle']);
-
-    $resultado = false;
     try {
-        if ($stmt->execute()) {
-            $resultado = $stmt->rowCount();
-        }
+        $sql = 'UPDATE recordatorios SET recordar_hasta = :recordar_hasta, titulo = :titulo, detalle = :detalle WHERE id = :id';
+
+        $stmt = $PDO->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':recordar_hasta', $recordatorio['recordar_hasta']);
+        $stmt->bindValue(':titulo', $recordatorio['titulo']);
+        $stmt->bindValue(':detalle', $recordatorio['detalle']);
+
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
     } catch (PDOException $e) {
+        return false;
     }
-    return $resultado > 0 ? $resultado : false;
 }

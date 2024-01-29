@@ -1,5 +1,5 @@
 <?php
-
+require_once('./vars.php');
 /**
  * Función que, a partir de la lista de participantes, ubicada en la variable de ámbito global 
  * $participantes, genera un array de $n candidatos finalistas de manera aleatoria
@@ -29,24 +29,15 @@ function getCandidatos($n)
 function getFormularioCandidatosMarkup($candidatos)
 {
   //Debes modificar esta función para que el formulario se construya dinámicament con los datos de $candidatos
-  $output = '';
-  $output = '<form action="ganador.php" method="post">
-    <div class="candidatoContainer">
-      <h2>Clark Kent</h2>
-      <img src="./img/Henry_Cavill_by_Gage_Skidmore_2.jpg"><br><input type="submit" value="Seleccionar" name="seleccionar[1]">
-    </div>
-    <div class="candidatoContainer">
-      <h2>Bruce Wayne</h2>
-      <img src="./img/Christianbale.jpg"><br><input type="submit" value="Seleccionar" name="seleccionar[2]">
-    </div>
-    <div class="candidatoContainer">
-      <h2>Diana Prince</h2>
-      <img src="./img/Diana_in_White.png"><br><input type="submit" value="Seleccionar" name="seleccionar[3]">
-    </div>
-    <div class="candidatoContainer">
-      <h2>Barry Allen</h2>
-      <img src="./img/Barry-Hallen.png"><br><input type="submit" value="Seleccionar" name="seleccionar[4]">
-    </div>
-  </form>';
+  global $participantes;
+  $output = '<form action="ganador.php" method="post">';
+  foreach ($candidatos as $candidato) {
+    $output .= '<div class="candidatoContainer">';
+    $output .= '<h2>' . $participantes[$candidato]['nombre'] . '</h2>';
+    $output .= '<img src="' . $participantes[$candidato]['imagen_url'] . '"><br>';
+    $output .= '<input type="submit" value="Seleccionar" name="seleccionar[' . $candidato . ']">';
+    $output .= '</div>';
+  }
+  $output .= '</form>';
   return $output;
 }

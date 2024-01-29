@@ -1,9 +1,9 @@
 <?php
 
-define('DB_HOST', 'database');
-define('DB_NAME', 'docker');
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'prueba');
 define('DB_USER', 'root');
-define('DB_PASS', 'tiger');
+define('DB_PASS', '');
 define('DB_PORT', '3306');
 
 
