@@ -5,7 +5,7 @@ session_start();
 
 if (isset($_POST['op'])) {
     unset($_SESSION['posiciones']);
-    $mensaje = "Tablero limpiado";
+    header("Location: index.php");
 } else if (isset($_POST['marcar']) && isset($_POST['x']) && $_POST['x'] != '' && isset($_POST['y']) && $_POST['y'] != '') {
     $x = filter_input(INPUT_POST, 'x', FILTER_VALIDATE_INT);
     $y = filter_input(INPUT_POST, 'y', FILTER_VALIDATE_INT);
@@ -35,7 +35,6 @@ if (isset($_POST['op'])) {
     $posiciones = $_SESSION['posiciones'];
 } else {
     $_SESSION['posiciones'] = $posiciones;
-    $posiciones = $_SESSION['posiciones'];
 }
 ?>
 <!DOCTYPE html>
@@ -63,7 +62,7 @@ if (isset($_POST['op'])) {
 
 <body>
     <?php
-    if (isset($mensaje)): ?>
+    if (isset($mensaje)) : ?>
         <h2>
             <?= $mensaje ?>
         </h2>
@@ -72,24 +71,24 @@ if (isset($_POST['op'])) {
 
         <tr>
             <th></th>
-            <?php for ($x = 0; $x < 10; $x++): ?>
+            <?php for ($x = 0; $x < 10; $x++) : ?>
                 <th>
                     <?= $x ?>
                 </th>
             <?php endfor; ?>
         </tr>
-        <?php for ($y = 0; $y < 10; $y++): ?>
+        <?php for ($y = 0; $y < 10; $y++) : ?>
             <tr>
                 <th>
                     <?= $y ?>
                 </th>
                 <?php
-                for ($x = 0; $x < 10; $x++):
+                for ($x = 0; $x < 10; $x++) :
                     if (in_array($x . '-' . $y, $posiciones))
                         $class = 'blue';
                     else
                         $class = '';
-                    ?>
+                ?>
                     <td class='<?= $class ?>'>
                         <?= $class ? "x" : "" ?>
                     </td>
