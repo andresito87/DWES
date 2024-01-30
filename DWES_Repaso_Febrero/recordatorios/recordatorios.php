@@ -33,8 +33,9 @@ $detalle = filter_input(INPUT_POST, 'detalle');
 $accion = filter_input(INPUT_POST, 'accion');
 
 //Para cargar los datos del registro a modificar
-if (isset($_POST['accion'])) {
+if (isset($_POST['accion']) == "Modificar") {
     $datos_recordatorio = obtener_recordatorio($con, $id);
+    var_dump($datos_recordatorio);
 }
 
 $errores = [];
@@ -130,7 +131,7 @@ $recordatorios = obtener_recordatorios($con); //Recordatorios del presente y fut
         </table>
     <?php endif; ?>
     <form action="" method="post">
-        <label for="recordar_hasta">Recordar hasta (Dia/Mes/Año Horas:Minutos): <input type="text" name="recordar_hasta" id="recordar_hasta" value="<?= isset($datos_recordatorio['recordar_hasta']) ? DateTime::createFromFormat('Y-m-d H:m:s', $datos_recordatorio['recordar_hasta'])->format('Y-m-d H:i') : "" ?>"><br>
+        <label for="recordar_hasta">Recordar hasta (Dia/Mes/Año Horas:Minutos): <input type="text" name="recordar_hasta" id="recordar_hasta" value="<?= isset($datos_recordatorio['recordar_hasta']) ? DateTime::createFromFormat('Y-m-d H:i:s', $datos_recordatorio['recordar_hasta'])->format('Y-m-d H:i') : "" ?>"><br>
             <label for="titulo">Título: <input type="text" name="titulo" id="titulo" value="<?= isset($datos_recordatorio['titulo']) ? $datos_recordatorio['titulo'] : "" ?>"></label><br>
             <label for="detalles">Detalles: <input type="text" name="detalle" id="detalle" value="<?= isset($datos_recordatorio['detalle']) ? $datos_recordatorio['detalle'] : "" ?>">
                 <?php if (isset($_POST['accion'])) { ?>

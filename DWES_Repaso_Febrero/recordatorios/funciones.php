@@ -83,8 +83,9 @@ function actualizar_recordatorio($PDO, $id, $recordatorio)
         $stmt->bindValue(':detalle', $recordatorio['detalle']);
 
         $stmt->execute();
+        $resultado = $stmt->rowCount();
 
-        return $stmt->rowCount() > 0;
+        return  $resultado > 0;
     } catch (PDOException $e) {
         return false;
     }
