@@ -29,48 +29,50 @@ telefono VARCHAR(15) UNIQUE NOT NULL
 $con = require_once("conexion_BD.php");
 require_once("funciones.php");
 $usuarios = obtener_usuarios($con);
-
-$telefonos = array_column($usuarios, "telefono");
+//var_dump($usuarios);
 
 session_start();
 if (isset($_POST['enviar']) && $_POST['enviar'] == "Enviar") {
 
     // Definir el patrón de división de los usuarios
-    $patron = '/(\d{6,})([,;\t\s-])/';
-
+    $patron = '/(;|,|-|\t,(\s\[),(\s\())/';
 
     // Dividir la cadena en un array usando el patrón
     $arrayUsuarios = preg_split($patron, $_POST['datos']);
-    var_dump($arrayUsuarios);
+    if (isset($arrayUsuarios[1])) {
+        // Iterar sobre los usuarios
+        foreach ($arrayUsuarios as $key => $usuario) {
+            //Dividir la información de cada usuario
+            $arrayUsuario = preg_split('/\]|\)/', $usuario);
+            if (isset($arrayUsuario[1])) {
+                $nombre = trim($arrayUsuario[0], "[]()");
+                $telefonoSinFiltrar = trim($arrayUsuario[1]);
 
-    // Iterar sobre los usuarios
-    foreach ($arrayUsuarios as $key => $usuario) {
-        //Dividir la información de cada usuario
-        $arrayUsuario = preg_split('/\]|\)/', $usuario);
-        if (isset($arrayUsuario[1])) {
-            $nombre = trim($arrayUsuario[0], "[]()");
-            $telefonoSinFiltrar = trim($arrayUsuario[1]);
+                $nombreApellidos = filter_var($nombre, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $telefono = filter_var($telefonoSinFiltrar, FILTER_VALIDATE_INT);
 
-            $nombreApellidos = filter_var($nombre, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $telefono = filter_var($telefonoSinFiltrar, FILTER_VALIDATE_INT);
-
-            echo $nombreApellidos;
-            echo $telefono;
-
-            //Comprobar que no hay numeros de telefono repetidos
-            if ($nombreApellidos != "" && $telefono != 0) {
-                if (!isset($_SESSION['usuarios']) || !array_key_exists($telefono, $_SESSION['usuarios'])) {
-                    $_SESSION['usuarios'][$telefono] = $nombreApellidos;
-                    $usuarioAgregado = true;
+                //Comprobar que no hay numeros de telefono repetidos
+                if ($nombreApellidos != "" && $telefono != 0) {
+                    if (
+                        !isset($_SESSION['usuarios']) ||
+                        (!array_key_exists($telefono, $_SESSION['usuarios'])
+                            && !array_key_exists($telefono, $usuarios))
+                    ) {
+                        $_SESSION['usuarios'][$telefono] = $nombreApellidos;
+                        $usuarioAgregado = true;
+                    } else {
+                        $errores[] = 'Teléfono repetido en los registros almacenados en la base de datos o en la sesión';
+                    }
                 } else {
-                    $errores[] = 'Teléfono repetido';
+                    $errores[] = 'Información introducida inválida';
                 }
-            } else {
-                $errores[] = 'Información introducida inválida';
             }
         }
+    } else {
+        $errores[] = "Error en el formato de los datos introducidos";
     }
 }
+
 
 //En caso de querer eliminar el telefono seleccionado
 if (isset($_POST['eliminar']) && $_POST['eliminar'] == "Eliminar") {
@@ -81,7 +83,12 @@ if (isset($_POST['eliminar']) && $_POST['eliminar'] == "Eliminar") {
     $usuarioEliminado = true;
 }
 
-
+//En caso de querer eliminar el telefono seleccionado
+if (isset($_POST['guardar']) && $_POST['guardar'] == "Guardar") {
+    foreach ($_SESSION['usuarios'] as $key => $usuario) {
+        guardar_usuario($con, ["nombre" => $usuario, "telefono" => $key]);
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -122,7 +129,11 @@ if (isset($_POST['eliminar']) && $_POST['eliminar'] == "Eliminar") {
                 <?php endforeach; ?>
             </tbody>
         </table>
-    <?php endif; ?>
+        <form action="" method="post">
+            <input type="submit" value="Guardar" name="guardar">
+        </form>
+    <?php endif;
+    ?>
 
 
     <h2>Formulario Telemarketing:</h2>

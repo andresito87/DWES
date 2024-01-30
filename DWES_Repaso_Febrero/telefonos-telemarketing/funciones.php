@@ -15,3 +15,21 @@ function obtener_usuarios($PDO)
         return false;
     }
 }
+
+function guardar_usuario($PDO, $usuario)
+{
+    $sql = 'INSERT INTO usuarios (nombre,telefono) VALUES (:nombre, :telefono);';
+
+    $stmt = $PDO->prepare($sql);
+    $stmt->bindValue(':nombre', $usuario['nombre']);
+    $stmt->bindValue(':telefono', $usuario['telefono']);
+
+    $resultado = false;
+    try {
+        if ($stmt->execute()) {
+            $resultado = $stmt->rowCount();
+        }
+    } catch (PDOException $e) {
+    }
+    return $resultado;
+}
