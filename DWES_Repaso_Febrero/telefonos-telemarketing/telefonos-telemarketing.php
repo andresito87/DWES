@@ -35,7 +35,7 @@ session_start();
 if (isset($_POST['enviar']) && $_POST['enviar'] == "Enviar") {
 
     // Definir el patrón de división de los usuarios
-    $patron = '/(;|,|-|\t,(\s\[),(\s\())/';
+    $patron = '/(?<=\d)([;;,-]|\s)+/';
 
     // Dividir la cadena en un array usando el patrón
     $arrayUsuarios = preg_split($patron, $_POST['datos']);
@@ -43,8 +43,9 @@ if (isset($_POST['enviar']) && $_POST['enviar'] == "Enviar") {
         // Iterar sobre los usuarios
         foreach ($arrayUsuarios as $key => $usuario) {
             //Dividir la información de cada usuario
-            $arrayUsuario = preg_split('/\]|\)/', $usuario);
-            if (isset($arrayUsuario[1])) {
+            $arrayUsuario = preg_match('/(?:\[|\()((?:[\s|\w\d])+)(?:\]|\))\s*(\d+)/', $usuario, $matches);
+            $arrayUsuario = array_slice($matches, 1);
+            if (isset($arrayUsuario[0])) {
                 $nombre = trim($arrayUsuario[0], "[]()");
                 $telefonoSinFiltrar = trim($arrayUsuario[1]);
 
@@ -75,15 +76,22 @@ if (isset($_POST['enviar']) && $_POST['enviar'] == "Enviar") {
 
 
 //En caso de querer eliminar el telefono seleccionado
-if (isset($_POST['eliminar']) && $_POST['eliminar'] == "Eliminar") {
-    $keyAEliminar = filter_input(INPUT_POST, 'telefonoAEliminar', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    //Compruebo si la key es numérica
-    if (is_numeric($keyAEliminar))
-        unset($_SESSION['usuarios'][$keyAEliminar]);
-    $usuarioEliminado = true;
+if (isset($_POST['eliminar']) && $_POST['eliminar'] == "Eliminar seleccionados") {
+    $telefonosAEliminar = filter_input(INPUT_POST, 'telefonosAEliminar', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
+
+    if (!empty($telefonosAEliminar)) {
+        foreach ($telefonosAEliminar as $telefonoAEliminar) {
+            // Compruebo si la key es numérica
+            if (is_numeric($telefonoAEliminar)) {
+                unset($_SESSION['usuarios'][$telefonoAEliminar]);
+            }
+        }
+
+        $usuariosEliminados = true;
+    }
 }
 
-//En caso de querer eliminar el telefono seleccionado
+//En caso de querer guardar los datos almacenados
 if (isset($_POST['guardar']) && $_POST['guardar'] == "Guardar") {
     foreach ($_SESSION['usuarios'] as $key => $usuario) {
         guardar_usuario($con, ["nombre" => $usuario, "telefono" => $key]);
@@ -104,36 +112,32 @@ if (isset($_POST['guardar']) && $_POST['guardar'] == "Guardar") {
     <h1>Bienenido al sistema de gestión de teléfonos</h1>
 
     <?php if (!empty($_SESSION['usuarios'])) : ?>
-        <h2>Informacióm introducida en la sesión:</h2>
-        <table border="1">
-            <thead>
-                <tr>
-                    <td>Nombre</td>
-                    <td>Telefono</td>
-                    <td>Eliminar</td>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($_SESSION['usuarios'] as $key => $value) : ?>
-                    <tr>
-                        <td><?= $value ?></td>
-                        <td><?= $key ?></td>
-                        <td>
-                            <form action="" method="post">
-                                <input type="hidden" value="<?= $key ?>" name="telefonoAEliminar">
-                                <input type="hidden" name="accion" value="eliminar">
-                                <input type="submit" value="Eliminar" name="eliminar">
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <h2>Información introducida en la sesión:</h2>
         <form action="" method="post">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <td>Nombre</td>
+                        <td>Telefono</td>
+                        <td>Eliminar</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($_SESSION['usuarios'] as $key => $value) : ?>
+                        <tr>
+                            <td><?= $value ?></td>
+                            <td><?= $key ?></td>
+                            <td>
+                                <input type="checkbox" name="telefonosAEliminar[]" value="<?= $key ?>">
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <input type="submit" value="Eliminar seleccionados" name="eliminar">
             <input type="submit" value="Guardar" name="guardar">
         </form>
-    <?php endif;
-    ?>
+    <?php endif; ?>
 
 
     <h2>Formulario Telemarketing:</h2>
