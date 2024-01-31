@@ -109,7 +109,7 @@ if (isset($_POST['guardar']) && $_POST['guardar'] == "Guardar") {
 </head>
 
 <body>
-    <h1>Bienenido al sistema de gestión de teléfonos</h1>
+    <h1>Bienvenido al sistema de gestión de teléfonos</h1>
 
     <?php if (!empty($_SESSION['usuarios'])) : ?>
         <h2>Información introducida en la sesión:</h2>
