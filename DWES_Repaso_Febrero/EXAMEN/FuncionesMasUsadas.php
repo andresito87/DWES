@@ -1,20 +1,4 @@
 <?php
-//ARRAYWALK
-// Función de ejemplo que eleva al cuadrado cada elemento del array
-echo "ArrayWalk: Numeros al Cuadrado<br>";
-function elevarAlCuadrado(&$valor, $clave)
-{
-    $valor = $valor * $valor;
-}
-$numeros = array(1, 2, 3, 4, 5);
-// Aplicar la función elevarAlCuadrado a cada elemento del array
-array_walk($numeros, 'elevarAlCuadrado');
-// Imprimir el array después de aplicar la función
-array_walk($numeros, function ($e) {
-    echo $e . " ";
-});
-
-/*---------------------------------------------------------------------------------------*/
 
 echo "<br><br>HTML Entites<br>";
 $str = "A 'quote' is <b>bold</b>";
@@ -69,9 +53,20 @@ return $data;
 
 /*---------------------------------------------------------------------------------------*/
 
-echo "<br><br>STRLEN de abcdef<br>";
-$str = 'abcdef';
-echo strlen($str); // 6
+//ARRAYWALK
+// Función de ejemplo que eleva al cuadrado cada elemento del array
+echo "ArrayWalk: Numeros al Cuadrado<br>";
+function elevarAlCuadrado(&$valor, $clave)
+{
+    $valor = $valor * $valor;
+}
+$numeros = array(1, 2, 3, 4, 5);
+// Aplicar la función elevarAlCuadrado a cada elemento del array
+array_walk($numeros, 'elevarAlCuadrado');
+// Imprimir el array después de aplicar la función
+array_walk($numeros, function ($e) {
+    echo $e . " ";
+});
 
 /*---------------------------------------------------------------------------------------*/
 
@@ -165,20 +160,35 @@ $registrosDeVenta = ['PorProvincia', 'PorCCAA', 'PorPaís'];
 $datos = array_fill(0, count($registrosDeVenta), 0);
 var_dump($datos); //Muestra 0 0 0
 
+//array_flip: Volveta un array, convirtiendo las claves en valores y los valores en claves
 
 
+//array_intersect_key: array_intersect_key(array $array1, array $array2, array $... = ?): array
+//Devuelve un array con todos los pares valor de array1 cuyas claves estén presentes en el resto de arrays con los que se compara
 
 
 /*---------------------------------------------------------------------------------------*/
+
 echo "<br><br>FILE_EXISTS<br>";
 echo file_exists("FuncionesMasUsadas.php") ? "Sí existe el archivo" : "No existe el archivo";
+
 /*---------------------------------------------------------------------------------------*/
+
 echo "<br><br>Fecha y hora del documento: ";
 echo date('d/m/Y h:m', filemtime("."));
+
 /*---------------------------------------------------------------------------------------*/
+
 echo "<br><br>Transformar fecha 02/03/2024 de string a UNIX Timestamp para ser almacenada en Base de datos:<br>T";
 echo strtotime("02/03/2024");
 
+/*---------------------------------------------------------------------------------------*/
+
+echo "<br><br>STRLEN de abcdef<br>";
+$str = 'abcdef';
+echo strlen($str); // 6
+
+/*---------------------------------------------------------------------------------------*/
 
 //IS_NULL
 //EMPTY
@@ -190,6 +200,7 @@ echo strtotime("02/03/2024");
 filter_input(INPUT_POST, 'confirmado',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $idusuario = filter_input(INPUT_POST, 'idusuario', FILTER_VALIDATE_INT);
 $datos['fecha_espanol'] = filter_input(INPUT_POST, 'fecha', FILTER_VALIDATE_REGEXP, REGEX_VALIDATE_FECHA);
+//exit() Acabamos la ejecucion del script
 */
 //DEFINE
 // require, require_once, include
