@@ -69,24 +69,30 @@ if (isset($_POST['enviar'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Ejercicio 12</title>
 </head>
+
 <body>
-<!--Formulario para importar el archivo CSV-->
-<form action="ejercicio12.php" method="post">
-    <input type="submit" name="importar" value="Importar">
-</form>
-<!--Formulario para añadir un nuevo usuario-->
-<form action="ejercicio12.php" method="post">
-    <label for="nombre">Nombre</label>
-    <input type="text" name="nombre" id="nombre">
-    <label for="apellido">Apellido</label>
-    <input type="text" name="apellido" id="apellido">
-    <label for="edad">Edad</label>
-    <input type="text" name="edad" id="edad">
-    <input type="submit" name="enviar" value="Enviar">
-</form>
+    <!--Formulario para importar el archivo CSV-->
+    <form action="ejercicio12.php" method="post">
+        <input type="submit" name="importar" value="Importar">
+    </form>
+    <!--Formulario para añadir un nuevo usuario-->
+    <form action="ejercicio12.php" method="post">
+        <label for="nombre">Nombre
+            <input type="text" name="nombre" id="nombre">
+        </label>
+        <label for="apellido">Apellido
+            <input type="text" name="apellido" id="apellido">
+        </label>
+        <label for="edad">Edad
+            <input type="text" name="edad" id="edad">
+        </label>
+        <input type="submit" name="enviar" value="Enviar">
+    </form>
 </body>
+
 </html>

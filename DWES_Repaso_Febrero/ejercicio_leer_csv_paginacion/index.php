@@ -48,9 +48,9 @@ if (is_array($datos)) {
             <input type="submit" value="Ver los <?= ELEM_PAG ?> siguientes">
         </form>
     <?php endif ?>
-    <?php
+<?php
 }
-if (!is_array($datos)||empty($datos))
+if (!is_array($datos) || empty($datos))
     echo "<p>Columna o Categoría no encontrada</p>";
 ?>
 <form action="" method="post">
