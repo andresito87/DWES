@@ -32,11 +32,14 @@ function subconjunto(array $datos, int $inicio, int $length): array
     return $nuevo_array;
 }
 
-function ordenar(array $array, string $nombreColumna): array
+function ordenar(array $array, string $nombreColumna): array|string
 {
     $columna = array_column($array, $nombreColumna);
-    array_multisort($columna, SORT_ASC, $array);
-    return $array;
+    if (!empty($columna)) {
+        array_multisort($columna, SORT_ASC, $array);
+        return $array;
+    }
+    return "Columna no encontrada";
 }
 
 function filtrar(array $array, string $categoria): array
@@ -50,7 +53,7 @@ function filtrar(array $array, string $categoria): array
     }
     return $arrayres;
     */
-    return array_filter($array, fn ($val) => $val['Categoría'] === $categoria);
+    return array_filter($array, fn ($val) => $val['Categoría'] == $categoria);
 }
 
 function mostrarDatos($array)
