@@ -14,7 +14,7 @@ require_once('./vars.php');
 function getCandidatos($n)
 {
   global $participantes;
-  $candidatos = array();
+  $candidatos = [];
   $candidatos = array_rand($participantes, $n);
   return $candidatos;
 }
@@ -31,6 +31,7 @@ function getFormularioCandidatosMarkup($candidatos)
   //Debes modificar esta función para que el formulario se construya dinámicament con los datos de $candidatos
   global $participantes;
   $output = '<form action="ganador.php" method="post">';
+
   foreach ($candidatos as $candidato) {
     $output .= '<div class="candidatoContainer">';
     $output .= '<h2>' . $participantes[$candidato]['nombre'] . '</h2>';
@@ -38,6 +39,8 @@ function getFormularioCandidatosMarkup($candidatos)
     $output .= '<input type="submit" value="Seleccionar" name="seleccionar[' . $candidato . ']">';
     $output .= '</div>';
   }
+
   $output .= '</form>';
+
   return $output;
 }

@@ -66,7 +66,7 @@
       return $ret;
     }
     $conexion_DB = connect();
-    $datos_actualizados = actualizar_datos_pelicula($conexion_DB, $_POST);
+    $datos_actualizados = actualizar_datos_pelicula($conexion_DB, $_POST['datos']);
     $conexion_DB = null;
   }
 

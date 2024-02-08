@@ -3,18 +3,18 @@ $posiciones = [];
 
 session_start();
 
-if (isset($_POST['op'])) {
+//Compruebo si han pulsado en eliminar
+if (isset($_POST['op']) && $_POST['op'] == "limpiar") {
     unset($_SESSION['posiciones']);
     header("Location: index.php");
+    //compruebo si han introducido posiciones no vacias y pulsado el botón de marcar
 } else if (isset($_POST['marcar']) && isset($_POST['x']) && $_POST['x'] != '' && isset($_POST['y']) && $_POST['y'] != '') {
     $x = filter_input(INPUT_POST, 'x', FILTER_VALIDATE_INT);
     $y = filter_input(INPUT_POST, 'y', FILTER_VALIDATE_INT);
     if ($x === false || $y === false) {
         $mensaje = "Posición no válida";
-        $posiciones = $_SESSION['posiciones'];
     } else if ($x < 0 || $x > 9 || $y < 0 || $y > 9) {
         $mensaje = "Posición fuera de rango";
-        $posiciones = $_SESSION['posiciones'];
     } else {
         $pos = $x . '-' . $y;
         if (!in_array($pos, $_SESSION['posiciones'])) {
@@ -23,16 +23,20 @@ if (isset($_POST['op'])) {
         } else {
             $mensaje = "Posición ya marcada";
         }
-        $posiciones = $_SESSION['posiciones'];
     }
+    $posiciones = $_SESSION['posiciones'];
+    //compruebo si han pulsado el boton de marcar y la posición introducida en x está vacía
 } else if (isset($_POST['marcar']) && (isset($_POST['x']) && $_POST['x'] == '')) {
     $mensaje = "Posición x no introducida";
     $posiciones = $_SESSION['posiciones'];
+    //comprueba si han pulsado el botón de marcar y la posición introducida en y está vacía
 } else if (isset($_POST['marcar']) && (isset($_POST['y']) && $_POST['y'] == '')) {
     $mensaje = "Posición y no introducida";
     $posiciones = $_SESSION['posiciones'];
-} else if (isset($_SESSION['posiciones'])) {
+    //Compruebo si el array de posiciones está en la sesión y recupero sus valores
+} else if (isset($_SESSION['posiciones']) && !empty($_SESSION['posiciones'])) {
     $posiciones = $_SESSION['posiciones'];
+    //Si el array de posiciones no ha sido creado o está vacío se crea con un array vacío
 } else {
     $_SESSION['posiciones'] = $posiciones;
 }

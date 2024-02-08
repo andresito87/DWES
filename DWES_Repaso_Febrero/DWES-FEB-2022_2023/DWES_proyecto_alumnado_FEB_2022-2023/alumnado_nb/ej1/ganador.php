@@ -25,14 +25,10 @@ if (isset($_POST['seleccionar'])) {
 
 <body>
   <h1>¡Enhorabuena a
-    <?php
-    echo $ganadorNombre;
-    ?>
+    <?= $ganadorNombre; ?>
     !
   </h1>
-  <p><img src="<?php
-  echo $ganadorImagen;
-  ?>"></p>
+  <p><img src="<?= $ganadorImagen; ?>"></p>
 
 </body>
 
