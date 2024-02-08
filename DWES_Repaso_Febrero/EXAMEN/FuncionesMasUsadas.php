@@ -160,6 +160,24 @@ $registrosDeVenta = ['PorProvincia', 'PorCCAA', 'PorPaís'];
 $datos = array_fill(0, count($registrosDeVenta), 0);
 var_dump($datos); //Muestra 0 0 0
 
+/*---------------------------------------------------------------------------------------*/
+//Si no se le pasa un array de valores de sustituto, sirve para quitar elementos de un array
+echo "<br><br>ARRAY_SPLICE<br>";
+$provincias = ["Málaga", "Sevilla", "Córdoba", "Jaén", "Granada", "Almería", "Huelva"];
+$arrayProvinciasRecortado = array_splice($provincias, 2);
+var_dump($arrayProvinciasRecortado); //elimina los dos priemros elementos del array
+var_dump($provincias); //se ha modificado este array y se ha quedado sólo con dos posiciones
+
+/*---------------------------------------------------------------------------------------*/
+
+echo "<br><br>ARRAY_SLICE<br>"; //Si no se le pasa un array de valores de sustituto, sirve para quitar elementos de un array
+$provincias = ["Málaga", "Sevilla", "Córdoba", "Jaén", "Granada", "Almería", "Huelva"];
+$arrayProvinciasRecortado = array_slice($provincias, 2); //extrae la porción del array apartir del indice que recibe el método
+var_dump($arrayProvinciasRecortado); //muestra el array original sin las dos priemras posiciones
+var_dump($provincias); //No se altera el array de provincias original
+
+/*---------------------------------------------------------------------------------------*/
+
 //array_flip: Volveta un array, convirtiendo las claves en valores y los valores en claves
 
 

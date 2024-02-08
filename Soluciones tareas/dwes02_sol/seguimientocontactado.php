@@ -17,50 +17,53 @@ if (!is_int($idseguimiento) || $idseguimiento <= 0) exit();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Rellenar informe de seguimiento contactado</title>
-        <link rel="stylesheet" href="styles/dwes02.css">
-    </head>
-    <body>
-        <?php if ($action !== "registrarseguimiento" || is_null($informe) || strlen($informe) < 5): ?>
-        
-            <?php if (is_string($informe) && strlen($informe) < 5): ?>
-                <h2>El informe tiene menos de 5 carácteres</h2>        
-            <?php endif; ?>    
-            
-            <form action="" method="post">
-                <label for="informe">Introduzca el informe de seguimiento:</label>
-                <textarea name="informe" id="informe" cols="80" rows="10"><?= $informe ?? '' ?></textarea>
-                <br>
-                <input type="hidden" name="id_seguimiento" value="<?= $idseguimiento ?>">
-                <input type="hidden" name="action" value="registrarseguimiento">
-                <input type="hidden" name="idusuario" value="<?= $usuario_id ?>">
-                <input type="submit" value="Confirmar contacto y añadir informe">
-            </form>
 
-        <?php else: ?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rellenar informe de seguimiento contactado</title>
+    <link rel="stylesheet" href="styles/dwes02.css">
+</head>
 
-            <?php
-            $pdo = connect();
-            $r = registrarcontactoseguimiento($pdo, $idseguimiento, $informe);
-            if ($r === 1):
-                ?>
-                <h1>Informe registrado adecuadamente</h1>
-                <?php if (isset($usuario_id)): ?>
-                    <form action="detalleusuario.php" method="post">
-                        <input type="hidden" name="idusuario" value="<?= $usuario_id ?>">
-                        <input type="submit" value="Volver a detalles del usuario">
-                    </form>            
-            <?php endif; ?>
-                <form action="usuarios.php" method="post">                    
-                    <input type="submit" value="Volver a lista de usuarios">
-                </form>
-    <?php else: ?>
-                <B>Error: posiblemente el informe ya se ha rellenado.</B>
-            <?php endif; ?>
+<body>
+    <?php if ($action !== "registrarseguimiento" || is_null($informe) || strlen($informe) < 5) : ?>
+
+        <?php if (is_string($informe) && strlen($informe) < 5) : ?>
+            <h2>El informe tiene menos de 5 carácteres</h2>
         <?php endif; ?>
 
-    </body>
+        <form action="" method="post">
+            <label for="informe">Introduzca el informe de seguimiento:</label>
+            <textarea name="informe" id="informe" cols="80" rows="10"><?= $informe ?? '' ?></textarea>
+            <br>
+            <input type="hidden" name="id_seguimiento" value="<?= $idseguimiento ?>">
+            <input type="hidden" name="action" value="registrarseguimiento">
+            <input type="hidden" name="idusuario" value="<?= $usuario_id ?>">
+            <input type="submit" value="Confirmar contacto y añadir informe">
+        </form>
+
+    <?php else : ?>
+
+        <?php
+        $pdo = connect();
+        $r = registrarcontactoseguimiento($pdo, $idseguimiento, $informe);
+        if ($r === 1) :
+        ?>
+            <h1>Informe registrado adecuadamente</h1>
+            <?php if (isset($usuario_id)) : ?>
+                <form action="detalleusuario.php" method="post">
+                    <input type="hidden" name="idusuario" value="<?= $usuario_id ?>">
+                    <input type="submit" value="Volver a detalles del usuario">
+                </form>
+            <?php endif; ?>
+            <form action="usuarios.php" method="post">
+                <input type="submit" value="Volver a lista de usuarios">
+            </form>
+        <?php else : ?>
+            <B>Error: posiblemente el informe ya se ha rellenado.</B>
+        <?php endif; ?>
+    <?php endif; ?>
+
+</body>
+
 </html>
