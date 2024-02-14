@@ -1,0 +1,7 @@
+{
+    "autoload": {
+        "files": 
+            ["libs/misfunciones.php",
+             "conf/db.conf.php"]
+    }
+}

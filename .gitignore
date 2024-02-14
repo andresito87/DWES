@@ -19,3 +19,6 @@ dwes01/.idea/.gitignore
 dwes01/.idea/inspectionProfiles/Project_Default.xml
 dwes02/.idea
 /prueba/
+*/vendor/
+*/.idea
+

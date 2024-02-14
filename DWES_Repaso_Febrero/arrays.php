@@ -16,7 +16,6 @@ $array_asociativo = array(
 
 foreach ($array_asociativo as $key => $value) {
     echo $key . PHP_EOL . ' : ' . $value . PHP_EOL;
-
 }
 echo '<BR>';
 
