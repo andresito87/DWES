@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Test Documentation</title>
+        <style>
+            body {
+                text-rendering: optimizeLegibility;
+                font-family: Source SansSerif Pro, Arial, sans-serif;
+                font-variant-ligatures: common-ligatures;
+                font-kerning: normal;
+                margin-left: 2rem;
+                background-color: #fff;
+                color: #000;
+            }
+
+            body > ul > li {
+                font-size: larger;
+            }
+
+            h2 {
+                font-size: larger;
+                text-decoration-line: underline;
+                text-decoration-thickness: 2px;
+                margin: 0;
+                padding: 0.5rem 0;
+            }
+
+            ul {
+                list-style: none;
+                margin: 0 0 2rem;
+                padding: 0 0 0 1rem;
+                text-indent: -1rem;
+            }
+
+            .success:before {
+                color: #4e9a06;
+                content: '✓';
+                padding-right: 0.5rem;
+            }
+
+            .defect {
+                color: #a40000;
+            }
+
+            .defect:before {
+                color: #a40000;
+                content: '✗';
+                padding-right: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Taller (DWES04\models\Taller)</h2>
+        <ul>
+            <li class="success">Comprobar que el id es nulo al crear un nuevo taller que no ha sido guardado en la base de datos</li>
+            <li class="success">Comprobar que el id se establece correctamente cuando el taller ha sido guardado en la base de datos</li>
+            <li class="success">Comprobar que el nombre se obtiene correctamente</li>
+            <li class="success">Comprobar que el nombre se establece correctamente</li>
+            <li class="success">Comprobar que el nombre no se establece cuando es una cadena vacía</li>
+            <li class="success">Comprobar que la descripción se obtiene correctamente</li>
+            <li class="success">Comprobar que la descripción se establece correctamente</li>
+            <li class="success">Comprobar que la descripción no se establece cuando es una cadena vacía</li>
+            <li class="success">Comprobar que la ubicación se obtiene correctamente</li>
+            <li class="success">Comprobar que la ubicación se establece correctamente</li>
+            <li class="success">Comprobar que la ubicación no se establece cuando es una cadena vacía</li>
+            <li class="success">Comprobar que el día de la semana se obtiene correctamente</li>
+            <li class="success">Comprobar que el día de la semana se establece correctamente cuando es un día válido</li>
+            <li class="success">Comprobar que el día de la semana no se establece cuando es un día no válido (Domingo)</li>
+            <li class="success">Comprobar que la hora de inicio se obtiene correctamente</li>
+            <li class="success">Comprobar que la hora de inicio se establece correctamente</li>
+            <li class="success">Comprobar que la hora de inicio no se establece cuando es mayor que la hora de fin</li>
+            <li class="success">Comprobar que la hora de fin se obtiene correctamente</li>
+            <li class="success">Comprobar que la hora de fin se establece correctamente</li>
+            <li class="success">Comprobar que la hora de fin no se establece cuando es menor que la hora de inicio</li>
+            <li class="success">Comprobar que el cupo máximo se obtiene correctamente</li>
+            <li class="success">Comprobar que el cupo máximo se establece correctamente</li>
+            <li class="success">Comprobar que el cupo máximo no se establece cuando es menor que 5</li>
+            <li class="success">Comprobar que el cupo máximo no se establece cuando es mayor que 30</li>
+            <li class="success">Comprobar que cuando se guarda un taller en la base de datos se recibe la cantidad de registros afectados</li>
+            <li class="success">Comprobar que el método rescatar() devuelve un objeto Taller con los datos de un registro de la base de datos</li>
+            <li class="success">Comprobar que el método borrar() devuelve la cantidad de registros afectados al eliminar un taller de la base de datos</li>
+        </ul>
+        <h2>Talleres (DWES04\models\Talleres)</h2>
+        <ul>
+            <li class="success">Comprobar que se listan correctamente los talleres almacenados en la base de datos.</li>
+            <li class="success">Comprobar que se devuelve -1 si no se pudo ejecutar la consulta.</li>
+            <li class="success">Comprobar que se devuelve false si se produce una excepción en la operación.</li>
+            <li class="success">Comprobar que se filtran correctamente los talleres almacenados en la base de datos por día de la semana(lunes).</li>
+            <li class="success">Comprobar que se devuelve -1 si no se pudo ejecutar la consulta al filtrar por día de la semana.</li>
+            <li class="success">Comprobar que se devuelve false si se produce una excepción en la operación al filtrar por día de la semana.</li>
+            <li class="success">Comprobar que se filtran correctamente los talleres por un día de la semana que no existe y devuelve un array vacío.</li>
+        </ul>
+    </body>
+</html>

@@ -22,3 +22,5 @@ dwes02/.idea
 */vendor/
 */.idea
 
+/PhpProject1/nbproject/private/
+/PhpProject2/nbproject/private/

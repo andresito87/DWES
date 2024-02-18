@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
+        beStrictAboutChangesToGlobalState="true"
+        beStrictAboutOutputDuringTests="true"
+        colors="true"
+        defaultTestSuite="unit"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        bootstrap="vendor/autoload.php"
+        >
+    <testsuites>
+        <testsuite name="unit">
+            <directory phpVersion="8.3.0" phpVersionOperator=">=">tests/unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory phpVersion="8.3.0" phpVersionOperator=">=">tests/integration</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <testdoxHtml outputFile="reports/testdox.html"/>
+        <testdoxText outputFile="reports/testdox.txt"/>
+    </logging>
+</phpunit>

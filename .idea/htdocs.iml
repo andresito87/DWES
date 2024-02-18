@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/dwes04_4_5_ejemplos_autoloading/psr0/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/dwes04_4_5_ejemplos_autoloading/psr4/src" isTestSource="false" packagePrefix="MisClases\" />
+      <sourceFolder url="file://$MODULE_DIR$/proyecto_mvc/src" isTestSource="false" packagePrefix="DWES04\" />
+      <excludeFolder url="file://$MODULE_DIR$/proyecto_mvc/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/proyecto_mvc/vendor/smarty/smarty" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

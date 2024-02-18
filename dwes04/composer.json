@@ -1,0 +1,24 @@
+{
+  "name": "andres/dwes04",
+  "description": "Proyecto de la tarea 04",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "DWES04\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Andres",
+      "email": "andrespodadera87@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "smarty/smarty": "^5.0@dev"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.1@dev"
+  }
+}

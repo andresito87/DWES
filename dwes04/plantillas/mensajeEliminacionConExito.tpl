@@ -1,0 +1,1 @@
+<h1>Taller con id {$id} eliminado con éxito</h1>
