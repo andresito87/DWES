@@ -213,10 +213,12 @@ class Controladores
             } else {
                 $smarty->assign('errores', 'No se pudo crear el taller');
                 $smarty->display('mostrarErrores.tpl');
+                $smarty->display('formularioNuevoTaller.tpl');
             }
         } else {
             $smarty->assign('errores', $errores);
             $smarty->display('mostrarErrores.tpl');
+            $smarty->display('formularioNuevoTaller.tpl');
         }
         // Cerrar la conexión a la base de datos
         DB::cerrarConexion();

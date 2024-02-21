@@ -9,6 +9,3 @@ define('DB_PASSWORD', '');
 define('TEMPLATE_DIR', '/plantillas');
 define('TEMPLATE_C_DIR', '/plantillas_c');
 define('CACHE_DIR', '/cache');
-
-
-?>
