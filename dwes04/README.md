@@ -1,6 +1,10 @@
 # Ejecucion de tests de la aplicacion
 
 ```bash
+composer run test
+```
+
+```bash
 ./run.tests.sh
 ```
 

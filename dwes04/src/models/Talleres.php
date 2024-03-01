@@ -40,7 +40,7 @@ class Talleres
             if ($stmt->execute()) {
                 return $stmt->fetchAll(PDO::FETCH_CLASS, Taller::class);
             } else {
-                return -1;
+                return false;
             }
         } catch (PDOException $ex) {
             return false;
@@ -67,7 +67,7 @@ class Talleres
             if ($stmt->execute()) {
                 return $stmt->fetchAll(PDO::FETCH_CLASS, Taller::class);
             } else {
-                return -1;
+                return false;
             }
         } catch (PDOException $ex) {
             return false;

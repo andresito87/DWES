@@ -49,7 +49,7 @@ final class TalleresTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Comprobar que se devuelve -1 si no se pudo ejecutar la consulta.')]
+    #[TestDox('Comprobar que se devuelve false si no se pudo ejecutar la consulta.')]
     public function listarTalleresError(): void
     {
         $this->con->expects($this->once())
@@ -59,7 +59,7 @@ final class TalleresTest extends TestCase
         $this->stmt->expects($this->once())
             ->method('execute')
             ->willReturn(false);
-        $this->assertEquals(-1, Talleres::listar($this->con));
+        $this->assertEquals(false, Talleres::listar($this->con));
     }
 
     #[Test]
@@ -98,7 +98,7 @@ final class TalleresTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('Comprobar que se devuelve -1 si no se pudo ejecutar la consulta al filtrar por día de la semana.')]
+    #[TestDox('Comprobar que se devuelve false si no se pudo ejecutar la consulta al filtrar por día de la semana.')]
     public function filtrarTalleresPorDiaError(): void
     {
         $this->con->expects($this->once())
@@ -111,7 +111,7 @@ final class TalleresTest extends TestCase
         $this->stmt->expects($this->once())
             ->method('execute')
             ->willReturn(false);
-        $this->assertEquals(-1, Talleres::filtrarPorDia($this->con, 'lunes'));
+        $this->assertEquals(false, Talleres::filtrarPorDia($this->con, 'lunes'));
     }
 
     #[Test]

@@ -29,10 +29,10 @@ Taller (DWES04\models\Taller)
 
 Talleres (DWES04\models\Talleres)
  [x] Comprobar que se listan correctamente los talleres almacenados en la base de datos.
- [x] Comprobar que se devuelve -1 si no se pudo ejecutar la consulta.
+ [x] Comprobar que se devuelve false si no se pudo ejecutar la consulta.
  [x] Comprobar que se devuelve false si se produce una excepción en la operación.
  [x] Comprobar que se filtran correctamente los talleres almacenados en la base de datos por día de la semana(lunes).
- [x] Comprobar que se devuelve -1 si no se pudo ejecutar la consulta al filtrar por día de la semana.
+ [x] Comprobar que se devuelve false si no se pudo ejecutar la consulta al filtrar por día de la semana.
  [x] Comprobar que se devuelve false si se produce una excepción en la operación al filtrar por día de la semana.
  [x] Comprobar que se filtran correctamente los talleres por un día de la semana que no existe y devuelve un array vacío.
 

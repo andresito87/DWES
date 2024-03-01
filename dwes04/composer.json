@@ -23,5 +23,9 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^11.1"
+  },
+  "scripts": {
+    "test": "phpunit --bootstrap vendor/autoload.php tests/unit",
+    "test-bonitos": "phpunit --bootstrap vendor/autoload.php tests/unit --testdox"
   }
 }
