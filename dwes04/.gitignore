@@ -1,3 +1,4 @@
 ./vendor
 /composer.lock
 /plantillas_c/*.tpl.php
+.phpunit.result.cache
