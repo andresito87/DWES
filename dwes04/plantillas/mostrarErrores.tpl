@@ -1,5 +1,7 @@
 <div>
-    {foreach $errores as $error}
-        <h2>{$error}</h2>
-    {/foreach}
+    <ul>
+        {foreach $errores as $error}
+            <li>{$error}</li>
+        {/foreach}
+    </ul>
 </div>

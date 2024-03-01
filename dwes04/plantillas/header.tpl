@@ -20,14 +20,12 @@
         }
 
         form {
-            margin: 20px;
             font-size: large;
             font-weight: bold;
         }
 
         input,
         select {
-            margin: 10px;
             padding: 5px;
         }
 
@@ -57,7 +55,6 @@
 
         label {
             font-weight: 800;
-            margin: 10px;
         }
 
         form input[type="submit"] {

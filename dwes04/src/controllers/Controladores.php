@@ -9,6 +9,7 @@ use Smarty;
 use DWES04\models\Taller;
 use DWES04\models\Talleres;
 use DWES04\models\Peticion;
+use Exception;
 
 /**
  * Clase Controladores implementando el patrón MVC.
@@ -46,6 +47,8 @@ class Controladores
      */
     public static function accionPorDefecto(PDO $pdo, Smarty $smarty, Peticion $peticion): void
     {
+        // Nota: En la tarea se pide que el parámetro del día a filtrar se haga por POST, en el vídeo de explicación de la tarea se hace por GET.
+        // TODO: Reparar esta parte del código, ya que no se está filtrando por día de la semana correctamente.
         // Verificar si se recibieron datos por POST y que se haya seleccionado un día de la semana
         if ($peticion->isPost() && $peticion->has('dia_semana')) {
             // Verificar que el valor de 'diaSemana' sea válido
@@ -63,13 +66,12 @@ class Controladores
                     $smarty->assign('talleres', $talleres);
                     $smarty->display('mostrarTalleres.tpl');
                 }
+                $smarty->display('enlaceFormularioNuevoTaller.tpl');
             } else { // El valor de 'diaSemana' no es válido
                 $smarty->assign('errores', 'El día de la semana no es válido');
                 $smarty->display('mostrarErrores.tpl');
                 $smarty->display('formularioFiltrarDia.tpl');
-                $talleres = Talleres::listar($pdo);
-                $smarty->assign('talleres', $talleres);
-                $smarty->display('mostrarTalleres.tpl');
+                $smarty->display('enlaceVolverAListadoTalleres.tpl');
             }
         } else {
             // No se recibieron datos por POST o no viene el parámetro 'diaSemana'
@@ -86,7 +88,6 @@ class Controladores
         }
         // Cerrar la conexión a la base de datos
         DB::cerrarConexion();
-        $smarty->display('enlaceFormularioNuevoTaller.tpl');
     }
 
     /**
@@ -136,93 +137,173 @@ class Controladores
      */
     public static function nuevoTaller(PDO $pdo, Smarty $smarty, Peticion $peticion)
     {
+        $esNombreValido = false;
+        $esDescripcionValida = false;
+        $esUbicacionValida = false;
+        $esDiaSemanaValido = false;
+        $esHoraInicioValida = false;
+        $esHoraFinValida = false;
+        $esCupoMaximoValido = false;
+
+
         $errores = [];
+        $taller = new Taller();
         if ($peticion->has('nombre')) {
-            $nombre = $peticion->getString('nombre');
+            try {
+                $nombre = $peticion->getString('nombre');
+                if (!$taller->setNombre($nombre)) {
+                    $errores[] = 'El nombre del taller no es válido';
+                } else {
+                    $esNombreValido = true;
+                }
+            } catch (Exception $e) {
+                $errores[] = 'El nombre del taller no es válido';
+            }
         } else {
             $errores[] = 'El nombre del taller es obligatorio';
         }
 
         if ($peticion->has('descripcion')) {
-            $descripcion = $peticion->getString('descripcion');
+            try {
+                $descripcion = $peticion->getString('descripcion');
+                if (!$taller->setDescripcion($descripcion)) {
+                    $errores[] = 'La descripción del taller no es válida';
+                } else {
+                    $esDescripcionValida = true;
+                }
+            } catch (Exception $e) {
+                $errores[] = 'La descripción del taller no es válida';
+            }
         } else {
             $errores[] = 'La descripción del taller es obligatoria';
         }
 
         if ($peticion->has('ubicacion')) {
-            $ubicacion = $peticion->getString('ubicacion');
+            try {
+                $ubicacion = $peticion->getString('ubicacion');
+                if (!$taller->setUbicacion($ubicacion)) {
+                    $errores[] = 'La ubicación del taller no es válida';
+                } else {
+                    $esUbicacionValida = true;
+                }
+            } catch (Exception $e) {
+                $errores[] = 'La ubicación del taller no es válida';
+            }
         } else {
             $errores[] = 'La ubicación del taller es obligatoria';
         }
 
         if ($peticion->has('dia_semana')) {
-            $dia_semana = strtolower($peticion->getString('dia_semana'));
-            // Poner en mayusculas la primera letra del día de la semana
-            $dia_semana = ucfirst($dia_semana);
+            try {
+                $dia_semana = strtolower($peticion->getString('dia_semana'));
+                // Poner en mayusculas la primera letra del día de la semana
+                $dia_semana = ucfirst($dia_semana);
+                if (!$taller->setDiaSemana($dia_semana)) {
+                    $errores[] = 'El día de la semana no es válido';
+                } else {
+                    $esDiaSemanaValido = true;
+                }
+            } catch (Exception $e) {
+                $errores[] = 'El día de la semana no es válido';
+            }
         } else {
             $errores[] = 'El día de la semana es obligatorio';
         }
 
         if ($peticion->has('hora_inicio')) {
-            $hora_inicio = $peticion->getString('hora_inicio');
-            $hora_inicio = DateTime::createFromFormat('H:i', $hora_inicio);
+            try {
+                $hora_inicio = $peticion->getString('hora_inicio');
+                $hora_inicio = DateTime::createFromFormat('H:i', $hora_inicio);
+                if ($hora_inicio === false) {
+                    throw new Exception('La hora de inicio no es válida');
+                }
+                if (!$taller->setHoraInicio($hora_inicio)) {
+                    $errores[] = 'La hora de inicio no es válida';
+                } else {
+                    $esHoraInicioValida = true;
+                }
+            } catch (Exception $e) {
+                $errores[] = $e->getMessage();
+            }
         } else {
             $errores[] = 'La hora de inicio es obligatoria';
         }
 
         if ($peticion->has('hora_fin')) {
-            $hora_fin = $peticion->getString('hora_fin');
-            $hora_fin = DateTime::createFromFormat('H:i', $hora_fin);
+            try {
+                $hora_fin = $peticion->getString('hora_fin');
+                $hora_fin = DateTime::createFromFormat('H:i', $hora_fin);
+                if ($hora_fin === false) {
+                    throw new Exception('La hora de fin no es válida');
+                }
+                if (!$taller->setHoraFin($hora_fin)) {
+                    $errores[] = 'La hora de fin no es válida';
+                } else {
+                    $esHoraFinValida = true;
+                }
+            } catch (Exception $e) {
+                $errores[] = $e->getMessage();
+            }
         } else {
             $errores[] = 'La hora de fin es obligatoria';
         }
 
         if ($peticion->has('cupo_maximo')) {
-            $cupo_maximo = $peticion->getInt('cupo_maximo');
+            try {
+                $cupo_maximo = $peticion->getInt('cupo_maximo');
+                if (!$taller->setCupoMaximo($cupo_maximo)) {
+                    $errores[] = 'El cupo máximo no es válido';
+                } else {
+                    $esCupoMaximoValido = true;
+                }
+            } catch (Exception $e) {
+                $errores[] = 'El cupo máximo no es válido';
+            }
         } else {
             $errores[] = 'El cupo máximo es obligatorio';
         }
 
-        $taller = new Taller();
-        if (!$taller->setNombre($nombre)) {
-            $errores[] = 'El nombre del taller no es válido';
-        }
-        if (!$taller->setDescripcion($descripcion)) {
-            $errores[] = 'La descripción del taller no es válida';
-        }
-        if (!$taller->setUbicacion($ubicacion)) {
-            $errores[] = 'La ubicación del taller no es válida';
-        }
-        if (!$taller->setDiaSemana($dia_semana)) {
-            $errores[] = 'El día de la semana no es válido';
-        }
-        if (!$taller->setHoraInicio($hora_inicio)) {
-            $errores[] = 'La hora de inicio no es válida';
-        }
-        if (!$taller->setHoraFin($hora_fin)) {
-            $errores[] = 'La hora de fin no es válida';
-        }
-        if (!$taller->setCupoMaximo($cupo_maximo)) {
-            $errores[] = 'El cupo máximo no es válido';
-        }
-
         if (empty($errores)) {
-            if ($taller->guardar($pdo)) {
+            if ($taller->guardar($pdo) > 0) {
                 $smarty->assign('id', $taller->getId());
                 $smarty->display('mensajeCreacionConExito.tpl');
-            } else {
+            } else if ($taller->guardar($pdo) == 0) {
                 $smarty->assign('errores', 'No se pudo crear el taller, inténalo de nuevo');
+                $smarty->display('mostrarErrores.tpl');
+                Controladores::nuevoTallerForm($smarty);
+            } else {
+                $smarty->assign('errores', 'Hubo un problema en el proceso de creación del taller, inténalo de nuevo');
                 $smarty->display('mostrarErrores.tpl');
                 Controladores::nuevoTallerForm($smarty);
             }
         } else {
             $smarty->assign('errores', $errores);
             $smarty->display('mostrarErrores.tpl');
+            if ($esNombreValido) {
+                $smarty->assign('nombre', $nombre);
+            }
+            if ($esDescripcionValida) {
+                $smarty->assign('descripcion', $descripcion);
+            }
+            if ($esUbicacionValida) {
+                $smarty->assign('ubicacion', $ubicacion);
+            }
+            if ($esDiaSemanaValido) {
+                $smarty->assign('dia_semana', $dia_semana);
+            }
+            if ($esHoraInicioValida) {
+                $smarty->assign('hora_inicio', $hora_inicio);
+            }
+            if ($esHoraFinValida) {
+                $smarty->assign('hora_fin', $hora_fin);
+            }
+            if ($esCupoMaximoValido) {
+                $smarty->assign('cupo_maximo', $cupo_maximo);
+            }
             Controladores::nuevoTallerForm($smarty);
         }
         // Cerrar la conexión a la base de datos
         DB::cerrarConexion();
-        $smarty->display('enlaceVolverAListadoTalleres.tpl');
     }
 
     /**
@@ -241,26 +322,41 @@ class Controladores
      */
     public static function borrarTaller(PDO $pdo, Smarty $smarty, Peticion $peticion)
     {
-        // Verificar si se recibió un id por POST y si se confirmó la eliminación
-        if ($peticion->has('id') && $peticion->has('eliminar') && $peticion->getString('eliminar') == "eliminar") {
-            $id = $peticion->getInt('id');
-            if (Taller::borrar($pdo, $id)) {
+        try {
+            // Verificar si se recibió un id por POST y si se confirmó la eliminación
+            if ($peticion->has('id') && $peticion->has('eliminar') && $peticion->getString('eliminar') == "eliminar" && $peticion->has('confirmar') && $peticion->getString('confirmar') == "confirmar") {
+                // Verificar si se activo el checkbox de confirmación, viene el id y se confirmó la eliminación
+                $id = $peticion->getInt('id');
+                if (Taller::borrar($pdo, $id) > 0) {
+                    $smarty->assign('id', $id);
+                    $smarty->display('mensajeEliminacionConExito.tpl');
+                } elseif (Taller::borrar($pdo, $id) == 0) {
+                    $smarty->assign('errores', 'No se pudo borrar el taller, ese taller no existe o ya fue borrado');
+                    $smarty->display('formularioConfirmarEliminacion.tpl');
+                } else {
+                    $smarty->assign('errores', 'Hubo un problema en el proceso de borrado del taller, inténtalo de nuevo');
+                    $smarty->display('formularioConfirmarEliminacion.tpl');
+                }
+            } else if ($peticion->has('id') && $peticion->has('confirmar') && $peticion->getString('confirmar') == "confirmar" && !$peticion->has('eliminar')) {
+                // Verificar si se recibió un id por POST, aunque no se haya confirmado la eliminación
+                $id = $peticion->getInt('id');
                 $smarty->assign('id', $id);
-                $smarty->display('mensajeEliminacionConExito.tpl');
-                $smarty->display('enlaceVolverAListadoTalleres.tpl');
-            } else {
-                $smarty->assign('errores', 'No se pudo borrar el taller, ese taller no existe o ya fue borrado');
-                $smarty->display('mostrarErrores.tpl');
+                $smarty->assign('errores', 'No has marcado la casilla de confirmación');
+                $smarty->display('formularioConfirmarEliminacion.tpl');
+            } else if ($peticion->has('id') && $peticion->getInt('id') > 0) {
+                // Verificar si se recibió un id por POST, se ha iniciado el proceso de eliminación
+                $id = $peticion->getInt('id');
+                $smarty->assign('id', $id);
+                $smarty->display('formularioConfirmarEliminacion.tpl');
+            } else { // No se recibió un id por POST
+                $smarty->assign('errores', 'No se pudo continuar con el proceso de borrado del taller, error en los datos recibidos');
+                $smarty->display('formularioConfirmarEliminacion.tpl');
             }
-        } else if ($peticion->has('id')) { // Verificar si se recibió un id por POST, para mostrar el formulario de confirmación
-            $id = $peticion->getInt('id');
-            $smarty->assign('id', $id);
+            // Cerrar la conexión a la base de datos
+            DB::cerrarConexion();
+        } catch (Exception $e) {
+            $smarty->assign('errores', 'No se pudo continuar con el proceso de borrado del taller, error en los datos recibidos');
             $smarty->display('formularioConfirmarEliminacion.tpl');
-        } else { // No se recibió un id por POST
-            $smarty->assign('errores', 'No se pudo borrar el taller, error en el id recibido');
-            $smarty->display('mostrarErrores.tpl');
         }
-        // Cerrar la conexión a la base de datos
-        DB::cerrarConexion();
     }
 }
