@@ -4,6 +4,8 @@
 ./run.tests.sh
 ```
 
+Una vez ejecutado el script, se generará un archivo llamado "testdox.html" en el directorio /reports con el resultado de los tests.
+
 # Despliegue de la Aplicación Dockerizada
 
 Este repositorio contiene una aplicación dockerizada para facilitar su despliegue y ejecución en cualquier entorno compatible con Docker.

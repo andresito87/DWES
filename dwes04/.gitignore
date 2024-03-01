@@ -1,0 +1,3 @@
+./vendor
+/composer.lock
+/plantillas_c/*.tpl.php
