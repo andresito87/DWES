@@ -15,11 +15,16 @@ Este repositorio contiene una aplicación dockerizada para facilitar su desplieg
 
 ## Despliegue de la Aplicación
 
-### La carpeta dwes04DepliegueProfesor contiene el docker-compose.yml para desplegar la aplicación en un entorno de producción.(Tiempo estimado de despliegue: 1 minuto a 2 minutos. Se podría mejorar el tiempo de despliegue si se utilizara un servidor web más ligero como Nginx. Habría que eliminar archivos, configuraciones y test de la aplicación que no se utilizan en producción)
+### La carpeta dwes04DepliegueDocker contiene el docker-compose.yml para desplegar la aplicación en un entorno de producción.(Tiempo estimado de despliegue: 1 minuto a 2 minutos. Habría que eliminar archivos, modificar configuraciones y limpiar los tests de la aplicación que no se utilizan en producción) También habría que crear un archivo .env con variables de entorno y configurar la ip del contenedor del servidor Apache para que sea accesible desde el exterior. Ahora mismo la aplicación se despliega y es accesible desde el localhost.
 
 ```bash
 docker-compose up [-d]
 ```
+
+## Acceso a la Aplicación
+
+Una vez desplegada la aplicación, se puede acceder a ella a través de un navegador web en la siguiente URL:
+http://localhost/index.php
 
 ## Construcción de la Aplicación y subida a Docker Hub
 
@@ -31,11 +36,6 @@ docker push andres87/dwes04-web
 ## Localización de la Aplicación
 
 Repositorio de Docker Hub: [andres87/dwes04-web](https://hub.docker.com/r/andres87/dwes04-web) Latest será la última versión subida a Docker Hub.
-
-## Acceso a la Aplicación
-
-Una vez desplegada la aplicación, se puede acceder a ella a través de un navegador web en la siguiente URL:
-http://localhost/index.php
 
 ## Parada y Eliminación de la Aplicación
 
