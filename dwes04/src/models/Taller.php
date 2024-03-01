@@ -257,7 +257,7 @@ class Taller implements IGuardable
      * 
      * @param PDO $con Conexión a la base de datos.
      * @return bool|int el número de talleres guardados si el guradado se ha realizado correctamente,
-     * -1 sino se guardó ningún taller y false si se ha producido una excepción en la operación.
+     * 0 sino se guardó ningún taller y false si se ha producido una excepción en la operación.
      * @see https://www.php.net/manual/es/book.pdo.php
      */
     public function guardar(PDO $con): bool|int
@@ -301,7 +301,7 @@ class Taller implements IGuardable
      * 
      * @param PDO $con Conexión a la base de datos.
      * @param int $id Identificador del taller.
-     * @return Taller|bool|int El taller si se ha recuperado correctamente, -1 si no se ha encontrado el taller 
+     * @return Taller|bool|int El taller si se ha recuperado correctamente, 0 si no se ha encontrado el taller 
      * y false si se ha producido una excepción en la operación.
      * @see https://www.php.net/manual/es/book.pdo.php
      */
@@ -342,18 +342,18 @@ class Taller implements IGuardable
      * @param PDO $con Conexión a la base de datos.
      * @param int $id Identificador del taller.
      * @return bool|int el número de filas eliminadas si el proceso se realizó correctamente,
-     * -1 si no se ha borrado ningún taller y false si se ha producido una excepción en la operación.
+     * 0 si no se ha borrado ningún taller y false si se ha producido una excepción en la operación.
      */
     public static function borrar(PDO $con, int $id): bool|int
     {
         try {
             $sql = "DELETE FROM talleres WHERE id = :id";
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             if ($stmt->execute()) {
                 return $stmt->rowCount();
             } else {
-                return -1;
+                return false;
             }
         } catch (PDOException $e) {
             return false;

@@ -21,6 +21,9 @@ dwes02/.idea
 /prueba/
 */vendor/
 */.idea
+.idea/
+dwes04/plantillas_c/*.tpl.php
+proyecto_mvc/templates_c/*.tpl.php
 
 /PhpProject1/nbproject/private/
 /PhpProject2/nbproject/private/

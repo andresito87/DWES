@@ -1,0 +1,4 @@
+#excluir la carpeta vendor
+vendor/
+#excluir composer.lock
+composer.lock

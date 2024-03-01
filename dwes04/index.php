@@ -3,7 +3,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use DWES04\models\Peticion;
 use DWES04\controllers\Controladores;
-use Smarty\Smarty;
 use DWES04\DB;
 
 //Conexión a la base de datos:

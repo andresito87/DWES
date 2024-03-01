@@ -5,7 +5,7 @@ namespace DWES04\controllers;
 use PDO;
 use DateTime;
 use DWES04\DB;
-use Smarty\Smarty;
+use Smarty;
 use DWES04\models\Taller;
 use DWES04\models\Talleres;
 use DWES04\models\Peticion;
@@ -211,14 +211,14 @@ class Controladores
                 $smarty->assign('id', $taller->getId());
                 $smarty->display('mensajeCreacionConExito.tpl');
             } else {
-                $smarty->assign('errores', 'No se pudo crear el taller');
+                $smarty->assign('errores', 'No se pudo crear el taller, inténalo de nuevo');
                 $smarty->display('mostrarErrores.tpl');
-                $smarty->display('formularioNuevoTaller.tpl');
+                Controladores::nuevoTallerForm($smarty);
             }
         } else {
             $smarty->assign('errores', $errores);
             $smarty->display('mostrarErrores.tpl');
-            $smarty->display('formularioNuevoTaller.tpl');
+            Controladores::nuevoTallerForm($smarty);
         }
         // Cerrar la conexión a la base de datos
         DB::cerrarConexion();

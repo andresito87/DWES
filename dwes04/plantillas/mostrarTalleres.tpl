@@ -1,60 +1,4 @@
-<style>
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    th,
-    td {
-        border: 1px solid black;
-        text-align: center;
-        padding: 4px;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    tr:hover {
-        background-color: #ffc5c5;
-    }
-
-    label {
-        font-weight: 800;
-    }
-
-    form input[type="submit"] {
-        background-color: #08fb2c;
-        color: black;
-        padding: 6px 10px;
-        text-align: center;
-        font-weight: 800;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 12px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 4px;
-    }
-
-    form button[type="submit"] {
-        background-color: #ff0e0e;
-        color: black;
-        font-weight: 800;
-        padding: 6px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 12px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 4px;
-    }
-</style>
+{include file="header.tpl" title="Listado de Talleres"}
 <h1>Listado de Talleres</h1>
 <table>
     <thead>
@@ -84,10 +28,11 @@
                 <td>
                     <form action="index.php?accion=borrar_taller" method="post">
                         <input type="hidden" name="id" value="{$taller->getId()}">
-                        <button type="submit" value="Eliminar">Eliminar</button>
+                        <button class="eliminar" type="submit" value="Eliminar">Eliminar</button>
                     </form>
                 </td>
             </tr>
         {/foreach}
     </tbody>
 </table>
+{include file="footer.tpl"}

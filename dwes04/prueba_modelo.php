@@ -18,7 +18,7 @@ $pdo = DB::obtenerConexion();
 /********************************/
 /***** PRUEBAS CLASE TALLER *****/
 /********************************/
-echo "<h3>Creando un nuevo taller y guardandolo en la BD</h3>";
+echo "<h3>Creando un nuevo taller</h3>";
 $taller = new Taller();
 $errores = [];
 if (!$taller->setNombre("Taller de prueba")) {
@@ -56,33 +56,39 @@ if (count($errores) > 0) {
     }
     exit;
 } else {
-    if (!$taller->guardar($pdo))
-        echo "Error al guardar el taller en la base de datos";
-    else {
-        //mostrar todos los datos del taller
-        echo "Taller guardado correctamente: <br>";
-        echo "ID: " . $taller->getId() . "<br>";
-        echo "Nombre: " . $taller->getNombre() . "<br>";
-        echo "Descripción: " . $taller->getDescripcion() . "<br>";
-        echo "Ubicación: " . $taller->getUbicacion() . "<br>";
-        echo "Día de la semana: " . $taller->getDiaSemana() . "<br>";
-        echo "Hora de inicio: " . $taller->getHoraInicio()->format('H:i') . "<br>";
-        echo "Hora de fin: " . $taller->getHoraFin()->format('H:i') . "<br>";
-        echo "Cupo máximo: " . $taller->getCupoMaximo() . "<br>";
-    }
+    //mostrar todos los datos del taller
+    echo "Taller creado correctamente: <br>";
+    echo "ID: " . ($taller->getId() ?? "nulo") . "<br>";
+    echo "Nombre: " . $taller->getNombre() . "<br>";
+    echo "Descripción: " . $taller->getDescripcion() . "<br>";
+    echo "Ubicación: " . $taller->getUbicacion() . "<br>";
+    echo "Día de la semana: " . $taller->getDiaSemana() . "<br>";
+    echo "Hora de inicio: " . $taller->getHoraInicio()->format('H:i') . "<br>";
+    echo "Hora de fin: " . $taller->getHoraFin()->format('H:i') . "<br>";
+    echo "Cupo máximo: " . $taller->getCupoMaximo() . "<br>";
 }
 
-echo "<h3>Borrando taller con ID 1...</h3>";
-if (!Taller::borrar($pdo, 1)) {
-    echo "Error al borrar el taller con ID 1";
+echo "<h3>Guardando el taller en la base de datos...</h3>";
+if (!$taller->guardar($pdo)) {
+    echo "Error al guardar el taller en la base de datos";
 } else {
-    echo "Taller con ID 1 borrado correctamente";
+    echo "Taller guardado correctamente: <br>";
+    echo "ID: " . $taller->getId() . "<br>";
+    echo "Nombre: " . $taller->getNombre() . "<br>";
+    echo "Descripción: " . $taller->getDescripcion() . "<br>";
+    echo "Ubicación: " . $taller->getUbicacion() . "<br>";
+    echo "Día de la semana: " . $taller->getDiaSemana() . "<br>";
+    echo "Hora de inicio: " . $taller->getHoraInicio()->format('H:i') . "<br>";
+    echo "Hora de fin: " . $taller->getHoraFin()->format('H:i') . "<br>";
+    echo "Cupo máximo: " . $taller->getCupoMaximo() . "<br>";
+
 }
 
-echo "<h3>Rescatando taller con ID 2...</h3>";
-$tallerRescatado = Taller::rescatar($pdo, 2);
+$idTaller = $taller->getId();
+echo "<h3>Rescatando taller con ID $idTaller...</h3>";
+$tallerRescatado = Taller::rescatar($pdo, $idTaller);
 if (!$tallerRescatado) {
-    echo "Error al rescatar el taller con ID 2";
+    echo "Error al rescatar el taller con ID $idTaller.";
 } else {
     echo "Taller rescatado correctamente: <br>";
     echo "ID: " . $tallerRescatado->getId() . "<br>";
@@ -93,6 +99,27 @@ if (!$tallerRescatado) {
     echo "Hora de inicio: " . $tallerRescatado->getHoraInicio()->format('H:i') . "<br>";
     echo "Hora de fin: " . $tallerRescatado->getHoraFin()->format('H:i') . "<br>";
     echo "Cupo máximo: " . $tallerRescatado->getCupoMaximo() . "<br>";
+}
+
+echo "<h3>Borrando taller con ID $idTaller...</h3>";
+$resultado = Taller::borrar($pdo, $idTaller);
+if ($resultado == 0) {
+    echo "No se ha borrado ningún taller con ID $idTaller";
+} else if (!$resultado) {
+    echo "Error al borrar el taller con ID $idTaller";
+} else {
+    echo "Taller con ID $idTaller borrado correctamente";
+}
+
+$idTaller = -1;
+echo "<h3>Borrando taller con id $idTaller (no existe)...</h3>";
+$resultado = Taller::borrar($pdo, $idTaller);
+if ($resultado == 0) {
+    echo "No se ha borrado ningún taller con ID $idTaller";
+} else if (!$resultado) {
+    echo "Error al borrar el taller con ID $idTaller";
+} else {
+    echo "Taller con ID $idTaller borrado correctamente";
 }
 
 /**********************************/

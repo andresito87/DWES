@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    container_name: contenedor_apache
+    depends_on:
+      - db
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 80:80
+    command: /bin/bash setup.sh
+
+  db:
+    image: mysql:latest
+    container_name: contenedor_mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dwes04tarea
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - ./DataBase:/docker-entrypoint-initdb.d

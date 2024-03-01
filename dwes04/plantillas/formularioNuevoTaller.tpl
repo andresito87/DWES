@@ -1,41 +1,8 @@
-<style>
-    h1 {
-        text-align: center;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        font-size: large;
-        font-weight: bold;
-    }
-
-    input,
-    select {
-        margin: 10px;
-        padding: 5px;
-    }
-
-    input[type="submit"] {
-        margin: 20px;
-        padding: 10px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        font-size: x-large;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    input[type="submit"]:hover {
-        background-color: #45a049;
-    }
-</style>
+{include file="header.tpl" title="Formulario de Creación de un nuevo Taller"}
 <div>
     <!--  Aunque los datos son verificados del lado del servidor, añado una sutíl comprobación con el atributo required en HTML   -->
     <h1>Ingrese los datos del nuevo taller</h1>
-    <form action="index.php?accion=crear_taller" method="post">
+    <form class="nuevoTaller" action="index.php?accion=crear_taller" method="post">
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" required>
         <br>
@@ -64,3 +31,4 @@
         <input type="submit" value="Guardar">
     </form>
 </div>
+{include file="footer.tpl"}
