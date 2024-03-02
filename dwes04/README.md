@@ -1,7 +1,11 @@
-# Ejecucion de tests de la aplicacion
+# Ejecución de tests de la aplicación
 
 ```bash
 composer run test
+```
+
+```bash
+composer run test-bonitos
 ```
 
 ```bash
@@ -21,7 +25,7 @@ Este repositorio contiene una aplicación dockerizada para facilitar su desplieg
 
 ## Despliegue de la Aplicación
 
-### La carpeta dwes04DepliegueDocker contiene el docker-compose.yml para desplegar la aplicación en un entorno de producción.(Tiempo estimado de despliegue: 1 minuto a 2 minutos. Habría que eliminar archivos, modificar configuraciones y limpiar los tests de la aplicación que no se utilizan en producción) También habría que crear un archivo .env con variables de entorno y configurar la ip del contenedor del servidor Apache para que sea accesible desde el exterior. Ahora mismo la aplicación se despliega y es accesible desde el localhost.
+La carpeta dwes04DepliegueDocker contiene el docker-compose.yml para desplegar la aplicación en un entorno de producción.(Tiempo estimado de despliegue: 30 segundos). Habría que eliminar archivos, modificar configuraciones y limpiar los tests de la aplicación que no se utilizan en producción. También habría que crear un archivo .env con variables de entorno y configurar la ip del contenedor del servidor Apache para que sea accesible desde el exterior. Ahora mismo la aplicación se despliega y es accesible desde localhost.
 
 ```bash
 docker-compose up [-d]
@@ -49,6 +53,10 @@ Repositorio de Docker Hub: [andres87/dwes04-web](https://hub.docker.com/r/andres
 docker-compose down
 docker rmi andres87/dwes04-web
 ```
+
+## Imagen de la Aplicación
+
+![Imagen de la Aplicación](imagenApp.png)
 
 ## Licencia
 
