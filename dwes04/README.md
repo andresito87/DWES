@@ -25,7 +25,7 @@ Este repositorio contiene una aplicación dockerizada para facilitar su desplieg
 
 ## Despliegue de la Aplicación
 
-La carpeta dwes04DepliegueDocker contiene el docker-compose.yml para desplegar la aplicación en un entorno de producción.(Tiempo estimado de despliegue: 30 segundos). Habría que eliminar archivos, modificar configuraciones y limpiar los tests de la aplicación que no se utilizan en producción. También habría que crear un archivo .env con variables de entorno y configurar la ip del contenedor del servidor Apache para que sea accesible desde el exterior. Ahora mismo la aplicación se despliega y es accesible desde localhost.
+La carpeta dwes04DepliegueDocker contiene el docker-compose.yml para desplegar la aplicación en un entorno de producción.(Tiempo estimado de despliegue: < 1 minuto). Habría que eliminar archivos, modificar configuraciones y limpiar los tests de la aplicación que no se utilizan en producción. También habría que crear un archivo .env con variables de entorno y configurar la ip del contenedor del servidor Apache para que sea accesible desde el exterior. Ahora mismo la aplicación se despliega y es accesible desde localhost.
 
 ```bash
 docker-compose up [-d]
