@@ -429,7 +429,12 @@ class Controladores
         $taller = new Taller();
         if ($peticion->has('id') && $peticion->getInt('id') > 0) {
             $id = $peticion->getInt('id');
-            $esIdValido = true;
+            $existeTaller = Taller::rescatar($pdo, $id);
+            if ($existeTaller instanceof Taller) {
+                $esIdValido = true;
+            } else {
+                $errores[] = 'El Id del taller no es válido';
+            }
         } else {
             $errores[] = 'No se pudo recuperar el id del taller';
         }
@@ -550,7 +555,7 @@ class Controladores
         }
 
         if (empty($errores)) {
-            $resultadoActualizacion = $taller->actualizar($pdo, $id);
+            $resultadoActualizacion = Taller::actualizar($pdo, $id, $taller);
             if ($resultadoActualizacion > 0) {
                 $smarty->assign('id', $id);
                 $smarty->display('mensajeEdicionConExito.tpl');

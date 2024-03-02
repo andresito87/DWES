@@ -365,23 +365,30 @@ class Taller implements IGuardable
      * 
      * @param PDO $con Conexión a la base de datos.
      * @param int $id Identificador del taller.
-     * @return bool|int el número de filas actualizadas si el proceso se realizó correctamente,
+     * @return bool|int el número de filas actualizadas si el proceso se realizó correctamente, 
      * 0 si no se ha actualizado ningún taller y false si se ha producido una excepción en la operación.
      */
-    public function actualizar(PDO $con, int $id): bool|int
+    public static function actualizar(PDO $con, int $id, Taller $tallerModificado): bool|int
     {
         try {
             $sql = "UPDATE talleres SET nombre = :nombre, descripcion = :descripcion, ubicacion = :ubicacion, dia_semana = :dia_semana, hora_inicio = :hora_inicio, hora_fin = :hora_fin, cupo_maximo = :cupo_maximo WHERE id = :id";
+            $nombre = $tallerModificado->getNombre();
+            $descripcion = $tallerModificado->getDescripcion();
+            $ubicacion = $tallerModificado->getUbicacion();
+            $dia_semana = $tallerModificado->getDiaSemana();
+            $hora_inicio = $tallerModificado->getHoraInicio();
+            $hora_fin = $tallerModificado->getHoraFin();
+            $cupo_maximo = $tallerModificado->getCupoMaximo();
             $stmt = $con->prepare($sql);
-            $stmt->bindParam(':nombre', $this->nombre);
-            $stmt->bindParam(':descripcion', $this->descripcion);
-            $stmt->bindParam(':ubicacion', $this->ubicacion);
-            $stmt->bindParam(':dia_semana', $this->dia_semana);
-            $hora_inicio_string = $this->hora_inicio->format('H:i');
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':descripcion', $descripcion);
+            $stmt->bindParam(':ubicacion', $ubicacion);
+            $stmt->bindParam(':dia_semana', $dia_semana);
+            $hora_inicio_string = $hora_inicio->format('H:i');
             $stmt->bindParam(':hora_inicio', $hora_inicio_string);
-            $hora_fin_string = $this->hora_fin->format('H:i');
+            $hora_fin_string = $hora_fin->format('H:i');
             $stmt->bindParam(':hora_fin', $hora_fin_string);
-            $stmt->bindParam(':cupo_maximo', $this->cupo_maximo);
+            $stmt->bindParam(':cupo_maximo', $cupo_maximo);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             if ($stmt->execute()) {
                 return $stmt->rowCount();

@@ -101,6 +101,29 @@ if (!$tallerRescatado) {
     echo "Cupo máximo: " . $tallerRescatado->getCupoMaximo() . "<br>";
 }
 
+echo "<h3>Modificando el taller con ID $idTaller...</h3>";
+$tallerRescatado->setNombre("Taller de prueba modificado");
+$tallerRescatado->setDescripcion("Descripción de prueba modificada");
+$tallerRescatado->setUbicacion("Ubicación de prueba modificada");
+$tallerRescatado->setDiaSemana("Martes");
+$tallerRescatado->setHoraInicio(new DateTime("09:00"));
+$tallerRescatado->setHoraFin(new DateTime("11:00"));
+$tallerRescatado->setCupoMaximo(10);
+$resultado = $tallerRescatado->actualizar($pdo, $idTaller, $tallerRescatado);
+if (!$resultado) {
+    echo "Error al modificar el taller con ID $idTaller.";
+} else {
+    echo "Taller modificado correctamente: <br>";
+    echo "ID: " . $tallerRescatado->getId() . "<br>";
+    echo "Nombre: " . $tallerRescatado->getNombre() . "<br>";
+    echo "Descripción: " . $tallerRescatado->getDescripcion() . "<br>";
+    echo "Ubicación: " . $tallerRescatado->getUbicacion() . "<br>";
+    echo "Día de la semana: " . $tallerRescatado->getDiaSemana() . "<br>";
+    echo "Hora de inicio: " . $tallerRescatado->getHoraInicio()->format('H:i') . "<br>";
+    echo "Hora de fin: " . $tallerRescatado->getHoraFin()->format('H:i') . "<br>";
+    echo "Cupo máximo: " . $tallerRescatado->getCupoMaximo() . "<br>";
+}
+
 echo "<h3>Borrando taller con ID $idTaller...</h3>";
 $resultado = Taller::borrar($pdo, $idTaller);
 if ($resultado == 0) {

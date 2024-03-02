@@ -26,13 +26,14 @@ Taller (DWES04\models\Taller)
  [x] Comprobar que cuando se guarda un taller en la base de datos se recibe la cantidad de registros afectados
  [x] Comprobar que el método rescatar() devuelve un objeto Taller con los datos de un registro de la base de datos
  [x] Comprobar que el método borrar() devuelve la cantidad de registros afectados al eliminar un taller de la base de datos
+ [x] Comprobar que el método actualizar() devuelve la cantidad de registros afectados al modificar un taller en la base de datos
 
 Talleres (DWES04\models\Talleres)
  [x] Comprobar que se listan correctamente los talleres almacenados en la base de datos.
  [x] Comprobar que se devuelve false si no se pudo ejecutar la consulta.
  [x] Comprobar que se devuelve false si se produce una excepción en la operación.
  [x] Comprobar que se filtran correctamente los talleres almacenados en la base de datos por día de la semana(lunes).
- [x] Comprobar que se devuelve false si no se pudo ejecutar la consulta al filtrar por día de la semana.
+ [x] Comprobar que se devuelve false si no se pudo ejecutar la consulta al filtrar por día de la semana incorrecto.
  [x] Comprobar que se devuelve false si se produce una excepción en la operación al filtrar por día de la semana.
- [x] Comprobar que se filtran correctamente los talleres por un día de la semana que no existe y devuelve un array vacío.
+ [x] Comprobar que se filtran correctamente los talleres por un día de la semana que no registros en la BD y devuelve un array vacío.
 

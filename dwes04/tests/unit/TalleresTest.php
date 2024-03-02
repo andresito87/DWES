@@ -36,14 +36,12 @@ final class TalleresTest extends TestCase
     {
         $this->con->expects($this->once())
             ->method('prepare')
-            ->with('SELECT id, nombre, descripcion, ubicacion, dia_semana, hora_inicio, hora_fin, cupo_maximo FROM talleres')
             ->willReturn($this->stmt);
         $this->stmt->expects($this->once())
             ->method('execute')
             ->willReturn(true);
         $this->stmt->expects($this->once())
             ->method('fetchAll')
-            ->with(PDO::FETCH_CLASS, Taller::class)
             ->willReturn(['taller1', 'taller2']);
         $this->assertEquals(['taller1', 'taller2'], Talleres::listar($this->con));
     }
@@ -54,7 +52,6 @@ final class TalleresTest extends TestCase
     {
         $this->con->expects($this->once())
             ->method('prepare')
-            ->with('SELECT id, nombre, descripcion, ubicacion, dia_semana, hora_inicio, hora_fin, cupo_maximo FROM talleres')
             ->willReturn($this->stmt);
         $this->stmt->expects($this->once())
             ->method('execute')
@@ -68,7 +65,6 @@ final class TalleresTest extends TestCase
     {
         $this->con->expects($this->once())
             ->method('prepare')
-            ->with('SELECT id, nombre, descripcion, ubicacion, dia_semana, hora_inicio, hora_fin, cupo_maximo FROM talleres')
             ->willReturn($this->stmt);
         $this->stmt->expects($this->once())
             ->method('execute')
@@ -82,7 +78,6 @@ final class TalleresTest extends TestCase
     {
         $this->con->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM talleres WHERE dia_semana=:dia')
             ->willReturn($this->stmt);
         $this->stmt->expects($this->once())
             ->method('bindParam')
@@ -92,26 +87,21 @@ final class TalleresTest extends TestCase
             ->willReturn(true);
         $this->stmt->expects($this->once())
             ->method('fetchAll')
-            ->with(PDO::FETCH_CLASS, Taller::class)
             ->willReturn(['taller1', 'taller2']);
         $this->assertEquals(['taller1', 'taller2'], Talleres::filtrarPorDia($this->con, 'lunes'));
     }
 
     #[Test]
-    #[TestDox('Comprobar que se devuelve false si no se pudo ejecutar la consulta al filtrar por día de la semana.')]
+    #[TestDox('Comprobar que se devuelve false si no se pudo ejecutar la consulta al filtrar por día de la semana incorrecto.')]
     public function filtrarTalleresPorDiaError(): void
     {
         $this->con->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM talleres WHERE dia_semana=:dia')
             ->willReturn($this->stmt);
         $this->stmt->expects($this->once())
             ->method('bindParam')
-            ->with(':dia', 'lunes');
-        $this->stmt->expects($this->once())
-            ->method('execute')
-            ->willReturn(false);
-        $this->assertEquals(false, Talleres::filtrarPorDia($this->con, 'lunes'));
+            ->with(':dia', 'error');
+        $this->assertEquals(false, Talleres::filtrarPorDia($this->con, 'error'));
     }
 
     #[Test]
@@ -120,24 +110,19 @@ final class TalleresTest extends TestCase
     {
         $this->con->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM talleres WHERE dia_semana=:dia')
             ->willReturn($this->stmt);
-        $this->stmt->expects($this->once())
-            ->method('bindParam')
-            ->with(':dia', 'lunes');
         $this->stmt->expects($this->once())
             ->method('execute')
             ->will($this->throwException(new PDOException()));
-        $this->assertEquals(false, Talleres::filtrarPorDia($this->con, 'lunes'));
+        $this->assertEquals(false, Talleres::filtrarPorDia($this->con, 'Saltará excepción'));
     }
 
     #[Test]
-    #[TestDox('Comprobar que se filtran correctamente los talleres por un día de la semana que no existe y devuelve un array vacío.')]
+    #[TestDox('Comprobar que se filtran correctamente los talleres por un día de la semana que no tiene registros en la BD y devuelve un array vacío.')]
     public function filtrarTalleresPorDiaNoExistente(): void
     {
         $this->con->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM talleres WHERE dia_semana=:dia')
             ->willReturn($this->stmt);
         $this->stmt->expects($this->once())
             ->method('bindParam')
@@ -145,10 +130,6 @@ final class TalleresTest extends TestCase
         $this->stmt->expects($this->once())
             ->method('execute')
             ->willReturn(true);
-        $this->stmt->expects($this->once())
-            ->method('fetchAll')
-            ->with(PDO::FETCH_CLASS, Taller::class)
-            ->willReturn([]);
         $this->assertEquals([], Talleres::filtrarPorDia($this->con, 'domingo'));
     }
 

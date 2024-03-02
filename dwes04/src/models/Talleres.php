@@ -30,7 +30,7 @@ class Talleres
      * @param PDO $con Conexión a la base de datos.
      * 
      * @return array|bool|int Retorna un array con los talleres almacenados en la base de datos, 
-     * -1 si no se pudo ejecutar la consulta o false si se produjo una excepción en la operación.
+     * false si no se pudo ejecutar la consulta o si se produjo una excepción en la operación.
      */
     public static function listar(PDO $con): array|bool|int
     {
@@ -56,7 +56,7 @@ class Talleres
      * @param string $diaSemana Día de la semana por el que se quiere filtrar.
      * 
      * @return array|bool|int Retorna un array con los talleres almacenados en la base de datos, 
-     * -1 si no se pudo ejecutar la consulta o false si se produjo una excepción en la operación.
+     * 0 si no se pudo ejecutar la consulta o si se produjo una excepción en la operación.
      */
     public static function filtrarPorDia(PDO $con, string $diaSemana): array|bool|int
     {

@@ -323,4 +323,36 @@ final class TallerTest extends TestCase
         // Verificamos que la cantidad de registros afectados sea 1
         $this->assertEquals(1, $registrosAfectados);
     }
+
+    #[Test]
+    #[TestDox('Comprobar que el método actualizar() devuelve la cantidad de registros afectados al modificar un taller en la base de datos')]
+    public function actualizar(): void
+    {
+        // Creamos el mock de la conexión a la base de datos
+        $conexionMock = $this->createMock(PDO::class);
+
+        // Simulamos la preparación y ejecución de una consulta que modifica un taller en la base de datos
+        $statementMock = $this->createMock(PDOStatement::class);
+        $conexionMock->method('prepare')->willReturn($statementMock);
+        $statementMock->method('execute')->willReturn(true);
+        $statementMock->method('rowCount')->willReturn(1); // Simulamos que se afectó 1 registro
+
+        // Creamos una instancia de Taller
+        $taller = new Taller();
+
+        // Le asignamos valor a sus propiedades
+        $taller->setNombre('Taller de prueba');
+        $taller->setDescripcion('Descripción de prueba');
+        $taller->setUbicacion('Ubicación de prueba');
+        $taller->setDiaSemana('Lunes');
+        $taller->setHoraInicio(new DateTime('10:00'));
+        $taller->setHoraFin(new DateTime('12:00'));
+        $taller->setCupoMaximo(10);
+
+        // Modificamos un taller en la base de datos
+        $registrosAfectados = Taller::actualizar($conexionMock, 1, $taller);
+
+        // Verificamos que la cantidad de registros afectados sea 1
+        $this->assertEquals(1, $registrosAfectados);
+    }
 }
