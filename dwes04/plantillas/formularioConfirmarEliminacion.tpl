@@ -14,4 +14,5 @@
         <input class="eliminar" type="submit" value="Confirmar elimninación">
     </form>
 </div>
+{include file="enlaceVolverAListadoTalleres.tpl"}
 {include file="footer.tpl"}

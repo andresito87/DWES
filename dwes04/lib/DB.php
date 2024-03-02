@@ -54,7 +54,7 @@ class DB
                 static::$conn = false;
                 throw new AppException
                 (
-                    'Error DB. No se puede continuar. Revisa el valor de las constantes DB_USER y DB_PASSWORD en el archivo /conf/conf.php. DIR =>' . __DIR__,
+                    'Error en la conexión a la DB. No se puede continuar. Revisa el valor de las constantes DB_USER y DB_PASSWORD en el archivo /conf/conf.php. DIR =>' . __DIR__,
                     AppException::DB_UNABLE_TO_CONNECT
                 );
             }

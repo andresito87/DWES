@@ -1,1 +1,1 @@
-archivo para obligar a que el control de versiones cree y suba el directorio vacío, contendrá plantillas compiladas
+archivo para obligar a que el control de versiones cree y suba el directorio vacío, contendrá plantillas de smarty compiladas

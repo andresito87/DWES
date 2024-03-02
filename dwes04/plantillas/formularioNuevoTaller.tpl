@@ -1,4 +1,7 @@
 {include file="header.tpl" title="Formulario de Creación de un nuevo Taller"}
+{if isset($errores) && $errores!=null}
+    {include file="mostrarErrores.tpl"}
+{/if}
 <div>
     <!--  Aunque los datos son verificados del lado del servidor, añado una sutíl comprobación con el atributo required en HTML   -->
     <h1>Ingrese los datos del nuevo taller</h1>

@@ -257,7 +257,7 @@ class Taller implements IGuardable
      * 
      * @param PDO $con Conexión a la base de datos.
      * @return bool|int el número de talleres guardados si el guradado se ha realizado correctamente,
-     * 0 sino se guardó ningún taller y false si se ha producido una excepción en la operación.
+     * false sino se guardó ningún taller o si se ha producido una excepción en la operación.
      * @see https://www.php.net/manual/es/book.pdo.php
      */
     public function guardar(PDO $con): bool|int
@@ -288,7 +288,7 @@ class Taller implements IGuardable
                 return $statement->rowCount();
             } else {
                 // No se ejecutó la consulta
-                return -1;
+                return false;
             }
         } catch (PDOException $e) {
             // Se ha producido una excepción
@@ -301,8 +301,8 @@ class Taller implements IGuardable
      * 
      * @param PDO $con Conexión a la base de datos.
      * @param int $id Identificador del taller.
-     * @return Taller|bool|int El taller si se ha recuperado correctamente, 0 si no se ha encontrado el taller 
-     * y false si se ha producido una excepción en la operación.
+     * @return Taller|bool|int El taller si se ha recuperado correctamente, false si no se ha encontrado el taller 
+     * o si se ha producido una excepción en la operación.
      * @see https://www.php.net/manual/es/book.pdo.php
      */
     public static function rescatar(PDO $con, int $id): Taller|bool|int
@@ -324,7 +324,7 @@ class Taller implements IGuardable
                     $taller->cupo_maximo = $tallerData['cupo_maximo'];
                     return $taller;
                 } else { // No se encontró el taller
-                    return -1;
+                    return false;
                 }
             } else {
                 // No se ejecutó la consulta
@@ -349,6 +349,39 @@ class Taller implements IGuardable
         try {
             $sql = "DELETE FROM talleres WHERE id = :id";
             $stmt = $con->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            if ($stmt->execute()) {
+                return $stmt->rowCount();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Permite actualizar un taller en la base de datos.
+     * 
+     * @param PDO $con Conexión a la base de datos.
+     * @param int $id Identificador del taller.
+     * @return bool|int el número de filas actualizadas si el proceso se realizó correctamente,
+     * 0 si no se ha actualizado ningún taller y false si se ha producido una excepción en la operación.
+     */
+    public function actualizar(PDO $con, int $id): bool|int
+    {
+        try {
+            $sql = "UPDATE talleres SET nombre = :nombre, descripcion = :descripcion, ubicacion = :ubicacion, dia_semana = :dia_semana, hora_inicio = :hora_inicio, hora_fin = :hora_fin, cupo_maximo = :cupo_maximo WHERE id = :id";
+            $stmt = $con->prepare($sql);
+            $stmt->bindParam(':nombre', $this->nombre);
+            $stmt->bindParam(':descripcion', $this->descripcion);
+            $stmt->bindParam(':ubicacion', $this->ubicacion);
+            $stmt->bindParam(':dia_semana', $this->dia_semana);
+            $hora_inicio_string = $this->hora_inicio->format('H:i');
+            $stmt->bindParam(':hora_inicio', $hora_inicio_string);
+            $hora_fin_string = $this->hora_fin->format('H:i');
+            $stmt->bindParam(':hora_fin', $hora_fin_string);
+            $stmt->bindParam(':cupo_maximo', $this->cupo_maximo);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             if ($stmt->execute()) {
                 return $stmt->rowCount();

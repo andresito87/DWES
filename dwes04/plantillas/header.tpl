@@ -112,6 +112,26 @@
             color: white;
         }
 
+        form button#editar {
+            background-color: #f0f00f;
+            color: black;
+            font-weight: 800;
+            padding: 6px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: black solid 1px;
+        }
+
+        form button#editar:hover {
+            background-color: #7d7d01;
+            color: white;
+        }
+
         a {
             color: #041681;
             font-weight: bold;
