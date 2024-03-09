@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UbicacionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('ubicaciones', [UbicacionController::class, 'index'])->name('index');
+
+Route::post('ubicaciones/store', [UbicacionController::class, 'store']);
+
+Route::get('ubicaciones/create', [UbicacionController::class, 'create'])->name('crear_ubicacion');
