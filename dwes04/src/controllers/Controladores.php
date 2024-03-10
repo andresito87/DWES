@@ -2,6 +2,7 @@
 
 namespace DWES04\controllers;
 
+use DateTimeImmutable;
 use PDO;
 use DateTime;
 use DWES04\DB;
@@ -211,8 +212,8 @@ class Controladores
         if ($peticion->has('hora_inicio')) {
             try {
                 $hora_inicio = $peticion->getString('hora_inicio');
-                $hora_inicio = DateTime::createFromFormat('H:i', $hora_inicio);
-                if ($hora_inicio === false) {
+                $hora_inicio = DateTimeImmutable::createFromFormat('H:i', $hora_inicio);
+                if ($hora_inicio == false || $hora_inicio->getLastErrors()) {
                     throw new Exception('La hora de inicio no es válida');
                 }
                 if (!$taller->setHoraInicio($hora_inicio)) {
@@ -230,8 +231,8 @@ class Controladores
         if ($peticion->has('hora_fin')) {
             try {
                 $hora_fin = $peticion->getString('hora_fin');
-                $hora_fin = DateTime::createFromFormat('H:i', $hora_fin);
-                if ($hora_fin === false) {
+                $hora_fin = DateTimeImmutable::createFromFormat('H:i', $hora_fin);
+                if ($hora_fin == false || $hora_fin->getLastErrors()) {
                     throw new Exception('La hora de fin no es válida');
                 }
                 if (!$taller->setHoraFin($hora_fin)) {
@@ -504,8 +505,8 @@ class Controladores
         if ($peticion->has('hora_inicio')) {
             try {
                 $hora_inicio = $peticion->getString('hora_inicio');
-                $hora_inicio = DateTime::createFromFormat('H:i', $hora_inicio);
-                if ($hora_inicio === false) {
+                $hora_inicio = DateTimeImmutable::createFromFormat('H:i', $hora_inicio);
+                if ($hora_inicio == false || $hora_inicio->getLastErrors()) {
                     throw new Exception('La hora de inicio no es válida');
                 }
                 if (!$taller->setHoraInicio($hora_inicio)) {
@@ -523,8 +524,8 @@ class Controladores
         if ($peticion->has('hora_fin')) {
             try {
                 $hora_fin = $peticion->getString('hora_fin');
-                $hora_fin = DateTime::createFromFormat('H:i', $hora_fin);
-                if ($hora_fin === false) {
+                $hora_fin = DateTimeImmutable::createFromFormat('H:i', $hora_fin);
+                if ($hora_fin == false || $hora_fin->getLastErrors()) {
                     throw new Exception('La hora de fin no es válida');
                 }
                 if (!$taller->setHoraFin($hora_fin)) {

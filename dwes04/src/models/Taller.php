@@ -3,7 +3,7 @@
 namespace DWES04\models;
 
 use PDO;
-use DateTime;
+use DateTimeImmutable;
 use DWES04\models\IGuardable;
 use PDOException;
 
@@ -18,7 +18,7 @@ use PDOException;
  * @author Andrés Samuel Podadera González
  * @uses IGuardable DWES04\models\IGuardable
  * @uses PDO https://www.php.net/manual/es/class.pdo.php
- * @uses DateTime https://www.php.net/manual/es/class.datetime.php
+ * @uses DateTimeImmutable https://www.php.net/manual/es/class.datetime.php
  * @uses PDOException https://www.php.net/manual/es/class.pdoexception.php
  * @version 1.0
  */
@@ -50,12 +50,12 @@ class Taller implements IGuardable
     private $dia_semana;
 
     /**
-     * @var DateTime Hora de inicio del taller.
+     * @var DateTimeImmutable Hora de inicio del taller.
      */
     private $hora_inicio;
 
     /**
-     * @var DateTime Hora de fin del taller.
+     * @var DateTimeImmutable Hora de fin del taller.
      */
     private $hora_fin;
 
@@ -172,7 +172,7 @@ class Taller implements IGuardable
 
     /**
      * Retorna la hora de inicio del taller.
-     * @return DateTime Hora de inicio del taller.
+     * @return DateTimeImmutable Hora de inicio del taller.
      */
     public function getHoraInicio()
     {
@@ -181,11 +181,11 @@ class Taller implements IGuardable
 
     /**
      * Establece la hora de inicio del taller.
-     * @param DateTime $hora_inicio Hora de inicio del taller.
+     * @param DateTimeImmutable $hora_inicio Hora de inicio del taller.
      * @return bool true si la hora de inicio es válida y se ha establecido, false en caso contrario.
      * @see https://www.php.net/manual/es/function.preg-match.php
      */
-    public function setHoraInicio(DateTime $hora_inicio): bool
+    public function setHoraInicio(DateTimeImmutable $hora_inicio): bool
     {
         // Transformar la hora a string
         $hora_inicio_string = $hora_inicio->format('H:i');
@@ -200,7 +200,7 @@ class Taller implements IGuardable
 
     /**
      * Retorna la hora de fin del taller.
-     * @return DateTime Hora de fin del taller.
+     * @return DateTimeImmutable Hora de fin del taller.
      */
     public function getHoraFin()
     {
@@ -209,11 +209,11 @@ class Taller implements IGuardable
 
     /**
      * Establece la hora de fin del taller.
-     * @param DateTime $hora_fin Hora de fin del taller.
+     * @param DateTimeImmutable $hora_fin Hora de fin del taller.
      * @return bool true si la hora de fin es válida y se ha establecido, false en caso contrario.
      * @see https://www.php.net/manual/es/function.preg-match.php
      */
-    public function setHoraFin(DateTime $hora_fin): bool
+    public function setHoraFin(DateTimeImmutable $hora_fin): bool
     {
         // Transformar la hora a string
         $hora_fin_string = $hora_fin->format('H:i');
@@ -319,8 +319,8 @@ class Taller implements IGuardable
                     $taller->descripcion = $tallerData['descripcion'];
                     $taller->ubicacion = $tallerData['ubicacion'];
                     $taller->dia_semana = $tallerData['dia_semana'];
-                    $taller->hora_inicio = new DateTime($tallerData['hora_inicio']);
-                    $taller->hora_fin = new DateTime($tallerData['hora_fin']);
+                    $taller->hora_inicio = new DateTimeImmutable($tallerData['hora_inicio']);
+                    $taller->hora_fin = new DateTimeImmutable($tallerData['hora_fin']);
                     $taller->cupo_maximo = $tallerData['cupo_maximo'];
                     return $taller;
                 } else { // No se encontró el taller
