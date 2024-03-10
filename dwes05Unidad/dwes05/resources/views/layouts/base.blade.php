@@ -8,14 +8,18 @@
 </head>
 
 <body>
-    <h1>Respira</h1>
-
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ route('index') }}">Lista de ubicaciones</a></li>
+                <li><a href="{{ route('crear_ubicacion') }}">Crear nueva ubicación</a></li>
+            </ul>
+        </nav>
+    </header>
     @yield('contenido')
 
-    <footer>Hecho con 💖 por <a href="https://github.com/andresito87" target="_blank"><x-codicon-github /></a>
 
-
-
+    <footer>Hecho con 💛 por <a href="https://github.com/andresito87" target="_blank"><x-codicon-github /></a>
     </footer>
 </body>
 

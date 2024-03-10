@@ -1,10 +1,281 @@
-svg {
-    width: 1.5em;
-    height: 1.5em;
-    display: inline-block;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+    --color-primario: #f93636;
+    --color-secundario: #ff9595;
+    --color-terciario: #cafa77;
+    --color-enviar: #4CAF50;
+    --color-exito: #3c763d;
+    --color-fondo-exito: #aef7b4;
+    --color-error: #a94442;
+    --color-fondo-error: #f2dede;
+    --color-informativo: #036291;
+    --color-fondo-informativo: #a0dfff;
+    --color-sombra: #c5c4c4;
 }
 
-a {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+}
+
+body {
+    background-color: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body h1,
+body h2,
+body h3 {
+    margin: 0.5em;
+}
+
+body a {
+    margin: 0.5em;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+body a:hover {
+    color: var(--color-primario);
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em;
+    background-color: var(--color-primario);
+    border: 2px solid black;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.5em;
+    display: flex;
+    flex-direction: row;
+}
+
+li {
+    margin: 1em;
+}
+
+li a {
+    background-color: var(--color-secundario);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: black;
+    padding: 1em;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+li a:hover {
+    background-color: var(--color-terciario);
+}
+
+/* Tabla de ubicaciones*/
+table {
+    border-collapse: collapse;
+    width: 90%;
+    margin: 1em auto;
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: var(--color-secundario);
+}
+
+tr:hover {
+    background-color: var(--color-sombra);
+}
+
+td a {
+    background-color: var(--color-secundario);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    font-weight: bold;
+    margin: 4px 2px;
+}
+
+td a:hover {
+    background-color: var(--color-terciario);
+}
+
+/* Formulario */
+/* Errores */
+div.errores {
+    background-color: var(--color-fondo-error);
+    color: var(--color-error);
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: auto;
+    margin: 1em auto;
+}
+
+div.errores h2 {
+    margin: 0.5em;
+}
+
+div.errores ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.errores ul li {
+    margin: 0.5em;
+    text-align: center;
+}
+
+div.informativo {
+    background-color: var(--color-fondo-informativo);
+    color: var(--color-informativo);
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: auto;
+    margin: 1em auto;
+    text-align: center;
+}
+
+/* Mensaje Éxito */
+div.mensaje-exito {
+    background-color: #dff0d8;
+    color: var(--color-exito);
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: auto;
+    margin: 1em auto;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+    height: auto;
+}
+
+form label {
+    display: flex;
+    flex-direction: row;
+    margin: 1em;
+    align-items: center;
+    font-weight: bold;
+}
+
+form input {
+    padding: 0.5em;
+    margin: 0.5em;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+form input[type="submit"] {
+    background-color: var(--color-enviar);
+    color: black;
+    padding: 1em;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 40%;
+    margin: 1em auto;
+}
+
+form input[type="submit"]:hover {
+    background-color: var(--color-terciario);
+}
+
+form p {
+    margin: 1em;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/*Detalles de la ubicación*/
+div.detalles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 1em;
+    height: auto;
+}
+
+div.detalles strong {
+    font-weight: bold;
+    font-size: larger;
+}
+
+/* Footer */
+footer {
+    background-color: var(--color-primario);
+    border: 2px solid black;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    padding: 1em;
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+footer svg {
+    width: 1.5em;
+    height: 1.5em;
+    margin: 0 0.5em;
+    color: black;
+}
+
+footer svg:hover {
+    filter: brightness(0.8);
+    filter: drop-shadow(2px 2px 2px white);
+    transition: 0.3s;
+}
+
+footer a {
     text-decoration: none;
     color: black;
 }

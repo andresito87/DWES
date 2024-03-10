@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Taller;
 use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -19,7 +20,7 @@ class UbicacionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear una nueva ubicación.
      */
     public function create()
     {
@@ -27,7 +28,8 @@ class UbicacionController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena una nueva ubicación en la base de datos.
+     * @param Request $request Datos del formulario
      */
     public function store(Request $request)
     {
@@ -35,7 +37,7 @@ class UbicacionController extends Controller
             $datosvalidados = $request->validate([
                 'nombre' => 'required|min:4|max:50',
                 'descripcion' => 'required',
-                'dias' => ['required', 'array'],
+                'dias' => 'required',
                 'dias.*' => ['required', 'distinct', 'in:L,M,X,J,V,S,D']
             ]);
         } catch (ValidationException $e) {
@@ -53,38 +55,87 @@ class UbicacionController extends Controller
 
         return redirect()->route('index')
             ->with('mensaje', 'Ubicación creada correctamente')
-            ->with('tipomensaje', 'success');
+            ->with('tipo', 'exito');
     }
 
     /**
-     * Display the specified resource.
+     * Muestra la ubicación especificada.
+     * @param Ubicacion $ubicacion
      */
     public function show(Ubicacion $ubicacion)
     {
-        //
+        $ubicacion = Ubicacion::find($ubicacion->id);
+        return view('ubicaciones.detalleubicacion', ['ubicacion' => $ubicacion]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar la ubicación especificada.
+     * @param Ubicacion $ubicacion Ubicación a editar
      */
     public function edit(Ubicacion $ubicacion)
     {
-        //
+        return view('ubicaciones.editarubicacion', ['ubicacion' => $ubicacion]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza la ubicación especificada en la base de datos.
+     * @param Request $request Datos del formulario
      */
     public function update(Request $request, Ubicacion $ubicacion)
     {
-        //
+        try {
+            $datosvalidados = $request->validate([
+                'nombre' => 'required|min:4|max:50',
+                'descripcion' => 'required',
+                'dias' => 'required',
+                'dias.*' => ['required', 'distinct', 'in:L,M,X,J,V,S,D']
+            ]);
+        } catch (ValidationException $e) {
+            return Redirect::back()
+                ->withInput()
+                ->withErrors($e->errors());
+        }
+
+        $ubicacion = Ubicacion::find($ubicacion->id);
+        $ubicacion->nombre = $datosvalidados['nombre'];
+        $ubicacion->descripcion = $datosvalidados['descripcion'];
+        $ubicacion->dias = implode(',', $datosvalidados['dias']);
+
+        $ubicacion->save();
+
+        return redirect()->route('index')
+            ->with('mensaje', 'Ubicación actualizada correctamente')
+            ->with('tipo', 'exito');
+    }
+
+    /**
+     * Muestra el formulario de confirmación de eliminación de la ubicación especificada.
+     * @param Ubicacion $ubicacion Ubicación a eliminar
+     */
+    public function destroyconfirm(Ubicacion $ubicacion)
+    {
+        return view('ubicaciones.confirmarborrarubicacion', ['ubicacion' => $ubicacion]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ubicacion $ubicacion)
+    public function destroy(Request $request, Ubicacion $ubicacion)
     {
-        //
+        $haSidoEliminada = false;
+        if ($request->input('confirmar') == 'si') {
+
+            $ubicacion = Ubicacion::find($ubicacion->id);
+            foreach ($ubicacion->talleres as $taller) {
+                Taller::destroy($taller->id);
+            }
+            if (Ubicacion::destroy($ubicacion->id) > 0) {
+                $haSidoEliminada = true;
+            }
+        }
+
+        return redirect()->route('index')
+            ->with('mensaje', $haSidoEliminada ? 'Ubicación eliminada correctamente' : 'No se ha eliminado la ubicación')
+            ->with('tipo', $haSidoEliminada ? 'exito' : 'informativo');
     }
 }
