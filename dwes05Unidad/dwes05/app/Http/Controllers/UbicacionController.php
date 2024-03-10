@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ubicacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\ValidationException;
 
 class UbicacionController extends Controller
@@ -38,8 +39,9 @@ class UbicacionController extends Controller
                 'dias.*' => ['required', 'distinct', 'in:L,M,X,J,V,S,D']
             ]);
         } catch (ValidationException $e) {
-            return redirect()->route('crear_ubicacion')
-                ->with('errors', $e->validator->errors());
+            return Redirect::back()
+                ->withInput()
+                ->withErrors($e->errors());
         }
 
         $ubicacion = new Ubicacion();
