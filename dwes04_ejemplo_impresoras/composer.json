@@ -1,0 +1,19 @@
+{
+    "name": "portatil_profesorado/dwes",
+    "authors": [
+        {
+            "name": "Salvador Romero Villegas",
+            "email": "belcitron@gmail.com"
+        }
+    ],
+    "require": {
+        "smarty/smarty": "^4.3"
+    },
+    "autoload":
+    {
+        "psr-4":
+        {
+            "IMPR\\":"src/"
+        }
+    }
+}

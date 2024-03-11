@@ -13,7 +13,7 @@
     @if ($ubicaciones->isEmpty())
         <h3>No hay ubicaciones registradas en la Base de Datos</h3>
     @else
-        <table>
+        <table class="ubicaciones">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -39,5 +39,6 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $ubicaciones->links() }}
     @endif
 @endsection

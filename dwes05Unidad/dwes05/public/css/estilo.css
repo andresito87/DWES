@@ -102,7 +102,7 @@ th {
     background-color: var(--color-secundario);
 }
 
-tr:hover {
+table.ubicaciones tr:hover {
     background-color: var(--color-sombra);
 }
 
@@ -246,6 +246,43 @@ div.detalles strong {
     font-size: larger;
 }
 
+/* Paginación */
+
+nav ul.pagination {
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    padding: 2em;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+nav ul.pagination li {
+    margin: 1em;
+}
+
+nav ul.pagination li a {
+    background-color: var(--color-fondo-informativo);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: black;
+    padding: 1em;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+nav ul.pagination li a:hover {
+    background-color: var(--color-informativo);
+}
+
+
 /* Footer */
 footer {
     background-color: var(--color-primario);
@@ -265,7 +302,6 @@ footer {
 footer svg {
     width: 1.5em;
     height: 1.5em;
-    margin: 0 0.5em;
     color: black;
 }
 

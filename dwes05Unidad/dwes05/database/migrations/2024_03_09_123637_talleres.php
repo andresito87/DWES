@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id(); //Necesario para el ORM Eloquent
             /*Ubicación del taller (relación 1-N, dado que en una ubicación puede haber múltiples talleres)*/
             $table->unsignedBigInteger('ubicacion_id');
-            $table->foreign('ubicacion_id')->references('id')->on('ubicaciones');
+            $table->foreign('ubicacion_id')->references('id')->on('ubicaciones')->onDelete('cascade');
             $table->timestamps(); //Necesario para el ORM Eloquent
 
             $table->string('nombre', 50);

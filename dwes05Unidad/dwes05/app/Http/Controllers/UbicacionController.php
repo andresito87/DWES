@@ -15,7 +15,8 @@ class UbicacionController extends Controller
      */
     public function index()
     {
-        $ubicaciones = Ubicacion::all();
+        // Devolvemos los datos paginados
+        $ubicaciones = Ubicacion::paginate(3);
         return view('ubicaciones', ['ubicaciones' => $ubicaciones]);
     }
 
@@ -53,7 +54,7 @@ class UbicacionController extends Controller
 
         $ubicacion->save();
 
-        return redirect()->route('index')
+        return redirect()->route('ubicaciones')
             ->with('mensaje', 'Ubicación creada correctamente')
             ->with('tipo', 'exito');
     }
@@ -103,7 +104,7 @@ class UbicacionController extends Controller
 
         $ubicacion->save();
 
-        return redirect()->route('index')
+        return redirect()->route('ubicaciones')
             ->with('mensaje', 'Ubicación actualizada correctamente')
             ->with('tipo', 'exito');
     }
@@ -126,15 +127,15 @@ class UbicacionController extends Controller
         if ($request->input('confirmar') == 'si') {
 
             $ubicacion = Ubicacion::find($ubicacion->id);
-            foreach ($ubicacion->talleres as $taller) {
+            /*foreach ($ubicacion->talleres as $taller) {
                 Taller::destroy($taller->id);
-            }
+            }*/
             if (Ubicacion::destroy($ubicacion->id) > 0) {
                 $haSidoEliminada = true;
             }
         }
 
-        return redirect()->route('index')
+        return redirect()->route('ubicaciones')
             ->with('mensaje', $haSidoEliminada ? 'Ubicación eliminada correctamente' : 'No se ha eliminado la ubicación')
             ->with('tipo', $haSidoEliminada ? 'exito' : 'informativo');
     }

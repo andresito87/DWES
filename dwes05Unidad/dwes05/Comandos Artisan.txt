@@ -1,0 +1,17 @@
+php artisan test
+
+php artisan migrate:reset
+php artisan migrate:fresh
+php artisan migrate --env=testing
+
+
+php artisan make:seeder NombreSeeder
+php artisan db:seed --class=NombreSeeder
+
+
+php artisan make:factory NombreFactory
+
+
+
+php artisan make:test ModeloTest
+php artisan make:test ModeloTest --unit

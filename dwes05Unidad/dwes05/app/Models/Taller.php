@@ -19,4 +19,26 @@ class Taller extends Model
     {
         return $this->belongsTo(Ubicacion::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Cuando se crea un taller, se garantiza que a la ubicación a la que pertenece el taller tenga el día de la semana en el que se imparte el taller
+        static::created(function ($taller) {
+            $ubicacion = $taller->ubicacion;
+            $dias = $ubicacion->dias;
+            if (strpos($dias, $taller->dia_semana) === false) {
+                //Busca otra ubicacion random que tenga el dia de la semana en el que se imparte el taller
+                $ubicacion = Ubicacion::where('dias', 'like', '%' . $taller->dia_semana . '%')->inRandomOrder()->first();
+                if ($ubicacion) {
+                    $taller->ubicacion_id = $ubicacion->id;
+                    $taller->save();
+                } else {
+                    // Si no hay ninguna ubicación que tenga el día de la semana en el que se imparte el taller, se elimina el taller
+                    $taller->delete();
+                }
+            }
+        });
+    }
 }

@@ -16,6 +16,6 @@
         @csrf
         <p><input type="radio" name="confirmar" value="si">Sí, quiero borrar esta ubicación y los talleres.</input></p>
         <p><input type="radio" name="confirmar" value="no" checked>No, no quiero borrar la ubicación.</input></p>
-        <input type="submit" value="Enviar"></input>
+        <input type="submit" value="Borrar"></input>
     </form>
 @endsection

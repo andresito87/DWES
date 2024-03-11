@@ -20,13 +20,13 @@ Route::get('/', function () {
 })->name('principal');
 
 // Ruta para mostrar la lista de ubicaciones
-Route::get('ubicaciones', [UbicacionController::class, 'index'])->name('index');
+Route::get('ubicaciones', [UbicacionController::class, 'index'])->name('ubicaciones');
 
 // Ruta para mostrar el formulario de creación de una nueva ubicación
 Route::get('ubicaciones/create', [UbicacionController::class, 'create'])->name('crear_ubicacion');
 
 // Ruta para almacenar una nueva ubicación
-Route::post('ubicaciones/store', [UbicacionController::class, 'store']);
+Route::post('ubicaciones/store', [UbicacionController::class, 'store'])->name('almacenar_ubicacion_BD');
 
 // Ruta para mostrar los detalles de una ubicación
 Route::get('ubicaciones/{ubicacion}', [UbicacionController::class, 'show'])->whereNumber('ubicacion')->name('detalles_ubicacion');

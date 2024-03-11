@@ -11,7 +11,7 @@
     <header>
         <nav>
             <ul>
-                <li><a href="{{ route('index') }}">Lista de ubicaciones</a></li>
+                <li><a href="{{ route('ubicaciones') }}">Lista de ubicaciones</a></li>
                 <li><a href="{{ route('crear_ubicacion') }}">Crear nueva ubicación</a></li>
             </ul>
         </nav>
