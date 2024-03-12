@@ -36,9 +36,9 @@ class UbicacionController extends Controller
     {
         try {
             $datosvalidados = $request->validate([
-                'nombre' => 'required|min:4|max:50',
+                'nombre' => ['required', 'min:4', 'max:50'],
                 'descripcion' => 'required',
-                'dias' => 'required',
+                'dias' => ['required', 'array'],
                 'dias.*' => ['required', 'distinct', 'in:L,M,X,J,V,S,D']
             ]);
         } catch (ValidationException $e) {

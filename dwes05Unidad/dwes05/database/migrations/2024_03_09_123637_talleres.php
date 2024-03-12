@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->enum('dia_semana', ['L', 'M', 'X', 'J', 'V', 'S', 'D']);
             $table->time('hora_inicio', $precision = 0);
             $table->time('hora_fin', $precision = 0);
-            $table->unsignedTinyInteger('cupo_maximo');
+            $table->unsignedInteger('cupo_maximo');
         });
     }
 

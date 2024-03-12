@@ -53,6 +53,6 @@ class TallerSeeder extends Seeder
             $taller->save();
         }
 
-        Taller::factory(20)->create();
+        Taller::factory(50)->create();
     }
 }

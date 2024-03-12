@@ -229,6 +229,14 @@ form p {
     margin: 1em;
     font-size: 1.2em;
     font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+form p input,
+form p label {
+    margin: 0.2em;
 }
 
 /*Detalles de la ubicación*/
@@ -247,13 +255,12 @@ div.detalles strong {
 }
 
 /* Paginación */
-
 nav ul.pagination {
     color: black;
     font-weight: bold;
     text-align: center;
-    padding: 2em;
-    width: 100%;
+    padding: 1.2em;
+    width: 90%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -261,7 +268,7 @@ nav ul.pagination {
 }
 
 nav ul.pagination li {
-    margin: 1em;
+    margin: 0.5em;
 }
 
 nav ul.pagination li a {
@@ -269,7 +276,7 @@ nav ul.pagination li a {
     border: 1px solid black;
     border-radius: 5px;
     color: black;
-    padding: 1em;
+    padding: 0.5em;
     text-align: center;
     text-decoration: none;
     font-size: 14px;

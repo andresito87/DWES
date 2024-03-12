@@ -22,7 +22,7 @@ class UbicacionTest extends TestCase
             'dias' => 'L,M,X'
         ]);
         $response = $this->get(route('principal'));
-        $response->assertSuccessful();
+        $response->assertOK();
         $response->assertSee('Bienvenido a la asociación Respira');
     }
 
@@ -32,6 +32,7 @@ class UbicacionTest extends TestCase
     public function test_ruta_ubicaciones_muestra_una_lista_de_ubicaciones(): void
     {
         $response = $this->get(route('ubicaciones'));
+        $response->assertOK();
         $response->assertSee('Biblioteca Municipal Distrito 4');
         $response->assertSee('Biblioteca Municipal del distrito 4. 6ª Avenida');
         $response->assertSee('Centro Cívico Distrito 4');
@@ -43,6 +44,7 @@ class UbicacionTest extends TestCase
     public function test_ruta_crear_ubicacion_muestra_formulario_creacion_de_ubicacion(): void
     {
         $response = $this->get(route('crear_ubicacion'));
+        $response->assertOK();
         $response->assertSee('Formulario de creación de ubicación - Respira');
         $response->assertSee('Días en los que está disponible');
     }
@@ -85,6 +87,7 @@ class UbicacionTest extends TestCase
             'descripcion' => 'Prueba de descripción',
             'dias' => ['D']
         ]);
+        $response->assertStatus(302);
         $response->assertRedirect(route('ubicaciones'));
         $this->assertDatabaseHas('ubicaciones', [
             'nombre' => 'Prueba de nombre',
@@ -97,6 +100,7 @@ class UbicacionTest extends TestCase
             'descripcion' => 'Biblioteca Municipal del distrito 4. 6ª Avenida',
             'dias' => ['L', 'M', 'X']
         ]);
+        $response->assertStatus(302);
         $response->assertRedirect(route('ubicaciones'));
         $this->assertDatabaseHas('ubicaciones', [
             'nombre' => 'Biblioteca Municipal Distrito 4',
@@ -108,6 +112,7 @@ class UbicacionTest extends TestCase
     public function test_ruta_confirmar_borrar_ubicacion_muestra_formulario_confirmacion_borrar_ubicacion(): void
     {
         $response = $this->get(route('confirmar_borrar_ubicacion', ['ubicacion' => 1]));
+        $response->assertOK();
         $response->assertSee('<title>Confirmar borrado de ubicación - Respira</title>', $escaped = false);
         $response->assertSee('<h3>Debe confirmar la eliminación para continuar, dado que se borrarán también todos los talleres de esta ubicación:', $escaped = false);
         $response->assertSee('<input type="submit" value="Borrar"></input>', $escaped = false);
@@ -121,6 +126,7 @@ class UbicacionTest extends TestCase
             'descripcion' => 'Biblioteca Municipal del distrito 4. 6ª Avenida',
             'dias' => 'L,M,X'
         ]);
+        $response->assertStatus(302);
         $response->assertRedirect(route('ubicaciones'));
         $response->assertSessionHas('mensaje', 'Ubicación eliminada correctamente');
     }

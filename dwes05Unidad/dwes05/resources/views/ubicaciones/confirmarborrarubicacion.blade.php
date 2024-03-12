@@ -14,8 +14,14 @@
     </h3>
     <form action="{{ route('borrar_ubicacion', ['ubicacion' => $ubicacion->id]) }}" method="post">
         @csrf
-        <p><input type="radio" name="confirmar" value="si">Sí, quiero borrar esta ubicación y los talleres.</input></p>
-        <p><input type="radio" name="confirmar" value="no" checked>No, no quiero borrar la ubicación.</input></p>
+        <p>
+            <input type="radio" id="confirmar_si" name="confirmar" value="si">
+            <label for="confirmar_si">Sí, quiero borrar esta ubicación y los talleres.</label>
+        </p>
+        <p>
+            <input type="radio" id="confirmar_no" name="confirmar" value="no" checked>
+            <label for="confirmar_no">No, no quiero borrar la ubicación.</label>
+        </p>
         <input type="submit" value="Borrar"></input>
     </form>
 @endsection

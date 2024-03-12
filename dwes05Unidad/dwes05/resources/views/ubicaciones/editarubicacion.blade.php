@@ -3,7 +3,7 @@
 @section('contenido')
     @if ($errors->any())
         <div class="errores">
-            <p>¡¡¡ Errores !!!</p>
+            <h3>¡¡¡ Errores !!!</h3>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
