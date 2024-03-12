@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +19,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        // Usando el comando 'php artisan db:seed' se resetea la base de datos y se ejecutan los seeders
+        Artisan::call('migrate:reset');
+        Artisan::call('migrate:fresh');
+        Artisan::call('db:seed', ['--class' => UbicacionSeeder::class]);
+        Artisan::call('db:seed', ['--class' => TallerSeeder::class]);
     }
 }

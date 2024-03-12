@@ -8,6 +8,12 @@ php artisan migrate --env=testing
 php artisan make:seeder NombreSeeder
 php artisan db:seed --class=NombreSeeder
 
+php artisan db:seed (resetear la base de datos y ejecutar todos los seeders)
+
+php artisan make:model NombreModelo
+
+php artisan make:controller NombreController
+
 
 php artisan make:factory NombreFactory
 
