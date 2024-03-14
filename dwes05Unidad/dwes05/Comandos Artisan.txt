@@ -1,23 +1,31 @@
+**Featured and Unit Test**
 php artisan test
+php artisan make:test ModeloTest
+php artisan make:test ModeloTest --unit
 
+**Migrations**
 php artisan migrate:reset
 php artisan migrate:fresh
 php artisan migrate --env=testing
 
-
+**Seeders**
 php artisan make:seeder NombreSeeder
 php artisan db:seed --class=NombreSeeder
-
 php artisan db:seed (resetear la base de datos y ejecutar todos los seeders)
 
+**Models, Controllers, Factories**
 php artisan make:model NombreModelo
-
 php artisan make:controller NombreController
-
-
 php artisan make:factory NombreFactory
 
-
-
-php artisan make:test ModeloTest
-php artisan make:test ModeloTest --unit
+**Regression Testing**
+composer require --dev laravel/dusk
+Para usar Dusk, es necesario descomentar la siguiente línea en el archivo en C:\\xamp\php\php.ini
+;extension=zip
+Sino dará error al hacer el composer install o update
+Instalacion del Driver de Chrome
+php artisan dusk:install
+*Ejecución de tests:*
+php artisan dusk
+*Creación de tests:*
+php artisan dusk:make LoginTest

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Taller;
 use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
