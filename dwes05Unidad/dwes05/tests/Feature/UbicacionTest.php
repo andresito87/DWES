@@ -12,7 +12,7 @@ class UbicacionTest extends TestCase
     {
         //Crear la base de datos con artisan
         Artisan::call('migrate:reset');
-        Artisan::call('migrate --env=testing');
+        Artisan::call('migrate:fresh');
         Artisan::call('db:seed --class=UbicacionSeeder');
         Artisan::call('db:seed --class=TallerSeeder');
 
@@ -47,6 +47,7 @@ class UbicacionTest extends TestCase
         $response->assertOK();
         $response->assertSee('Formulario de creación de ubicación - Respira');
         $response->assertSee('Días en los que está disponible');
+        $response->assertSee('<input type="submit" value="Crear nueva ubicación">', $escaped = false);
     }
 
     public function test_ruta_almacenar_ubicacion_almacena_ubicacion_en_base_datos(): void
@@ -77,7 +78,7 @@ class UbicacionTest extends TestCase
     {
         $response = $this->get(route('editar_ubicacion', ['ubicacion' => 1]));
         $response->assertSee('Actualizar ubicación - Respira');
-        $response->assertSee('<input type="submit" value="Actualizar"></input>', $escaped = false);
+        $response->assertSee('<input type="submit" value="Actualizar">', $escaped = false);
     }
 
     public function test_ruta_actualizar_ubicacion_actualiza_ubicacion_en_base_datos(): void
@@ -132,4 +133,6 @@ class UbicacionTest extends TestCase
     }
 
     // TODO: Test que no pertencen al Happy Path
+
+
 }

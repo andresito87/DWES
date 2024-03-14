@@ -1,3 +1,8 @@
+**Requirements**
+Crear dos bases de datos en MySQL con los siguientes nombres:
+- respira_laravel
+- respira_laravel_testing
+
 **Featured and Unit Test**
 php artisan test
 php artisan make:test ModeloTest
@@ -19,7 +24,6 @@ php artisan make:controller NombreController
 php artisan make:factory NombreFactory
 
 **Regression Testing**
-composer require --dev laravel/dusk
 Para usar Dusk, es necesario descomentar la siguiente línea en el archivo en C:\\xamp\php\php.ini
 ;extension=zip
 Sino dará error al hacer el composer install o update
