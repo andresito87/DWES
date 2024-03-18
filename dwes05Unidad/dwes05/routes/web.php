@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\TalleresController;
 use App\Http\Controllers\UbicacionController;
+use App\Models\Taller;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +45,8 @@ Route::get('ubicaciones/{ubicacion}/destroyconfirm', [UbicacionController::class
 
 // Ruta para eliminar una ubicación
 Route::post('ubicaciones/{ubicacion}/destroy', [UbicacionController::class, 'destroy'])->whereNumber('ubicacion')->name('borrar_ubicacion');
+
+// Ruta para mostrar la lista de talleres
+Route::get('/talleres', [TalleresController::class, 'index'])->name('talleres');
+
 

@@ -11,6 +11,7 @@
         "php": "^8.2",
         "codeat3/blade-codicons": "^1.33",
         "guzzlehttp/guzzle": "^7.2",
+        "inertiajs/inertia-laravel": "^1.0",
         "laravel-lang/locales": "^2.5",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",

@@ -13,6 +13,7 @@
             <ul>
                 <li><a href="{{ route('ubicaciones') }}">Lista de ubicaciones</a></li>
                 <li><a href="{{ route('crear_ubicacion') }}" dusk="botonCrearUbicacion">Crear nueva ubicación</a></li>
+                <li><a href="{{ route('talleres') }}">Lista de Talleres Con Inertia/VUE</a></li>
             </ul>
         </nav>
     </header>
