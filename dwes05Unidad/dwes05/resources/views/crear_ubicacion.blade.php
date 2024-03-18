@@ -6,7 +6,12 @@
             <h3>¡¡¡ Errores !!!</h3>
             <ul>
                 @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
+                    @if (strpos($error, 'dias.') !== false)
+                        <li>{{ str_replace(['dias.0', 'dias.1', 'dias.2', 'dias.3', 'dias.4', 'dias.5', 'dias.6'], 'dia', $error) }}
+                        </li>
+                    @else
+                        <li>{{ $error }}</li>
+                    @endif
                 @endforeach
             </ul>
         </div>

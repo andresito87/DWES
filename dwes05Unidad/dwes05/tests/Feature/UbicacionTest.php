@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
@@ -132,7 +133,29 @@ class UbicacionTest extends TestCase
         $response->assertSessionHas('mensaje', 'Ubicación eliminada correctamente');
     }
 
-    // TODO: Test que no pertencen al Happy Path
+    public function test_ruta_almacenar_ubicacion_no_almacena_ubicacion_en_base_datos_si_no_se_introducen_datos(): void
+    {
+        $response = $this->post(route('almacenar_ubicacion_BD'), [
+            'nombre' => '',
+            'descripcion' => '',
+            'dias' => ''
+        ]);
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['nombre' => 'El campo nombre es obligatorio.', 'descripcion' => 'El campo descripcion es obligatorio.', 'dias' => 'El campo dias es obligatorio.']);
+    }
 
+    public function test_ruta_almacenar_ubicacion_no_almacena_ubicacion_en_base_datos_si_no_se_introducen_datos_correctos(): void
+    {
+        $response = $this->post(route('almacenar_ubicacion_BD'), [
+            'nombre' => 'Nombre Prueba',
+            'descripcion' => 'descripcion prueba',
+            'dias' => ['F']
+        ]);
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors([
+            'dias.0' => 'El dias.0 seleccionado no es válido.'
+        ]);
+        $response->isRedirect(route('crear_ubicacion'));
+    }
 
 }
