@@ -11,6 +11,7 @@ class UbicacionController extends Controller
 {
     /**
      * Muestra la lista de ubicaciones.
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -30,6 +31,7 @@ class UbicacionController extends Controller
     /**
      * Almacena una nueva ubicación en la base de datos.
      * @param Request $request Datos del formulario
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -61,6 +63,7 @@ class UbicacionController extends Controller
     /**
      * Muestra la ubicación especificada.
      * @param Ubicacion $ubicacion
+     * @return \Illuminate\Contracts\View\View
      */
     public function show(Ubicacion $ubicacion)
     {
@@ -71,6 +74,7 @@ class UbicacionController extends Controller
     /**
      * Muestra el formulario para editar la ubicación especificada.
      * @param Ubicacion $ubicacion Ubicación a editar
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit(Ubicacion $ubicacion)
     {
@@ -80,6 +84,8 @@ class UbicacionController extends Controller
     /**
      * Actualiza la ubicación especificada en la base de datos.
      * @param Request $request Datos del formulario
+     * @param Ubicacion $ubicacion Ubicación a actualizar
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Ubicacion $ubicacion)
     {
@@ -111,6 +117,7 @@ class UbicacionController extends Controller
     /**
      * Muestra el formulario de confirmación de eliminación de la ubicación especificada.
      * @param Ubicacion $ubicacion Ubicación a eliminar
+     * @return \Illuminate\Contracts\View\View
      */
     public function destroyconfirm(Ubicacion $ubicacion)
     {
@@ -118,7 +125,10 @@ class UbicacionController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina la ubicación especificada de la base de datos.
+     * @param Request $request Datos del formulario
+     * @param Ubicacion $ubicacion Ubicación a eliminar
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, Ubicacion $ubicacion)
     {

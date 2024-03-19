@@ -14,7 +14,9 @@
 
     <h1>Bienvenido a la asociación Respira</h1>
 
-    <a href="{{ url('/') }}/ubicaciones">Lista de ubicaciones</a>
+    <a href="{{ url('/') }}/ubicaciones">Lista de Ubicaciones</a>
+
+    <a href="{{ url('/') }}/talleres">Lista de Talleres</a>
 
 </body>
 

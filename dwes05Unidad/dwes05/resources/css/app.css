@@ -21,7 +21,7 @@
     font-family: Roboto, sans-serif;
 }
 
-body {
+div#app {
     background-color: #f2f2f2;
     display: flex;
     flex-direction: column;
@@ -30,7 +30,8 @@ body {
 
 body h1,
 body h2,
-body h3 {
+body h3,
+body p {
     margin: 0.5em;
 }
 
@@ -41,7 +42,7 @@ body a {
 }
 
 body a:hover {
-    color: var(--color-primario);
+    color: var(--color-fondo-exito);
 }
 
 header {
@@ -58,8 +59,8 @@ ul {
     list-style: none;
     padding: 0;
     margin: 0.5em;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
 }
 
 li {
@@ -81,7 +82,7 @@ li a {
 }
 
 li a:hover {
-    background-color: var(--color-terciario);
+    background-color: var(--color-informativo);
 }
 
 /* Tabla de ubicaciones*/
@@ -117,10 +118,12 @@ td a {
     display: block;
     font-weight: bold;
     margin: 4px 2px;
+    width: 50%;
+    margin: 1em auto;
 }
 
 td a:hover {
-    background-color: var(--color-terciario);
+    background-color: var(--color-primario);
 }
 
 /* Formulario */

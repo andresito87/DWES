@@ -49,4 +49,7 @@ Route::post('ubicaciones/{ubicacion}/destroy', [UbicacionController::class, 'des
 // Ruta para mostrar la lista de talleres
 Route::get('/talleres', [TalleresController::class, 'index'])->name('talleres');
 
+// Ruta para mostrar los detalles de un taller
+Route::get('/talleres/{taller}', [TalleresController::class, 'show'])->whereNumber('taller')->name('detalles_taller');
+
 
