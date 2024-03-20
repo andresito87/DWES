@@ -5,18 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class UbicacionController extends Controller
 {
     /**
      * Muestra la lista de ubicaciones.
-     * @return \Illuminate\Contracts\View\View
+     * @return \Illuminate\Contracts\View\View | \Illuminate\Http\RedirectResponse
      */
     public function index()
     {
         // Devolvemos los datos paginados
         $ubicaciones = Ubicacion::paginate(3);
+        if (count($ubicaciones) == 0) {
+            return redirect()->route('ubicaciones')
+                ->with('mensaje', 'No hay tantas ubicaciones para alcanzar esta página')
+                ->with('tipo', 'informativo');
+        }
         return view('ubicaciones', ['ubicaciones' => $ubicaciones]);
     }
 
@@ -35,23 +41,19 @@ class UbicacionController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $datosvalidados = $request->validate([
-                'nombre' => ['required', 'min:4', 'max:50'],
-                'descripcion' => 'required',
-                'dias' => ['required', 'array'],
-                'dias.*' => ['required', 'distinct', 'in:L,M,X,J,V,S,D']
-            ]);
-        } catch (ValidationException $e) {
+        // Validamos los datos del formulario
+        $validador = $this->validar($request);
+        if ($validador->fails()) {
             return Redirect::back()
                 ->withInput()
-                ->withErrors($e->errors());
+                ->withErrors($validador);
         }
 
-        $ubicacion = new Ubicacion();
-        $ubicacion->nombre = $datosvalidados['nombre'];
-        $ubicacion->descripcion = $datosvalidados['descripcion'];
-        $ubicacion->dias = implode(',', $datosvalidados['dias']);
+        $ubicacion = Ubicacion::create([
+            'nombre' => $request->input('nombre'),
+            'descripcion' => $request->input('descripcion'),
+            'dias' => implode(',', $request->input('dias'))
+        ]);
 
         $ubicacion->save();
 
@@ -89,23 +91,18 @@ class UbicacionController extends Controller
      */
     public function update(Request $request, Ubicacion $ubicacion)
     {
-        try {
-            $datosvalidados = $request->validate([
-                'nombre' => 'required|min:4|max:50',
-                'descripcion' => 'required',
-                'dias' => 'required',
-                'dias.*' => ['required', 'distinct', 'in:L,M,X,J,V,S,D']
-            ]);
-        } catch (ValidationException $e) {
+        // Validamos los datos del formulario
+        $validador = $this->validar($request);
+        if ($validador->fails()) {
             return Redirect::back()
                 ->withInput()
-                ->withErrors($e->errors());
+                ->withErrors($validador);
         }
 
         $ubicacion = Ubicacion::find($ubicacion->id);
-        $ubicacion->nombre = $datosvalidados['nombre'];
-        $ubicacion->descripcion = $datosvalidados['descripcion'];
-        $ubicacion->dias = implode(',', $datosvalidados['dias']);
+        $ubicacion->nombre = $request->input('nombre');
+        $ubicacion->descripcion = $request->input('descripcion');
+        $ubicacion->dias = implode(',', $request->input('dias'));
 
         $ubicacion->save();
 
@@ -149,5 +146,16 @@ class UbicacionController extends Controller
         return redirect()->route('ubicaciones')
             ->with('mensaje', $haSidoEliminada ? 'Ubicación eliminada correctamente' : 'No se ha eliminado la ubicación')
             ->with('tipo', $haSidoEliminada ? 'exito' : 'informativo');
+    }
+
+    private function validar(Request $request)
+    {
+        // Creamos un validador con las reglas de validación
+        return Validator::make($request->all(), [
+            'nombre' => 'required|min:4|max:50',
+            'descripcion' => 'required',
+            'dias' => 'required',
+            'dias.*' => ['required', 'distinct', 'in:L,M,X,J,V,S,D']
+        ]);
     }
 }

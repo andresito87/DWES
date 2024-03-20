@@ -80,7 +80,7 @@ Este proyecto es una aplicación web desarrollada con el framework Laravel. La a
           respira_laravel_testing
 
 -   php artisan migrate --env=testing
--   php artisan test
+-   php artisan test (ejecuta todos los tests unitarios y de características)
 -   php artisan test --testsuite=Feature
 -   php artisan test --testsuite=Unit
 

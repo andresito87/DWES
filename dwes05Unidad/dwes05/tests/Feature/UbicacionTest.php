@@ -157,4 +157,12 @@ class UbicacionTest extends TestCase
         $response->isRedirect(route('crear_ubicacion'));
     }
 
+    public function test_ruta_ubicacion_que_no_existe_devuelve_error_404(): void
+    {
+        $response = $this->get(route('detalles_ubicacion', ['ubicacion' => 1000]));
+        $response->assertStatus(404);
+        $response->assertSee('404');
+        $response->assertSee('No encontrado');
+    }
+
 }

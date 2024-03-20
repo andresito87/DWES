@@ -186,4 +186,10 @@ class TallerUnitTest extends TestCase
             'cupo_maximo' => $taller->cupo_maximo
         ]);
     }
+
+    public function test_comprobar_que_devuelve_null_si_no_encuentra_taller()
+    {
+        $taller = Taller::find(999);
+        $this->assertNull($taller);
+    }
 }

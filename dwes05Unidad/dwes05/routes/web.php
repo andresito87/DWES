@@ -50,4 +50,36 @@ Route::get('/talleres', [TalleresController::class, 'index'])->name('talleres');
 // Ruta para mostrar los detalles de un taller
 Route::get('/talleres/{taller}', [TalleresController::class, 'show'])->whereNumber('taller')->name('detalles_taller');
 
+/* Si uso el agrupamiento de rutas, no me funcionan los tests de regresión con Dusk
+Route::controller(UbicacionController::class)->group(
+    function () {
+        // Ruta para mostrar la lista de ubicaciones
+        Route::get('ubicaciones', 'index')->name('ubicaciones');
+        // Ruta para mostrar el formulario de creación de una nueva ubicación
+        Route::get('ubicaciones/create', 'create')->name('crear_ubicacion');
+        // Ruta para almacenar una nueva ubicación
+        Route::post('ubicaciones/store', 'store')->name('almacenar_ubicacion_BD');
+        // Ruta para mostrar los detalles de una ubicación
+        Route::get('ubicaciones/{ubicacion}', 'show')->whereNumber('ubicacion')->name('detalles_ubicacion');
+        // Ruta para mostrar el formulario de edición de una ubicación
+        Route::get('ubicaciones/{ubicacion}/edit', 'edit')->whereNumber('ubicacion')->name('editar_ubicacion');
+        // Ruta para actualizar una ubicación
+        Route::post('ubicaciones/{ubicacion}/update', 'update')->whereNumber('ubicacion')->name('actualizar_ubicacion');
+        // Ruta para mostrar el formulario de confirmación de eliminación de una ubicación
+        Route::get('ubicaciones/{ubicacion}/destroyconfirm', 'destroyconfirm')->whereNumber('ubicacion')->name('confirmar_borrar_ubicacion');
+        // Ruta para eliminar una ubicación
+        Route::post('ubicaciones/{ubicacion}/destroy', 'destroy')->whereNumber('ubicacion')->name('borrar_ubicacion');
+    }
+);
+
+Route::controller(TalleresController::class)->group(
+    function () {
+        // Ruta para mostrar la lista de talleres
+        Route::get('talleres', 'index')->name('talleres');
+        // Ruta para mostrar los detalles de un taller
+        Route::get('talleres/{taller}', 'show')->whereNumber('taller')->name('detalles_taller');
+    }
+);
+*/
+
 

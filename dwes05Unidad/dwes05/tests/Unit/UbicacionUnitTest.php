@@ -121,4 +121,10 @@ class UbicacionUnitTest extends TestCase
         $this->expectException(QueryException::class);
         Ubicacion::factory()->create(['nombre' => 'Nombre de ubicación demasiado largooooooooooooooooooooooooooo']);
     }
+
+    public function test_comprobar_que_devuelve_error_si_no_se_encuentra_ubicacion()
+    {
+        $ubicacion = Ubicacion::find(999);
+        $this->assertNull($ubicacion);
+    }
 }

@@ -22,11 +22,14 @@ class TalleresController extends Controller
     /**
      * Muestra los datos de un taller.
      * @param int $id Identificador del taller
-     * @return \Inertia\Response
+     * @return \Inertia\Response | \Illuminate\Http\RedirectResponse
      */
     public function show($id)
     {
         $taller = Taller::find($id);
+        if (!$taller) {
+            return Inertia::render('404NotFound');
+        }
         $ubicacion = $taller->ubicacion;
         return Inertia::render('Taller/Show', [
             'taller' => $taller,
