@@ -92,7 +92,7 @@ Este proyecto es una aplicación web desarrollada con el framework Laravel. La a
 
     Sino dará error al hacer el composer install o update ya que no podrá instalar el paquete de Dusk.
 
-    Instalacion del Driver de Chrome
+    Instalacion del Driver de Chrome para realizar las pruebas de Dusk
 
     -   php artisan dusk:install
 

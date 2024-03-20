@@ -256,6 +256,14 @@ form p label {
     margin: 0.2em;
 }
 
+div.boton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 1em;
+}
+
 /*Detalles de la ubicación*/
 div.detalles {
     display: flex;

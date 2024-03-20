@@ -84,8 +84,8 @@ class UbicacionTest extends DuskTestCase
             $browser->visit('/ubicaciones/2/edit')
                 ->assertSee('Nombre')
                 ->assertSee('Descripción')
-                ->assertSee('Días:')
-                ->assertSourceHas('<input type="submit" value="Actualizar">');
+                ->assertSee('Días en los que está disponible:')
+                ->assertSourceHas('<input type="submit" name="enviar" value="Actualizar"');
         });
     }
 

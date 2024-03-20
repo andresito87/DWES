@@ -16,16 +16,27 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('actualizar_ubicacion', ['ubicacion' => $ubicacion->id]) }}" method="post">
-        @csrf
-        <p><strong>Nombre:</strong> <input dusk="nombre" type="text" name="nombre" value="{{ $ubicacion->nombre }}"></p>
-        <p><strong>Descripción:</strong> <input type="text" name="descripcion" value="{{ $ubicacion->descripcion }}"></p>
-        <p><strong>Días: </strong>
-            @foreach (['L', 'M', 'X', 'J', 'V', 'S', 'D'] as $dia)
-                {{ $dia }} <input type="checkbox" name="dias[]" value="{{ $dia }}"
-                    @if (in_array($dia, explode(',', $ubicacion->dias))) checked @endif>
-            @endforeach
-        </p>
-        <input type="submit" value="Actualizar">
-    </form>
+    <x-formulario :action="route('actualizar_ubicacion', $ubicacion->id)" :csrf="true">
+        <x-slot name="titulo">Actualizar ubicación</x-slot>
+        <x-slot name="campos">
+            <x-label :for="'nombre'">
+                Nombre
+                <x-input :type="'text'" :name="'nombre'" :value="!$errors->has('nombre') ? $ubicacion->nombre : old('nombre')" :checked="'no'" />
+            </x-label>
+            <x-label :for="'descripcion'">
+                Descripción
+                <x-input :type="'text'" :name="'descripcion'" :value="!$errors->has('descripcion') ? $ubicacion->descripcion : old('descripcion')" :checked="'no'" />
+            </x-label>
+            <x-label :for="'dias'">
+                Días en los que está disponible:
+                @foreach (['L', 'M', 'X', 'J', 'V', 'S', 'D'] as $dia)
+                    {{ $dia }}
+                    <x-input :type="'checkbox'" :name="'dias[]'" :value="$dia" :checked="!$errors->has('dias') && in_array($dia, explode(',', $ubicacion->dias))" />
+                @endforeach
+            </x-label>
+        </x-slot>
+        <x-slot name="boton">
+            <x-input :type="'submit'" :name="'enviar'" :value="'Actualizar'" :checked="'no'" />
+        </x-slot>
+    </x-formulario>
 @endsection

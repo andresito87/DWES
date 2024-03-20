@@ -16,19 +16,27 @@
             </ul>
         </div>
     @endif
-    <form action="/ubicaciones/store" method="post">
-        @csrf
-        <label for="nombre">Nombre
-            <input type="text" name="nombre" value="{{ !$errors->has('nombre') ? old('nombre') : '' }}"></label>
-        <label for="descripcion">Descripción
-            <input type="text" name="descripcion"
-                value="{{ !$errors->has('descripcion') ? old('descripcion') : '' }}"></label>
-        <label for="dias">Días en los que está disponible:
-            @foreach (['L', 'M', 'X', 'J', 'V', 'S', 'D'] as $dia)
-                {{ $dia }} <input type="checkbox" name="dias[]" value="{{ $dia }}"
-                    @if (is_array(old('dias')) && in_array($dia, old('dias'))) checked @endif>
-            @endforeach
-        </label>
-        <input type="submit" value="Crear nueva ubicación">
-    </form>
+    <x-formulario :action="'/ubicaciones/store'" :csrf="true">
+        <x-slot name="titulo">Formulario de creación de ubicación</x-slot>
+        <x-slot name="campos">
+            <x-label :for="'nombre'">
+                Nombre
+                <x-input :type="'text'" :name="'nombre'" :value="!$errors->has('nombre') ? old('nombre') : ''" :checked="'no'" />
+            </x-label>
+            <x-label :for="'descripcion'">
+                Descripción
+                <x-input :type="'text'" :name="'descripcion'" :value="!$errors->has('descripcion') ? old('descripcion') : ''" :checked="'no'" />
+            </x-label>
+            <x-label :for="'dias'">
+                Días en los que está disponible:
+                @foreach (['L', 'M', 'X', 'J', 'V', 'S', 'D'] as $dia)
+                    {{ $dia }}
+                    <x-input :type="'checkbox'" :name="'dias[]'" :value="$dia" :checked="!$errors->has('dias') && in_array($dia, old('dias', []))" />
+                @endforeach
+            </x-label>
+        </x-slot>
+        <x-slot name="boton">
+            <x-input :type="'submit'" :name="'enviar'" :value="'Crear nueva ubicación'" :checked="'no'" />
+        </x-slot>
+    </x-formulario>
 @endsection
