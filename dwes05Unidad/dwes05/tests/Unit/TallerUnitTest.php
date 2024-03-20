@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Models\Taller;
 use App\Models\Ubicacion;
-use Illuminate\Database\QueryException;
 use Tests\TestCase;
 
 class TallerUnitTest extends TestCase

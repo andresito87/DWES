@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 

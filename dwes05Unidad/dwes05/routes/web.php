@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\TalleresController;
 use App\Http\Controllers\UbicacionController;
-use App\Models\Taller;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------

@@ -2,11 +2,8 @@
 
 namespace Tests\Browser;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Artisan;
 use Laravel\Dusk\Browser;
-use Symfony\Component\Console\Input\Input;
 use Tests\DuskTestCase;
 
 class UbicacionTest extends DuskTestCase

@@ -125,7 +125,8 @@ class UbicacionController extends Controller
     }
 
     /**
-     * Elimina la ubicación especificada de la base de datos.
+     * Elimina la ubicación especificada de la base de datos y los talleres 
+     * asociados a ella.
      * @param Request $request Datos del formulario
      * @param Ubicacion $ubicacion Ubicación a eliminar
      * @return \Illuminate\Http\RedirectResponse
@@ -136,6 +137,7 @@ class UbicacionController extends Controller
         if ($request->input('confirmar') == 'si') {
 
             $ubicacion = Ubicacion::find($ubicacion->id);
+            // No hace falta eliminar los talleres, ya que se eliminan en cascada
             /*foreach ($ubicacion->talleres as $taller) {
                 Taller::destroy($taller->id);
             }*/

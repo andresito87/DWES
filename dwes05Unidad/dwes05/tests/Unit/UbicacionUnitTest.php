@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use App\Models\Taller;
 use App\Models\Ubicacion;
 use Illuminate\Database\QueryException;
-use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 

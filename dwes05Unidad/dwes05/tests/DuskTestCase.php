@@ -6,7 +6,6 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Artisan;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use PHPUnit\Framework\Attributes\BeforeClass;
 
@@ -53,8 +52,8 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function hasHeadlessDisabled(): bool
     {
-        return isset($_SERVER['DUSK_HEADLESS_DISABLED']) ||
-            isset($_ENV['DUSK_HEADLESS_DISABLED']);
+        return isset ($_SERVER['DUSK_HEADLESS_DISABLED']) ||
+            isset ($_ENV['DUSK_HEADLESS_DISABLED']);
     }
 
     /**
@@ -62,7 +61,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function shouldStartMaximized(): bool
     {
-        return isset($_SERVER['DUSK_START_MAXIMIZED']) ||
-            isset($_ENV['DUSK_START_MAXIMIZED']);
+        return isset ($_SERVER['DUSK_START_MAXIMIZED']) ||
+            isset ($_ENV['DUSK_START_MAXIMIZED']);
     }
 }
