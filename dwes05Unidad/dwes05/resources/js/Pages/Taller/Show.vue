@@ -16,6 +16,10 @@ defineProps({ taller: Object });
                 <td>{{ taller.descripcion }}</td>
             </tr>
             <tr>
+                <th>Día de la Semana</th>
+                <td>{{ taller.dia_semana }}</td>
+            </tr>
+            <tr>
                 <th>Hora de Inicio</th>
                 <td>{{ taller.hora_inicio }}</td>
             </tr>
