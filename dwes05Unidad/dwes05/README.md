@@ -24,7 +24,7 @@ Para usar Dusk, es necesario descomentar la siguiente línea en el archivo en C:
 
     -   ;extension=zip
 
-Sino dará error al hacer el composer install o update ya que no podrá instalar el paquete de Dusk.
+Sino dará error al hacer el composer install o update ya que no podrá instalar el paquete.
 
 -   composer install
 -   npm install
