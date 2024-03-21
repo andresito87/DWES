@@ -83,30 +83,30 @@ class UbicacionTest extends TestCase
 
     public function test_ruta_actualizar_ubicacion_actualiza_ubicacion_en_base_datos(): void
     {
-        $response = $this->post(route('actualizar_ubicacion', ['ubicacion' => 1]), [
+        $response = $this->post(route('actualizar_ubicacion', ['ubicacion' => 2]), [
             'nombre' => 'Prueba de nombre',
             'descripcion' => 'Prueba de descripción',
-            'dias' => ['D']
+            'dias' => ['J', 'V']
         ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('ubicaciones'));
         $this->assertDatabaseHas('ubicaciones', [
             'nombre' => 'Prueba de nombre',
             'descripcion' => 'Prueba de descripción',
-            'dias' => 'D'
+            'dias' => 'J,V'
         ]);
 
-        $response = $this->post(route('actualizar_ubicacion', ['ubicacion' => 1]), [
+        $response = $this->post(route('actualizar_ubicacion', ['ubicacion' => 2]), [
             'nombre' => 'Biblioteca Municipal Distrito 4',
             'descripcion' => 'Biblioteca Municipal del distrito 4. 6ª Avenida',
-            'dias' => ['L', 'M', 'X']
+            'dias' => ['J', 'V']
         ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('ubicaciones'));
         $this->assertDatabaseHas('ubicaciones', [
             'nombre' => 'Biblioteca Municipal Distrito 4',
             'descripcion' => 'Biblioteca Municipal del distrito 4. 6ª Avenida',
-            'dias' => 'L,M,X'
+            'dias' => 'J,V'
         ]);
     }
 
@@ -165,4 +165,18 @@ class UbicacionTest extends TestCase
         $response->assertSee('No encontrado');
     }
 
+    public function test_ruta_editar_ubicacion_no_actualiza_ubicacion_si_dias_editados_no_incluyen_dias_de_talleres_asociados(): void
+    {
+        $response = $this->post(route('actualizar_ubicacion', ['ubicacion' => 2]), [
+            'nombre' => 'Biblioteca Municipal Distrito 4',
+            'descripcion' => 'Biblioteca Municipal del distrito 4. 6ª Avenida',
+            'dias' => ['L']
+        ]);
+        $response->assertStatus(302);
+        $this->assertDatabaseMissing('ubicaciones', [
+            'nombre' => 'Biblioteca Municipal Distrito 4',
+            'descripcion' => 'Biblioteca Municipal del distrito 4. 6ª Avenida',
+            'dias' => 'L'
+        ]);
+    }
 }

@@ -6,7 +6,6 @@ use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class UbicacionController extends Controller
 {
@@ -103,6 +102,19 @@ class UbicacionController extends Controller
         $ubicacion->nombre = $request->input('nombre');
         $ubicacion->descripcion = $request->input('descripcion');
         $ubicacion->dias = implode(',', $request->input('dias'));
+
+        // Verificamos que los talleres asociados a la ubicación tengan como dia, uno de los días del array de dias de la ubicación, sino no se puede editar la ubicación con esos dias y hay que mostar un mensaje de error
+        foreach ($ubicacion->talleres as $taller) {
+            if (!in_array($taller->dia_semana, $request->input('dias'))) {
+                return redirect()->route('editar_ubicacion', ['ubicacion' => $ubicacion->id])
+                    ->withInput()
+                    ->withErrors([
+                        'error' => 'No se puede seleccionar esos días, ya que hay talleres asociados a ella que no incluyen esos días. Más info consulte la lista de talleres ',
+                        'linkTalleres' => 'aquí'
+                    ])
+                    ->with('tipo', 'error');
+            }
+        }
 
         $ubicacion->save();
 

@@ -20,6 +20,15 @@ Este proyecto es una aplicación web desarrollada con el framework Laravel. La a
 
 ## Instalación
 
+Para usar Dusk, es necesario descomentar la siguiente línea en el archivo en C:\\xamp\php\php.ini
+
+    -   ;extension=zip
+
+Sino dará error al hacer el composer install o update ya que no podrá instalar el paquete de Dusk.
+
+-   composer install
+-   npm install
+
 -   Crear una base de datos en MySQL con el siguiente nombre:
 
         respira_laravel
@@ -27,6 +36,7 @@ Este proyecto es una aplicación web desarrollada con el framework Laravel. La a
 -   php artisan migrate:fresh
 -   php artisan db:seed
 -   php artisan serve
+-   npm run dev
 
 ## Uso/Rutas
 
@@ -84,13 +94,11 @@ Este proyecto es una aplicación web desarrollada con el framework Laravel. La a
 -   php artisan test --testsuite=Feature
 -   php artisan test --testsuite=Unit
 
-    **Regression Testing**
+    **Pruebas en el navegador con Dusk**
 
     Para usar Dusk, es necesario descomentar la siguiente línea en el archivo en C:\\xamp\php\php.ini
 
     -   ;extension=zip
-
-    Sino dará error al hacer el composer install o update ya que no podrá instalar el paquete de Dusk.
 
     Instalacion del Driver de Chrome para realizar las pruebas de Dusk
 
@@ -102,7 +110,7 @@ Este proyecto es una aplicación web desarrollada con el framework Laravel. La a
 
 ## Autor
 
-**Andrés Podadera** - [Perfil Github](https://github.com/andresito87)
+**Andrés Podadera** - [Github](https://github.com/andresito87)
 
 ## Licencia
 

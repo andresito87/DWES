@@ -314,6 +314,12 @@ nav ul.pagination li a:hover {
     background-color: var(--color-informativo);
 }
 
+/* Boton de mostrar talleres desde editar ubicación */
+a.botonTalleres {
+    width: auto;
+    padding: 0 1em;
+}
+
 
 /* Footer */
 footer {
