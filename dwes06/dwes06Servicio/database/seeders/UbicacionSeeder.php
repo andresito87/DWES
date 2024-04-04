@@ -10,7 +10,7 @@ class UbicacionSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run() : void
     {
         if (Ubicacion::where('nombre', 'Biblioteca Municipal Distrito 4')->where('descripcion', 'Biblioteca Municipal del distrito 4. 6ª Avenida')->where('dias', 'L,M,X')->count() == 0) {
             $ubicacion = new Ubicacion;
@@ -33,6 +33,14 @@ class UbicacionSeeder extends Seeder
             $ubicacion->nombre = 'Polideportivo Ciudad Jardín';
             $ubicacion->descripcion = 'Polideportivo Ciudad Jardín. Avenida Jane Bones';
             $ubicacion->dias = 'S,D';
+            $ubicacion->save();
+        }
+
+        if (Ubicacion::where('nombre', 'Polideportivo Central')->where('descripcion', 'Polideportivo Central. Avenida Simon Bolivar')->where('dias', 'S,D')->count() == 0) {
+            $ubicacion = new Ubicacion;
+            $ubicacion->nombre = 'Polideportivo Central';
+            $ubicacion->descripcion = 'Polideportivo Central. Avenida Simon Bolivar';
+            $ubicacion->dias = 'M,X';
             $ubicacion->save();
         }
 

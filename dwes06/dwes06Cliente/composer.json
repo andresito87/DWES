@@ -1,21 +1,21 @@
 {
-    "name": "andres/dwes06cliente",
-    "description": "proyecto cliente tarea 06 dwes",
-    "type": "project",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Andres\\Dwes06cliente\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Andres",
-            "email": "andrespodadera87@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "guzzlehttp/guzzle": "^7.8"
+  "name": "andres/dwes06cliente",
+  "description": "proyecto cliente tarea 06 dwes",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Andres\\Dwes06cliente\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Andres",
+      "email": "andrespodadera87@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "guzzlehttp/guzzle": "^7.8"
+  }
 }

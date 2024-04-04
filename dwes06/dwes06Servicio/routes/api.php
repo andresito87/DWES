@@ -9,3 +9,5 @@ use Illuminate\Support\Facades\Route;
 })->middleware('auth:sanctum');*/
 
 Route::get('ubicaciones', [UbicacionesControllerAPI::class, 'listar'])->name('listadoUbicaciones');
+
+Route::get('/ubicaciones/{idubicacion}/talleres', [UbicacionesControllerAPI::class, 'talleres'])->name('listadoTalleresEnUbicacion');
