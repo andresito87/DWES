@@ -2,7 +2,6 @@
 require 'vendor/autoload.php';
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 
 $idUbicacion = $_GET['ubicacion'];
 $cliente = new Client(['http_errors' => false]);

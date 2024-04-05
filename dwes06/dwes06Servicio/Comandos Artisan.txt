@@ -21,6 +21,7 @@ php artisan db:seed (resetear la base de datos y ejecutar todos los seeders)
 **Models, Controllers, Factories**
 php artisan make:model NombreModelo
 php artisan make:controller NombreController
+php artisan make:controller NombreController --resource
 php artisan make:factory NombreFactory
 
 **Regression Testing**

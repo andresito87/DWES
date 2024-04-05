@@ -1,0 +1,32 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+form label {
+    font-size: large;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+form input {
+    width: 200px;
+    height: 30px;
+}
+
+form div.botones input {
+    margin-top: 10px;
+    width: 100px;
+}

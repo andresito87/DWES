@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TalleresControllerAPI;
 use App\Http\Controllers\UbicacionesControllerAPI;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -11,3 +12,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('ubicaciones', [UbicacionesControllerAPI::class, 'listar'])->name('listadoUbicaciones');
 
 Route::get('/ubicaciones/{idubicacion}/talleres', [UbicacionesControllerAPI::class, 'talleres'])->name('listadoTalleresEnUbicacion');
+
+Route::post('/ubicaciones/{idubicacion}/creartaller', [TalleresControllerAPI::class, 'store'])->name('crearTaller');

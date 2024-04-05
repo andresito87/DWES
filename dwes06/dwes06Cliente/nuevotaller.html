@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Creacion de Nuevo Taller</title>
+    <link rel="stylesheet" href="./styles/estilos.css">
+</head>
+
+<body>
+    <h1>Ingrese la información requerida para crear un nuevo taller:</h1>
+    <form action="creartaller.php" method="post">
+        <label for="idUbicacion">Id de la Ubicación del Taller:</label>
+        <input type="text" name="idUbicacion" />
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" />
+        <label for="descripcion">Descripción:</label>
+        <input type="text" name="descripcion" />
+        <label for="diaSemana">Día de la Semana:</label>
+        <input type="text" name="diaSemana" />
+        <label for="horaInicio">Hora de Inicio:</label>
+        <input type="text" name="horaInicio" />
+        <label for="horaFin">Hora de Fin:</label>
+        <input type="text" name="horaFin" />
+        <label for="cupoMaximo">Cupo máximo:</label>
+        <input type="text" name="cupoMaximo" />
+        <div class="botones">
+            <input type="submit" value="Enviar">
+            <input type="reset" value="Limpiar">
+        </div>
+    </form>
+
+</body>
+
+</html>
