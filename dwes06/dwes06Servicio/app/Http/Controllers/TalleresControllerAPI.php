@@ -80,8 +80,13 @@ class TalleresControllerAPI extends Controller
     /**
      * Elimina un taller con un determinado id de la base de datos.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        $taller = Taller::find($id);
+        if (! $taller) {
+            return response()->json(['resultado' => 'No existe'], 404);
+        }
+        $taller->delete();
+        return response()->json(['resultado' => 'eliminado'], 200);
     }
 }

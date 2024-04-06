@@ -14,3 +14,6 @@ Route::get('ubicaciones', [UbicacionesControllerAPI::class, 'listar'])->name('li
 Route::get('/ubicaciones/{idubicacion}/talleres', [UbicacionesControllerAPI::class, 'talleres'])->name('listadoTalleresEnUbicacion');
 
 Route::post('/ubicaciones/{idubicacion}/creartaller', [TalleresControllerAPI::class, 'store'])->name('crearTaller');
+
+Route::delete('/talleres/{idtaller}', [TalleresControllerAPI::class, 'destroy'])->name('eliminarTaller');
+
