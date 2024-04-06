@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\TalleresControllerAPI;
 use App\Http\Controllers\UbicacionesControllerAPI;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*Route::get('/user', function (Request $request) {
@@ -16,4 +15,6 @@ Route::get('/ubicaciones/{idubicacion}/talleres', [UbicacionesControllerAPI::cla
 Route::post('/ubicaciones/{idubicacion}/creartaller', [TalleresControllerAPI::class, 'store'])->name('crearTaller');
 
 Route::delete('/talleres/{idtaller}', [TalleresControllerAPI::class, 'destroy'])->name('eliminarTaller');
+
+Route::patch('/talleres/{idtaller}/cambiarubicacion', [TalleresControllerAPI::class, 'cambiarUbicacion'])->name('cambiarUbicacion');
 

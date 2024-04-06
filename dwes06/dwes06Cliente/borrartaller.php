@@ -32,6 +32,7 @@ if (isset($_POST['eliminar']) && $_POST['eliminar'] == 'Eliminar') {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Formulario de eliminación de taller</title>
+        <link rel="stylesheet" href="./styles/estilos.css">
     </head>
 
     <body>
@@ -39,6 +40,7 @@ if (isset($_POST['eliminar']) && $_POST['eliminar'] == 'Eliminar') {
         <form action="borrartaller.php" method="post">
             <label for="idTaller">Id Taller:</label>
             <input type="text" name="idTaller" />
+            <BR />
             <input type="submit" name="eliminar" value="Eliminar" />
         </form>
     </body>

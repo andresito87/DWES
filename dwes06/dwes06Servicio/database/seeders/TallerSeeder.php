@@ -12,7 +12,7 @@ class TallerSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run() : void
     {
         if (Ubicacion::where('dias', 'L,M,X')->count() > 0) {
             $ubicacion_id = Ubicacion::where('dias', 'L,M,X')->first()->id;
@@ -21,6 +21,16 @@ class TallerSeeder extends Seeder
             $taller->nombre = 'Taller de lectura';
             $taller->descripcion = 'Taller de lectura en la biblioteca';
             $taller->dia_semana = 'L';
+            $taller->hora_inicio = '17:00';
+            $taller->hora_fin = '18:00';
+            $taller->cupo_maximo = 20;
+            $taller->save();
+
+            $taller = new Taller;
+            $taller->ubicacion_id = (int) $ubicacion_id;
+            $taller->nombre = 'Taller de escritura';
+            $taller->descripcion = 'Taller de escritura en la academia de idiomas';
+            $taller->dia_semana = 'X';
             $taller->hora_inicio = '17:00';
             $taller->hora_fin = '18:00';
             $taller->cupo_maximo = 20;
@@ -52,6 +62,7 @@ class TallerSeeder extends Seeder
             $taller->cupo_maximo = 10;
             $taller->save();
         }
+
 
         //Taller::factory(50)->create();
     }

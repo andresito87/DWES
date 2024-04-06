@@ -7,14 +7,20 @@ use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * Class TalleresControllerAPI
+ * Controlador para gestionar los talleres de la aplicación.
+ * @package App\Http\Controllers
+ */
 class TalleresControllerAPI extends Controller
 {
     /**
      * Almacena un taller en la base de datos.
-     * @param int|string idubicacion Ubicacion a la que se va añadir el taller
+     * @param int|string $idubicacion Ubicacion a la que se va añadir el taller
      * @annotation Decido dar un tipado de int|string al parámetro para evitar un código de estado 500 
      * cuando se procesa un idubicacion que es un string o que no puede ser transformable a entero
-     * @param Request request petición con los datos del taller introducidos en el formulario
+     * @param Request $request petición con los datos del taller introducidos en el formulario
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(int|string $idubicacion, Request $request)
     {
@@ -93,12 +99,13 @@ class TalleresControllerAPI extends Controller
      * @param int|string $id Id del taller a eliminar
      * @annotation Decido tipar con int|string para evitar que cuando el usuario teclee un id que no es un entero, el servidor 
      * responda con un código 500. De esta forma, es el controlador quien gestiona esa casuística.
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(int|string $id)
     {
         // Verificar si $id del taller es un entero o una cadena que representa un entero positivo
         if (! is_int($id) && ! ctype_digit($id)) {
-            return response()->json(['error' => 'Debe indicar un entero como id del taller.'], 404);
+            return response()->json(['resultado' => 'Debe indicar un entero como id del taller.'], 404);
         }
 
         $taller = Taller::find($id);
@@ -107,5 +114,59 @@ class TalleresControllerAPI extends Controller
         }
         $taller->delete();
         return response()->json(['resultado' => 'eliminado'], 200);
+    }
+
+    /**
+     * Cambia la ubicación de un taller.
+     * @param int $idtaller Id del taller a cambiar de ubicación
+     * @param Request $request Petición con los datos de la nueva ubicación
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cambiarUbicacion(int|string $idtaller, Request $request)
+    {
+        // Verificar si la petición contiene datos JSON
+        if (! $request->isJson()) {
+            return response()->json(['error' => 'Datos no procesables (se espera JSON)'], 422);
+        }
+        $datos = $request->json()->all();
+
+        // Verificar si el JSON contiene la clave 'nueva_ubicacion'
+        if (! isset($datos['nueva_ubicacion'])) {
+            return response()->json(['error' => 'Datos no procesables (JSON no contiene los datos esperados)'], 422);
+        }
+        $idUbicacion = $datos['nueva_ubicacion'];
+
+        // Verificar si $idtaller es un entero o una cadena que representa un entero positivo
+        if (! is_int($idtaller) && ! ctype_digit($idtaller)) {
+            return response()->json(['error' => 'Debe indicar un entero como id del taller.'], 404);
+        }
+
+        // Verificar si $idUbicacion es un entero o una cadena que representa un entero positivo
+        if (! is_int($idUbicacion) && ! ctype_digit($idUbicacion)) {
+            return response()->json(['error' => 'Debe indicar un entero como id de la nueva ubicación.'], 404);
+        }
+
+        $taller = Taller::find($idtaller);
+        if ($taller == null) {
+            return response()->json(['error' => 'Taller no encontrado'], 404);
+        }
+
+        // Verificar si la nueva ubicación existe
+        $ubicacion = Ubicacion::find($idUbicacion);
+        if ($ubicacion == null) {
+            return response()->json(['error' => 'Ubicación no válida o no existente'], 422);
+        }
+
+        // Verificar si la nueva ubicación tiene el día de la semana del taller
+        $diasDisponibles = Ubicacion::find($idUbicacion)->dias;
+        $arrayDiasDisponibles = explode(',', $diasDisponibles);
+        if (! in_array($taller->dia_semana, $arrayDiasDisponibles)) {
+            return response()->json(['error' => 'La ubicación no está disponible el día del taller'], 409);
+        }
+
+        $taller->ubicacion_id = $idUbicacion;
+        $taller->save();
+
+        return response()->json(['resultado' => 'Operación realizada correctamente', 'datos' => $taller], 200);
     }
 }

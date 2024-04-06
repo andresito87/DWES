@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
+    public function run() : void
     {
         // User::factory(10)->create();
 
@@ -19,5 +19,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Ejecutar el seeder de ubicaciones
+        $this->call(UbicacionSeeder::class);
+
+        // Ejecutar el seeder de talleres
+        $this->call(TallerSeeder::class);
+
     }
 }
