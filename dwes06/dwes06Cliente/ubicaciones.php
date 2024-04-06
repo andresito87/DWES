@@ -13,6 +13,24 @@ if ($response->getStatusCode() == 200) {
     $ubicaciones = json_decode($response->getBody(), true);
     ?>
 
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #dddddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
     <table border='1'>
         <thead>
             <tr>

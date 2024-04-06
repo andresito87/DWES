@@ -11,16 +11,25 @@ class TalleresControllerAPI extends Controller
 {
     /**
      * Almacena un taller en la base de datos.
+     * @param int|string idubicacion Ubicacion a la que se va añadir el taller
+     * @annotation Decido dar un tipado de int|string al parámetro para evitar un código de estado 500 
+     * cuando se procesa un idubicacion que es un string o que no puede ser transformable a entero
+     * @param Request request petición con los datos del taller introducidos en el formulario
      */
-    public function store(int $idubicacion, Request $request)
+    public function store(int|string $idubicacion, Request $request)
     {
+        // Verificar si $idubicacion es un entero o una cadena que representa un entero positivo
+        if (! is_int($idubicacion) && ! ctype_digit($idubicacion)) {
+            return response()->json(['error' => 'Debe indicar un entero como ubicación.'], 404);
+        }
+
         $ubicacion = Ubicacion::find($idubicacion);
         if ($ubicacion == null) {
             return response()->json(['error' => 'La ubicación no existe'], 404);
         }
 
         // Obtener los datos del taller
-        $nombreTaller = $request->input('nombre');
+        $nombre = $request->input('nombre');
         $descripcion = $request->input('descripcion');
         $diaSemana = $request->input('dia_semana');
         $horaInicio = $request->input('hora_inicio');
@@ -63,8 +72,8 @@ class TalleresControllerAPI extends Controller
 
         // Creamos el taller
         $taller = new Taller();
-        $taller->nombre = $request->nombre;
-        $taller->descripcion = $request->descripcion;
+        $taller->nombre = $nombre;
+        $taller->descripcion = $descripcion;
         $taller->dia_Semana = $diaSemana;
         $taller->ubicacion_id = $idubicacion;
         $taller->hora_inicio = $horaInicio;
@@ -72,16 +81,26 @@ class TalleresControllerAPI extends Controller
         $taller->cupo_maximo = $cupoMaximo;
         $taller->save();
 
-        // Retornar una respuesta exitosa, codigo de estado 200
-        return response()->json(['resultado' => 'ok', 'datos' => $taller], 200);
+        // Recuperar el taller recién guardado
+        $tallerGuardado = Taller::find($taller->id);
 
+        // Retornar una respuesta exitosa, codigo de estado 200 y los datos del taller guardado
+        return response()->json(['resultado' => 'ok', 'datos' => $tallerGuardado], 200);
     }
 
     /**
      * Elimina un taller con un determinado id de la base de datos.
+     * @param int|string $id Id del taller a eliminar
+     * @annotation Decido tipar con int|string para evitar que cuando el usuario teclee un id que no es un entero, el servidor 
+     * responda con un código 500. De esta forma, es el controlador quien gestiona esa casuística.
      */
-    public function destroy(int $id)
+    public function destroy(int|string $id)
     {
+        // Verificar si $id del taller es un entero o una cadena que representa un entero positivo
+        if (! is_int($id) && ! ctype_digit($id)) {
+            return response()->json(['error' => 'Debe indicar un entero como id del taller.'], 404);
+        }
+
         $taller = Taller::find($id);
         if (! $taller) {
             return response()->json(['resultado' => 'No existe'], 404);

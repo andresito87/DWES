@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Taller;
 use App\Models\Ubicacion;
-use Illuminate\Http\Request;
 
 class UbicacionesControllerAPI extends Controller
 {
@@ -18,7 +17,7 @@ class UbicacionesControllerAPI extends Controller
     {
         $ubicacion = Ubicacion::find($idUbicacion);
         if ($ubicacion == null) {
-            return response()->json(['mensaje' => 'La ubicacion no existe'], 404);
+            return response()->json(['error' => 'Ubicación no existente'], 404);
         }
         $talleres = Taller::where('ubicacion_id', $idUbicacion)->get();
         if ($talleres->count() == 0) {
