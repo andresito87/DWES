@@ -28,6 +28,43 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "description": "Datos del taller introducidos en el formulario",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Taller de lectura"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Taller de lectura en la biblioteca"
+                                    },
+                                    "dia_semana": {
+                                        "type": "string",
+                                        "example": "L"
+                                    },
+                                    "hora_inicio": {
+                                        "type": "string",
+                                        "example": "10:00"
+                                    },
+                                    "hora_fin": {
+                                        "type": "string",
+                                        "example": "11:00"
+                                    },
+                                    "cupo_maximo": {
+                                        "type": "integer",
+                                        "example": "10"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -90,7 +127,7 @@
                         }
                     },
                     "404": {
-                        "description": "NOT FOUND",
+                        "description": "Not Found",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -98,6 +135,61 @@
                                         "error": {
                                             "type": "string",
                                             "example": "La ubicación no existe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errores": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "nombre": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "El nombre es obligatorio."
+                                                        }
+                                                    },
+                                                    "dia_semana": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "El día de la semana es obligatorio."
+                                                        }
+                                                    },
+                                                    "hora_inicio": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "La hora de inicio es obligatoria."
+                                                        }
+                                                    },
+                                                    "hora_fin": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "La hora de fin es obligatoria."
+                                                        }
+                                                    },
+                                                    "cupo_maximo": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "El cupo máximo es obligatorio."
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -143,7 +235,7 @@
                         }
                     },
                     "404": {
-                        "description": "NOT FOUND",
+                        "description": "Not Found",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -151,6 +243,164 @@
                                         "resultado": {
                                             "type": "string",
                                             "example": "No existe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/talleres/{idTaller}/cambiarubicacion": {
+            "patch": {
+                "tags": [
+                    "Talleres"
+                ],
+                "summary": "Cambia la ubicación de un taller.",
+                "operationId": "b6be12ca938563f7ef481bd268bf1bfc",
+                "parameters": [
+                    {
+                        "name": "idTaller",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos de la nueva ubicación",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nueva_ubicacion": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "resultado": {
+                                            "type": "string",
+                                            "example": "Operación realizada correctamente"
+                                        },
+                                        "datos": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number",
+                                                        "example": "1"
+                                                    },
+                                                    "ubicacion_id": {
+                                                        "type": "number",
+                                                        "example": "1"
+                                                    },
+                                                    "nombre": {
+                                                        "type": "string",
+                                                        "example": "Taller de lectura"
+                                                    },
+                                                    "descripcion": {
+                                                        "type": "string",
+                                                        "example": "Taller de lectura en la biblioteca"
+                                                    },
+                                                    "dia_semana": {
+                                                        "type": "string",
+                                                        "example": "L"
+                                                    },
+                                                    "hora_inicio": {
+                                                        "type": "string",
+                                                        "example": "10:00:00"
+                                                    },
+                                                    "hora_fin": {
+                                                        "type": "string",
+                                                        "example": "11:00:00"
+                                                    },
+                                                    "cupo_maximo": {
+                                                        "type": "number",
+                                                        "example": "10"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2023-02-23T00:09:16.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2023-02-23T12:33:45.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Taller no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La ubicación no está disponible el día del taller"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Datos no procesables (se espera JSON)"
+                                        },
+                                        "error2": {
+                                            "type": "string",
+                                            "example": "Datos no procesables (JSON no contiene los datos esperados)"
+                                        },
+                                        "error3": {
+                                            "type": "string",
+                                            "example": "Ubicación no válida o no existente"
                                         }
                                     },
                                     "type": "object"
@@ -282,7 +532,7 @@
                         }
                     },
                     "404": {
-                        "description": "NOT FOUND",
+                        "description": "Not Found",
                         "content": {
                             "application/json": {
                                 "schema": {

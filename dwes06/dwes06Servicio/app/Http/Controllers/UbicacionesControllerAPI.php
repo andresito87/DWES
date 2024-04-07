@@ -79,7 +79,7 @@ class UbicacionesControllerAPI extends Controller
      *     ),
      *      @OA\Response(
      *          response=404,
-     *          description="NOT FOUND",
+     *          description="Not Found",
      *          @OA\JsonContent(
      *              @OA\Property(property="error", type="string", example="Ubicación no existente"),
      *          )

@@ -27,11 +27,27 @@ class TalleresControllerAPI extends Controller
      * @return \Illuminate\Http\JsonResponse
      * 
      * SWAGGER
-     * Permite crear un taller en una ubicación concreta.
+     * Permite crear un taller en una ubicación concreta recibiendo los datos de un formulario.
      * @OA\Post (
      *     path="/api/ubicaciones/{idUbicacion}/creartaller",
      *     tags={"Talleres"},
      *    @OA\Parameter(in="path",name="idUbicacion",required=true,@OA\Schema(type="integer")),
+     *    @OA\RequestBody(
+     *         required=true,
+     *         description="Datos del taller introducidos en el formulario",
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(property="nombre", type="string", example="Taller de lectura"),
+     *                 @OA\Property(property="descripcion", type="string", example="Taller de lectura en la biblioteca"),
+     *                 @OA\Property(property="dia_semana", type="string", example="L"),
+     *                 @OA\Property(property="hora_inicio", type="string", example="10:00"),
+     *                 @OA\Property(property="hora_fin", type="string", example="11:00"),
+     *                 @OA\Property(property="cupo_maximo", type="integer", example="10")
+     *             )
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="OK",
@@ -55,13 +71,42 @@ class TalleresControllerAPI extends Controller
      *             )
      *         )
      *     ),
-     *      @OA\Response(
+     *     @OA\Response(
      *          response=404,
-     *          description="NOT FOUND",
+     *          description="Not Found",
      *          @OA\JsonContent(
      *              @OA\Property(property="error", type="string", example="La ubicación no existe"),
      *          )
-     *      )
+     *     ),
+     * @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Content",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="errores", type="array",
+     *                 @OA\Items(
+     *                      @OA\Property(property="nombre", type="array",
+     *                          @OA\Items(type="string", example="El nombre es obligatorio."),
+     *                          @OA\Items(type="string", example="El nombre debe ser una cadena de caracteres."),
+     *                          @OA\Items(type="string", example="El nombre no puede tener más de :max caracteres.")),
+     *                      @OA\Property(property="dia_semana", type="array",
+     *                          @OA\Items(type="string", example="El día de la semana es obligatorio."),
+     *                          @OA\Items(type="string", example="El día de la semana debe ser una cadena de caracteres."),
+     *                          @OA\Items(type="string", example="La ubicación no está disponible el día indicado.")),
+     *                      @OA\Property(property="hora_inicio", type="array",
+     *                          @OA\Items(type="string", example="La hora de inicio es obligatoria."),
+     *                          @OA\Items(type="string", example="La hora de inicio debe estar en formato 00:00(24 horas).")),
+     *                      @OA\Property(property="hora_fin", type="array",
+     *                          @OA\Items(type="string", example="La hora de fin es obligatoria."),
+     *                          @OA\Items(type="string", example="La hora de fin debe estar en formato 00:00(24 horas)."),
+     *                          @OA\Items(type="string", example="La hora de fin debe ser posterior a la hora de inicio.")),
+     *                     @OA\Property(property="cupo_maximo", type="array",
+     *                          @OA\Items(type="string", example="El cupo máximo es obligatorio."),
+     *                          @OA\Items(type="string", example="El cupo máximo debe ser un número entero."),
+     *                          @OA\Items(type="string", example="El cupo máximo debe ser como mínimo :min.")),
+     *                 )
+     *              ),
+     *          )
+     *     )
      * )
      */
     public function store(int|string $idubicacion, Request $request)
@@ -151,7 +196,7 @@ class TalleresControllerAPI extends Controller
      *     @OA\Parameter(in="path",name="idTaller",required=true,@OA\Schema(type="integer")),
      *     @OA\Response(response=200,description="OK",
      *         @OA\JsonContent(@OA\Property(property="resultado", type="string", example="eliminado"))),
-     *      @OA\Response(response=404,description="NOT FOUND",
+     *      @OA\Response(response=404,description="Not Found",
      *          @OA\JsonContent(@OA\Property(property="resultado", type="string", example="No existe")))
      *      )
      */
@@ -175,6 +220,55 @@ class TalleresControllerAPI extends Controller
      * @param int $idtaller Id del taller a cambiar de ubicación
      * @param Request $request Petición con los datos de la nueva ubicación
      * @return \Illuminate\Http\JsonResponse
+     * 
+     * SWAGGER
+     * Permite cambiar la ubicación de un taller
+     * @OA\Patch (
+     *      path="/api/talleres/{idTaller}/cambiarubicacion",
+     *      tags={"Talleres"},
+     *      @OA\Parameter(in="path",name="idTaller",required=true,@OA\Schema(type="integer")),
+     *      @OA\RequestBody(required=true,description="Datos de la nueva ubicación",
+     *          @OA\MediaType(mediaType="application/json",
+     *          @OA\Schema(type="object",
+     *              @OA\Property(property="nueva_ubicacion", type="integer", example="1")
+     *          )
+     *          )
+     *      ),
+     *      @OA\Response(response=200,description="OK",
+     *          @OA\JsonContent(@OA\Property(property="resultado", type="string", example="Operación realizada correctamente"),
+     *          @OA\Property(property="datos", type="array",
+     *              @OA\Items(type="object",
+     *                  @OA\Property(property="id",type="number",example="1"),
+     *                  @OA\Property(property="ubicacion_id",type="number",example="1"),
+     *                  @OA\Property(property="nombre",type="string",example="Taller de lectura"),
+     *                  @OA\Property(property="descripcion", type="string", example="Taller de lectura en la biblioteca"),
+     *                  @OA\Property(property="dia_semana", type="string", example="L"),
+     *                  @OA\Property(property="hora_inicio", type="string", example="10:00:00"),
+     *                  @OA\Property(property="hora_fin", type="string", example="11:00:00"),
+     *                  @OA\Property(property="cupo_maximo", type="number", example="10"),
+     *                  @OA\Property(property="created_at", type="string", example="2023-02-23T00:09:16.000000Z"),
+     *                  @OA\Property(property="updated_at", type="string", example="2023-02-23T12:33:45.000000Z")
+     *            )
+     *          )
+     *        )
+     *      ),
+     *      @OA\Response(response=404,description="Not Found",
+     *          @OA\JsonContent(@OA\Property(property="error", type="string", example="Taller no encontrado"))
+     *      ),
+     *      @OA\Response(response=409,description="Conflict",
+     *          @OA\JsonContent(@OA\Property(property="error", type="string", example="La ubicación no está disponible el día del taller"))
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Content",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Datos no procesables (se espera JSON)"),
+     *              @OA\Property(property="error2", type="string", example="Datos no procesables (JSON no contiene los datos esperados)"),
+     *              @OA\Property(property="error3", type="string", example="Ubicación no válida o no existente"),
+     *          )
+     *      )
+     *    )
+     * )
      */
     public function cambiarUbicacion(int|string $idtaller, Request $request)
     {
