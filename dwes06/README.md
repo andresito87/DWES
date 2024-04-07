@@ -28,20 +28,20 @@
 
 ## Tecnologías y programas utilizados
 
-- Laravel
-- PHP
-- MySQL
-- HTML
-- CSS
-- Postman
-- Swagger
-- PHP Unit
-- Visual Studio Code
-- XAMPP
-- Composer
-- MySQL Workbench
-- Git
-- GitHub
+- Laravel: [Descargar Laravel](https://laravel.com/)
+- PHP: [Descargar PHP](https://www.php.net/downloads)
+- MySQL: [Descargar MySQL](https://www.mysql.com/downloads/)
+- HTML: [Documentacion HTML](https://developer.mozilla.org/es/docs/Web/HTML)
+- CSS: [Documentacion CSS](https://developer.mozilla.org/es/docs/Web/CSS)
+- Postman: [Descargar Postman](https://www.postman.com/downloads/)
+- Swagger En Laravel: [L5-Swagger](https://github.com/DarkaOnLine/L5-Swagger)
+- PHP Unit: [PHPUnit](https://phpunit.de/index.html)
+- Visual Studio Code: [Descargar Visual Studio Code](https://code.visualstudio.com/)
+- XAMPP: [Descargar XAMPP](https://www.apachefriends.org/es/index.html)
+- Composer: [Descargar Composer](https://getcomposer.org/)
+- MySQL Workbench: [Descargar MySQL Workbench](https://www.mysql.com/products/workbench/)
+- Git: [Descargar Git](https://git-scm.com/)
+- GitHub: [GitHub](https://github.com/)
 
 ## Autor
 
