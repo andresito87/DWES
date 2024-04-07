@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
  * Class TalleresControllerAPI
  * Controlador para gestionar los talleres de la aplicación.
  * @package App\Http\Controllers
+ * 
+ * SWAGGER
+ * @OA\Info(title="API de Talleres y Ubicaciones",version="1.0",description="Listado de URI's de la API de Talleres y Ubicaciones")
+ * @OA\Server(url="http://127.0.0.1:8000/")
  */
 class TalleresControllerAPI extends Controller
 {
@@ -21,6 +25,44 @@ class TalleresControllerAPI extends Controller
      * cuando se procesa un idubicacion que es un string o que no puede ser transformable a entero
      * @param Request $request petición con los datos del taller introducidos en el formulario
      * @return \Illuminate\Http\JsonResponse
+     * 
+     * SWAGGER
+     * Permite crear un taller en una ubicación concreta.
+     * @OA\Post (
+     *     path="/api/ubicaciones/{idUbicacion}/creartaller",
+     *     tags={"Talleres"},
+     *    @OA\Parameter(in="path",name="idUbicacion",required=true,@OA\Schema(type="integer")),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(
+     *            @OA\Property(property="resultado", type="string", example="ok"),
+     *             @OA\Property(
+     *                 property="datos",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id",type="number",example="1"),
+     *                     @OA\Property(property="ubicacion_id",type="number",example="1"),
+     *                     @OA\Property(property="nombre",type="string",example="Taller de lectura"),
+     *                     @OA\Property(property="descripcion", type="string", example="Taller de lectura en la biblioteca"),
+     *                     @OA\Property(property="dia_semana", type="string", example="L"),
+     *                     @OA\Property(property="hora_inicio", type="string", example="10:00:00"),
+     *                     @OA\Property(property="hora_fin", type="string", example="11:00:00"),
+     *                     @OA\Property(property="created_at", type="string", example="2023-02-23T00:09:16.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string", example="2023-02-23T12:33:45.000000Z")
+     *                  )
+     *             )
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="NOT FOUND",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="La ubicación no existe"),
+     *          )
+     *      )
+     * )
      */
     public function store(int|string $idubicacion, Request $request)
     {
@@ -100,6 +142,18 @@ class TalleresControllerAPI extends Controller
      * @annotation Decido tipar con int|string para evitar que cuando el usuario teclee un id que no es un entero, el servidor 
      * responda con un código 500. De esta forma, es el controlador quien gestiona esa casuística.
      * @return \Illuminate\Http\JsonResponse
+     * 
+     * SWAGGER
+     * Permite eliminar un taller de la base de datos
+     * @OA\Delete (
+     *     path="/api/talleres/{idTaller}",
+     *     tags={"Talleres"},
+     *     @OA\Parameter(in="path",name="idTaller",required=true,@OA\Schema(type="integer")),
+     *     @OA\Response(response=200,description="OK",
+     *         @OA\JsonContent(@OA\Property(property="resultado", type="string", example="eliminado"))),
+     *      @OA\Response(response=404,description="NOT FOUND",
+     *          @OA\JsonContent(@OA\Property(property="resultado", type="string", example="No existe")))
+     *      )
      */
     public function destroy(int|string $id)
     {

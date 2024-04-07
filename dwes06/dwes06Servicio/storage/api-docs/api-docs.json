@@ -1,0 +1,304 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Talleres y Ubicaciones",
+        "description": "Listado de URI's de la API de Talleres y Ubicaciones",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/"
+        }
+    ],
+    "paths": {
+        "/api/ubicaciones/{idUbicacion}/creartaller": {
+            "post": {
+                "tags": [
+                    "Talleres"
+                ],
+                "summary": "Almacena un taller en la base de datos.",
+                "operationId": "374717333be8337e8dd7975990823950",
+                "parameters": [
+                    {
+                        "name": "idUbicacion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "resultado": {
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "datos": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number",
+                                                        "example": "1"
+                                                    },
+                                                    "ubicacion_id": {
+                                                        "type": "number",
+                                                        "example": "1"
+                                                    },
+                                                    "nombre": {
+                                                        "type": "string",
+                                                        "example": "Taller de lectura"
+                                                    },
+                                                    "descripcion": {
+                                                        "type": "string",
+                                                        "example": "Taller de lectura en la biblioteca"
+                                                    },
+                                                    "dia_semana": {
+                                                        "type": "string",
+                                                        "example": "L"
+                                                    },
+                                                    "hora_inicio": {
+                                                        "type": "string",
+                                                        "example": "10:00:00"
+                                                    },
+                                                    "hora_fin": {
+                                                        "type": "string",
+                                                        "example": "11:00:00"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2023-02-23T00:09:16.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2023-02-23T12:33:45.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La ubicación no existe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/talleres/{idTaller}": {
+            "delete": {
+                "tags": [
+                    "Talleres"
+                ],
+                "summary": "Elimina un taller con un determinado id de la base de datos.",
+                "operationId": "bbf4303f2f4e81d2b16f27bcafc6775d",
+                "parameters": [
+                    {
+                        "name": "idTaller",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "resultado": {
+                                            "type": "string",
+                                            "example": "eliminado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "resultado": {
+                                            "type": "string",
+                                            "example": "No existe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ubicaciones": {
+            "get": {
+                "tags": [
+                    "Ubicaciones"
+                ],
+                "summary": "Devuelve un listado con todas las ubicaciones.",
+                "operationId": "a211fb8db199e727bdcb04accc630737",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "nombre": {
+                                                "type": "string",
+                                                "example": "Biblioteca Municipal Distrito 4"
+                                            },
+                                            "descripcion": {
+                                                "type": "string",
+                                                "example": "Biblioteca Municipal del distrito 4. 6ª Avenida"
+                                            },
+                                            "dias": {
+                                                "type": "string",
+                                                "example": "L,M,X"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "example": "2024-04-06 19:48:12"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "example": "2024-04-06 19:48:12"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ubicaciones/{idUbicacion}/talleres": {
+            "get": {
+                "tags": [
+                    "Ubicaciones"
+                ],
+                "summary": "Devuelve un listado con los talleres de una ubicación.",
+                "operationId": "678e86406a73176ed5bc8025cce821a6",
+                "parameters": [
+                    {
+                        "name": "idUbicacion",
+                        "in": "path",
+                        "description": "Identificador de la ubicación",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "ubicacion_id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "nombre": {
+                                                "type": "string",
+                                                "example": "Taller de lectura"
+                                            },
+                                            "descripcion": {
+                                                "type": "string",
+                                                "example": "Taller de lectura en la biblioteca"
+                                            },
+                                            "dia_semana": {
+                                                "type": "string",
+                                                "example": "L"
+                                            },
+                                            "hora_inicio": {
+                                                "type": "string",
+                                                "example": "10:00:00"
+                                            },
+                                            "hora_fin": {
+                                                "type": "string",
+                                                "example": "11:00:00"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "example": "2023-02-23T00:09:16.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "example": "2023-02-23T12:33:45.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Ubicación no existente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
