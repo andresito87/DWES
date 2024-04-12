@@ -6,7 +6,7 @@ const axiosClient = axios.create({
 
 // Interceptors: Especials functions that run before or after a request is made
 axiosClient.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('ACCESS_TOKEN');
   config.headers['Authorization'] = `Bearer ${token}`;
   return config;
 });

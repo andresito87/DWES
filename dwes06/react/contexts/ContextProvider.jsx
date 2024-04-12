@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext } from 'react';
 import { useState } from 'react';
 import { useContext } from 'react';
@@ -13,8 +14,8 @@ export const ContextProvider = ({ children }) => {
   const [user, setUser] = useState({
     name: 'Andrés',
   });
-  // useState(localStorage.getItem('ACCESS_TOKEN'));
-  const [token, _setToken] = useState(null);
+
+  const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
 
   const setToken = token => {
     _setToken(token);

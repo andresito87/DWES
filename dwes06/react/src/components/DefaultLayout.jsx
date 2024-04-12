@@ -1,8 +1,10 @@
 import { Link, Navigate, Outlet } from 'react-router-dom';
 import { useStateContext } from '../../contexts/ContextProvider';
+import { useEffect } from 'react';
+import axiosClient from '../axios-client';
 
 const DefaultLayout = () => {
-  const { user, token } = useStateContext();
+  const { user, token, setUser, setToken } = useStateContext();
 
   if (!token) {
     return <Navigate to="/login" />;
@@ -10,7 +12,30 @@ const DefaultLayout = () => {
 
   const onLogout = e => {
     e.preventDefault();
+
+    axiosClient
+      .post('/logout')
+      .then(() => {
+        setUser({});
+        setToken(null);
+        localStorage.removeItem('ACCESS_TOKEN');
+      })
+      .catch(() => {
+        localStorage.removeItem('ACCESS_TOKEN');
+      });
   };
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    axiosClient
+      .get('/user')
+      .then(({ data }) => {
+        setUser(data);
+      })
+      .catch(() => {
+        localStorage.removeItem('ACCESS_TOKEN');
+      });
+  }, [setUser]);
 
   return (
     <div id="defaultLayout">
@@ -22,7 +47,7 @@ const DefaultLayout = () => {
         <header>
           <div>Header</div>
           <div>
-            {user.name}
+            {user.username}
             <a href="#" onClick={onLogout} className="btn-logout">
               Logout
             </a>
