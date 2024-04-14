@@ -24,13 +24,8 @@ php artisan make:controller NombreController
 php artisan make:controller NombreController --resource
 php artisan make:factory NombreFactory
 
-**Regression Testing**
-Para usar Dusk, es necesario descomentar la siguiente línea en el archivo en C:\\xamp\php\php.ini
-;extension=zip
-Sino dará error al hacer el composer install o update
-Instalacion del Driver de Chrome
-php artisan dusk:install
-*Ejecución de tests:*
-php artisan dusk
-*Creación de tests:*
-php artisan dusk:make LoginTest
+** Creacion de un recurso, controlador y request **
+php artisan make:controller Api/UserController --model=User --requests --resource --api
+
+** Creacion de un recurso User**
+php artisan make:resource UserResource

@@ -6,6 +6,18 @@ import axiosClient from '../axios-client';
 const DefaultLayout = () => {
   const { user, token, setUser, setToken } = useStateContext();
 
+  useEffect(() => {
+    axiosClient
+      .get('/user')
+      .then(({ data }) => {
+        setUser(data);
+      })
+      .catch(() => {
+        localStorage.removeItem('ACCESS_TOKEN');
+      });
+  }, [setUser]);
+
+  // Redirect to login if there is no token, unauthorized access
   if (!token) {
     return <Navigate to="/login" />;
   }
@@ -24,18 +36,6 @@ const DefaultLayout = () => {
         localStorage.removeItem('ACCESS_TOKEN');
       });
   };
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    axiosClient
-      .get('/user')
-      .then(({ data }) => {
-        setUser(data);
-      })
-      .catch(() => {
-        localStorage.removeItem('ACCESS_TOKEN');
-      });
-  }, [setUser]);
 
   return (
     <div id="defaultLayout">
