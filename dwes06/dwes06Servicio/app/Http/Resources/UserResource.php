@@ -7,7 +7,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
+    /**
+     * Indicate if the resource should be wrapped within object.
+     * Example: { "data": [ ... ] }
+     * Userful when returning a collection of resources in axios.
+     *
+     * @var bool
+     */
     public static $wrap = false;
+
     /**
      * Transform the resource into an array.
      *
