@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axiosClient from '../axios-client';
 import { Link } from 'react-router-dom';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { setNotification } = useStateContext();
+  const [linkNext, setLinkNext] = useState(null);
+  const [linkPrev, setLinkPrev] = useState(null);
 
   useEffect(() => {
     getUsers();
@@ -16,6 +20,7 @@ const Users = () => {
       axiosClient
         .delete(`/users/${user.id}`)
         .then(() => {
+          setNotification('Usuario eliminado correctamente');
           getUsers();
         })
         .catch(() => {
@@ -24,14 +29,29 @@ const Users = () => {
     }
   };
 
-  const getUsers = () => {
+  const getUsers = link => {
     setLoading(true);
+    if (link) {
+      axiosClient
+        .get(link)
+        .then(({ data }) => {
+          setLoading(false);
+          setUsers(data.data);
+          setLinkNext(data.links.next);
+          setLinkPrev(data.links.prev);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+      return;
+    }
     axiosClient
       .get('/users')
       .then(({ data }) => {
         setLoading(false);
-        console.log(data);
         setUsers(data.data);
+        setLinkNext(data.links.next);
+        setLinkPrev(data.links.prev);
       })
       .catch(() => {
         setLoading(false);
@@ -106,6 +126,19 @@ const Users = () => {
             </tbody>
           )}
         </table>
+      </div>
+      <div>
+        {linkPrev && (
+          <button onClick={() => getUsers(linkPrev)} className="btn">
+            Anterior
+          </button>
+        )}
+        &nbsp;
+        {linkNext && (
+          <button onClick={() => getUsers(linkNext)} className="btn">
+            Siguiente
+          </button>
+        )}
       </div>
     </div>
   );

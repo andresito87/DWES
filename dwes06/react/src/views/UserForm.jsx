@@ -1,11 +1,14 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axiosClient from '../axios-client';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 const UserForm = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(null);
+  const { setNotification } = useStateContext();
   const [user, setUser] = useState({
     id: null,
     name: '',
@@ -31,24 +34,35 @@ const UserForm = () => {
 
   const onSubmit = e => {
     e.preventDefault();
-    const payload = {
-      name: e.target.name.value,
-      email: e.target.email.value,
-      password: e.target.password.value,
-      password_confirmation: e.target.password.value,
-    };
-    axiosClient
-      .post(id ? `/users/${id}` : '/users', payload)
-      .then(() => {
-        window.location.href = '/users';
-      })
-      .catch(error => {
-        const { response } = error;
-        if (response && response.status === 422) {
-          setErrors(response.data.errors);
-        }
-      });
+    if (user.id) {
+      axiosClient
+        .put(`/users/${id}`, user)
+        .then(() => {
+          setNotification('Usuario actualizado correctamente');
+          navigate('/users');
+        })
+        .catch(error => {
+          const { response } = error;
+          if (response && response.status === 422) {
+            setErrors(response.data.errors);
+          }
+        });
+    } else {
+      axiosClient
+        .post(`/users`, user)
+        .then(() => {
+          setNotification('Usuario creado correctamente');
+          navigate('/users');
+        })
+        .catch(error => {
+          const { response } = error;
+          if (response && response.status === 422) {
+            setErrors(response.data.errors);
+          }
+        });
+    }
   };
+
   return (
     <>
       {user.id && <h1>Editar Usuario: {user.username}</h1>}
@@ -108,6 +122,10 @@ const UserForm = () => {
             </div>
             <button className="btn" type="submit">
               Guardar
+            </button>
+            &nbsp;
+            <button className="btn" onClick={() => navigate('/users')}>
+              Cancelar
             </button>
           </form>
         )}
