@@ -29,3 +29,6 @@ php artisan make:controller Api/UserController --model=User --requests --resourc
 
 ** Creacion de un recurso User**
 php artisan make:resource UserResource
+
+** Ver lista de rutas disponibles **
+php artisan route:list

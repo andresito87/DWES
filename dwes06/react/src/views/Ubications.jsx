@@ -3,25 +3,24 @@ import axiosClient from '../axios-client';
 import { Link } from 'react-router-dom';
 import { useStateContext } from '../../contexts/ContextProvider';
 
-const Users = () => {
-  const [users, setUsers] = useState([]);
+const Ubications = () => {
+  const [ubications, setUbications] = useState([]);
   const [loading, setLoading] = useState(false);
   const { setNotification } = useStateContext();
   const [linkNext, setLinkNext] = useState(null);
   const [linkPrev, setLinkPrev] = useState(null);
 
   useEffect(() => {
-    getUsers();
+    getUbications();
   }, []);
-
-  const onDelete = user => {
-    if (window.confirm('¿Estás seguro  que desea eliminar este usuario?')) {
+  const onDelete = ubication => {
+    if (window.confirm('¿Estás seguro  que desea eliminar esta ubicación?')) {
       setLoading(true);
       axiosClient
-        .delete(`/users/${user.id}`)
+        .delete(`/ubications/${ubication.id}`)
         .then(() => {
-          setNotification('Usuario eliminado correctamente');
-          getUsers();
+          setNotification('Ubicación eliminada correctamente');
+          getUbications();
         })
         .catch(() => {
           setLoading(false);
@@ -29,14 +28,14 @@ const Users = () => {
     }
   };
 
-  const getUsers = link => {
+  const getUbications = link => {
     setLoading(true);
     if (link) {
       axiosClient
         .get(link)
         .then(({ data }) => {
           setLoading(false);
-          setUsers(data.data);
+          setUbications(data.data);
           setLinkNext(data.links.next);
           setLinkPrev(data.links.prev);
         })
@@ -46,10 +45,10 @@ const Users = () => {
       return;
     }
     axiosClient
-      .get('/users')
+      .get('/ubications')
       .then(({ data }) => {
         setLoading(false);
-        setUsers(data.data);
+        setUbications(data.data);
         setLinkNext(data.links.next);
         setLinkPrev(data.links.prev);
       })
@@ -57,7 +56,6 @@ const Users = () => {
         setLoading(false);
       });
   };
-
   return (
     <div>
       <div
@@ -67,9 +65,9 @@ const Users = () => {
           alignItems: 'center',
         }}
       >
-        <h1>Usuarios</h1>
-        <Link to={'/users/new'} className="btn-add">
-          Crear nuevo usuario
+        <h1>Ubicaciones</h1>
+        <Link to={'/ubications/new'} className="btn-add">
+          Crear nueva ubicación
         </Link>
       </div>
       <div className="card animated fadeInDown">
@@ -77,9 +75,9 @@ const Users = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Usuario</th>
-              <th>Email</th>
-              <th>Fecha de creación</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Días</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -92,30 +90,33 @@ const Users = () => {
               </tr>
             </tbody>
           )}
-          {!loading && users.length === 0 && (
+          {!loading && ubications.length === 0 && (
             <tbody>
               <tr>
                 <td colSpan="5" className="text-center">
-                  No hay usuarios
+                  No hay ubicaciones
                 </td>
               </tr>
             </tbody>
           )}
           {!loading && (
             <tbody>
-              {users.map(user => (
-                <tr key={user.id}>
-                  <td>{user.id}</td>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td>{user.created_at}</td>
+              {ubications.map(ubication => (
+                <tr key={ubication.id}>
+                  <td>{ubication.id}</td>
+                  <td>{ubication.nombre}</td>
+                  <td>{ubication.descripcion}</td>
+                  <td>{ubication.dias}</td>
                   <td>
-                    <Link className="btn-edit" to={`/users/${user.id}`}>
+                    <Link
+                      className="btn-edit"
+                      to={`/ubications/${ubication.id}`}
+                    >
                       Editar
                     </Link>
                     &nbsp;
                     <button
-                      onClick={e => onDelete(user)}
+                      onClick={e => onDelete(ubication)}
                       className="btn-delete"
                     >
                       Eliminar
@@ -129,13 +130,13 @@ const Users = () => {
       </div>
       <div>
         {linkPrev && (
-          <button onClick={() => getUsers(linkPrev)} className="btn">
+          <button onClick={() => getUbications(linkPrev)} className="btn">
             Anterior
           </button>
         )}
         &nbsp;
         {linkNext && (
-          <button onClick={() => getUsers(linkNext)} className="btn">
+          <button onClick={() => getUbications(linkNext)} className="btn">
             Siguiente
           </button>
         )}
@@ -144,4 +145,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Ubications;

@@ -8,6 +8,8 @@ import DefaultLayout from './components/DefaultLayout.jsx';
 import Dashboard from './views/Dashboard.jsx';
 import { Navigate } from 'react-router-dom';
 import UserForm from './views/UserForm.jsx';
+import Ubications from './views/Ubications.jsx';
+import UbicationForm from './views/UbicationForm.jsx';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +35,18 @@ const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: <Dashboard />,
+      },
+      {
+        path: '/ubications',
+        element: <Ubications />,
+      },
+      {
+        path: '/ubications/new',
+        element: <UbicationForm key="userCreate" />,
+      },
+      {
+        path: '/ubications/:id',
+        element: <UbicationForm key="userUpdate" />,
       },
     ],
   },

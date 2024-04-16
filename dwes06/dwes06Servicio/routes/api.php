@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UbicationController;
 use App\Http\Controllers\TalleresControllerAPI;
 use App\Http\Controllers\UbicacionesControllerAPI;
 use Illuminate\Http\Request;
@@ -21,12 +22,18 @@ Route::patch('/talleres/{idtaller}/cambiarubicacion', [TalleresControllerAPI::cl
 
 /* Rutas con Autenticación */
 Route::group(['middleware' => 'auth:sanctum'], function () {
+    // Obtenemos el usuario autenticado
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    // Desconexión del usuario autenticado
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // CRUD para todos los usuarios
     Route::apiResource('/users', UserController::class);
+    // CRUD para todas las ubicaciones
+    Route::apiResource('/ubications', UbicationController::class);
 });
+
 
 /* Rutas de Autenticación y Registro */
 Route::post('/login', [AuthController::class, 'login'])->name('login');

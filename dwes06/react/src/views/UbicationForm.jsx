@@ -3,28 +3,27 @@ import { useEffect, useState } from 'react';
 import axiosClient from '../axios-client';
 import { useStateContext } from '../../contexts/ContextProvider';
 
-const UserForm = () => {
+const UbicationForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(null);
   const { setNotification } = useStateContext();
-  const [user, setUser] = useState({
+  const [ubication, setUbication] = useState({
     id: null,
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    nombre: '',
+    descripcion: '',
+    dias: '',
   });
 
   useEffect(() => {
     if (id) {
       setLoading(true);
       axiosClient
-        .get(`/users/${id}`)
+        .get(`/ubications/${id}`)
         .then(({ data }) => {
           setLoading(false);
-          setUser(data);
+          setUbication(data);
         })
         .catch(() => {
           setLoading(false);
@@ -34,12 +33,12 @@ const UserForm = () => {
 
   const onSubmit = e => {
     e.preventDefault();
-    if (user.id) {
+    if (ubication.id) {
       axiosClient
-        .put(`/users/${id}`, user)
+        .put(`/ubications/${id}`, ubication)
         .then(() => {
-          setNotification('Usuario actualizado correctamente');
-          navigate('/users');
+          setNotification('Ubicación actualizada correctamente');
+          navigate('/ubications');
         })
         .catch(error => {
           const { response } = error;
@@ -49,10 +48,10 @@ const UserForm = () => {
         });
     } else {
       axiosClient
-        .post(`/users`, user)
+        .post(`/ubications`, ubication)
         .then(() => {
-          setNotification('Usuario creado correctamente');
-          navigate('/users');
+          setNotification('Ubicación creada correctamente');
+          navigate('/ubications');
         })
         .catch(error => {
           const { response } = error;
@@ -65,8 +64,8 @@ const UserForm = () => {
 
   return (
     <>
-      {user.id && <h1>Editar Usuario: {user.username}</h1>}
-      {!user.id && <h1>Creación Nuevo Usuario</h1>}
+      {ubication.id && <h1>Editar Ubicación: {ubication.nombre}</h1>}
+      {!ubication.id && <h1>Creación Nueva Ubicación:</h1>}
       <div className="card animated fadeInDown">
         {loading && <div className="text-center">Cargando...</div>}
         {errors && (
@@ -79,44 +78,38 @@ const UserForm = () => {
         {!loading && (
           <form onSubmit={onSubmit}>
             <div>
-              <label htmlFor="username">Usuario</label>
+              <label htmlFor="nombre">Nombre</label>
               <input
                 type="text"
-                id="username"
-                name="username"
-                value={user.username}
-                onChange={e => setUser({ ...user, username: e.target.value })}
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={user.email}
-                onChange={e => setUser({ ...user, email: e.target.value })}
-              />
-            </div>
-            <div>
-              <label htmlFor="password">Contraseña</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={user.password}
-                onChange={e => setUser({ ...user, password: e.target.value })}
-              />
-            </div>
-            <div>
-              <label htmlFor="password_confirmation">Repite Contraseña</label>
-              <input
-                type="password"
-                id="password_confirmation"
-                name="password_confirmation"
-                value={user.password_confirmation}
+                id="nombre"
+                name="nombre"
+                value={ubication.nombre}
                 onChange={e =>
-                  setUser({ ...user, password_confirmation: e.target.value })
+                  setUbication({ ...ubication, nombre: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <label htmlFor="descripcion">Descripcion</label>
+              <input
+                type="text"
+                id="descripcion"
+                name="descripcion"
+                value={ubication.descripcion}
+                onChange={e =>
+                  setUbication({ ...ubication, descripcion: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <label htmlFor="dias">Días</label>
+              <input
+                type="text"
+                id="dias"
+                name="dias"
+                value={ubication.dias}
+                onChange={e =>
+                  setUbication({ ...ubication, dias: e.target.value })
                 }
               />
             </div>
@@ -124,7 +117,7 @@ const UserForm = () => {
               Guardar
             </button>
             &nbsp;
-            <button className="btn" onClick={() => navigate('/users')}>
+            <button className="btn" onClick={() => navigate('/ubications')}>
               Cancelar
             </button>
           </form>
@@ -134,4 +127,4 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default UbicationForm;
