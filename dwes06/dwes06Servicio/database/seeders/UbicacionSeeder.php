@@ -44,6 +44,6 @@ class UbicacionSeeder extends Seeder
             $ubicacion->save();
         }
 
-        //Ubicacion::factory(20)->create();
+        Ubicacion::factory(30)->create();
     }
 }

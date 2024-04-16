@@ -16,7 +16,7 @@ class UbicationController extends Controller
     public function index()
     {
         return UbicationResource::collection(
-            Ubicacion::query()->orderBy('id', 'desc')->paginate(10)
+            Ubicacion::query()->orderBy('id', 'desc')->paginate(5)
         );
     }
 

@@ -41,14 +41,14 @@ const DefaultLayout = () => {
     <div id="defaultLayout">
       <aside>
         <Link to="/dashboard">Dashboard</Link>
-        <Link to="/users">Users</Link>
+        <Link to="/users">Usuarios</Link>
         <Link to="/ubications">Ubicaciones</Link>
       </aside>
       <div className="content">
         <header>
-          <div>Header</div>
+          <div>Asociación Respira: Panel de administración</div>
           <div>
-            {user.username}
+            <div className="username">{user.username}</div>
             <a href="#" onClick={onLogout} className="btn-logout">
               Logout
             </a>

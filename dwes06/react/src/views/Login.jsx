@@ -36,6 +36,7 @@ const Login = () => {
 
   return (
     <div className="login-signup-form animated fadeInDown">
+      <h1>Bienvenid@ a la asociación Respira</h1>
       <div className="form">
         <form onSubmit={onSubmit}>
           <h1 className="title">Acceder a tu cuenta</h1>

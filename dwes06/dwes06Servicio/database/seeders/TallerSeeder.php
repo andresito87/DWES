@@ -64,6 +64,6 @@ class TallerSeeder extends Seeder
         }
 
 
-        //Taller::factory(50)->create();
+        Taller::factory(30)->create();
     }
 }
