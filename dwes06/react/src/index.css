@@ -255,6 +255,20 @@ table>tbody>tr>td {
     text-align: center;
 }
 
+#recordar {
+    width: 7em;
+    margin-left: 7em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#recordar input {
+    margin: 0.5rem;
+}
+
 .infoProyecto {
     display: flex;
     flex-direction: column;

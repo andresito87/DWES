@@ -36,6 +36,7 @@ const Ubications = () => {
         .then(({ data }) => {
           setLoading(false);
           setUbications(data.data);
+          console.log(data.data);
           setLinkNext(data.links.next);
           setLinkPrev(data.links.prev);
         })
@@ -78,6 +79,7 @@ const Ubications = () => {
               <th>Nombre</th>
               <th>Descripción</th>
               <th>Días</th>
+              <th>Talleres</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -107,6 +109,19 @@ const Ubications = () => {
                   <td>{ubication.nombre}</td>
                   <td>{ubication.descripcion}</td>
                   <td>{ubication.dias}</td>
+                  <td>
+                    {Array.isArray(ubication.talleres)
+                      ? ubication.talleres.map((taller, index) => (
+                          <span
+                            style={{ color: 'blue', fontWeight: 'bold' }}
+                            key={index}
+                          >
+                            {taller.nombre}
+                            {index < ubication.talleres.length - 1 && <br />}
+                          </span>
+                        ))
+                      : ubication.talleres}
+                  </td>
                   <td>
                     <Link
                       className="btn-edit"

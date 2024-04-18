@@ -23,11 +23,13 @@ class UbicationResource extends JsonResource
      */
     public function toArray(Request $request) : array
     {
+        $talleres = $this->talleres;
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'dias' => $this->dias,
+            'talleres' => $talleres->count() > 0 ? $talleres : 'No hay talleres en esta ubicación.',
         ];
     }
 }
