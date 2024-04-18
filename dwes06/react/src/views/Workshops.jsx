@@ -3,24 +3,24 @@ import axiosClient from '../axios-client';
 import { Link } from 'react-router-dom';
 import { useStateContext } from '../../contexts/ContextProvider';
 
-const Ubications = () => {
-  const [ubications, setUbications] = useState([]);
+const Workshops = () => {
+  const [workshops, setWorkshops] = useState([]);
   const [loading, setLoading] = useState(false);
   const { setNotification } = useStateContext();
   const [linkNext, setLinkNext] = useState(null);
   const [linkPrev, setLinkPrev] = useState(null);
 
   useEffect(() => {
-    getUbications();
+    getWorkshops();
   }, []);
-  const onDelete = ubication => {
-    if (window.confirm('¿Estás seguro  que desea eliminar esta ubicación?')) {
+  const onDelete = workshop => {
+    if (window.confirm('¿Estás seguro  que desea eliminar este taller?')) {
       setLoading(true);
       axiosClient
-        .delete(`/ubications/${ubication.id}`)
+        .delete(`/workshops/${workshop.id}`)
         .then(() => {
-          setNotification('Ubicación eliminada correctamente');
-          getUbications();
+          setNotification('Taller eliminado correctamente');
+          getWorkshops();
         })
         .catch(() => {
           setLoading(false);
@@ -28,14 +28,14 @@ const Ubications = () => {
     }
   };
 
-  const getUbications = link => {
+  const getWorkshops = link => {
     setLoading(true);
     if (link) {
       axiosClient
         .get(link)
         .then(({ data }) => {
           setLoading(false);
-          setUbications(data.data);
+          setWorkshops(data.data);
           setLinkNext(data.links.next);
           setLinkPrev(data.links.prev);
         })
@@ -45,10 +45,10 @@ const Ubications = () => {
       return;
     }
     axiosClient
-      .get('/ubications')
+      .get('/workshops')
       .then(({ data }) => {
         setLoading(false);
-        setUbications(data.data);
+        setWorkshops(data.data);
         setLinkNext(data.links.next);
         setLinkPrev(data.links.prev);
       })
@@ -65,9 +65,9 @@ const Ubications = () => {
           alignItems: 'center',
         }}
       >
-        <h1>Ubicaciones</h1>
-        <Link to={'/ubications/new'} className="btn-add">
-          Crear nueva ubicación
+        <h1>Talleres</h1>
+        <Link to={'/workshops/new'} className="btn-add">
+          Crear nuevo taller
         </Link>
       </div>
       <div className="card animated fadeInDown">
@@ -75,62 +75,53 @@ const Ubications = () => {
           <thead>
             <tr>
               <th>ID</th>
+              <th>Ubicación ID</th>
               <th>Nombre</th>
               <th>Descripción</th>
-              <th>Días</th>
-              <th>Talleres</th>
+              <th>Día de Semana</th>
+              <th>Hora de Inicio</th>
+              <th>Hora de Fin</th>
+              <th>Cupo máximo</th>
               <th>Acciones</th>
             </tr>
           </thead>
           {loading && (
             <tbody>
               <tr>
-                <td colSpan="6" className="text-center">
+                <td colSpan="9" className="text-center">
                   Cargando...
                 </td>
               </tr>
             </tbody>
           )}
-          {!loading && ubications.length === 0 && (
+          {!loading && workshops.length === 0 && (
             <tbody>
               <tr>
                 <td colSpan="5" className="text-center">
-                  No hay ubicaciones
+                  No hay talleres
                 </td>
               </tr>
             </tbody>
           )}
           {!loading && (
             <tbody>
-              {ubications.map(ubication => (
-                <tr key={ubication.id}>
-                  <td>{ubication.id}</td>
-                  <td>{ubication.nombre}</td>
-                  <td>{ubication.descripcion}</td>
-                  <td>{ubication.dias}</td>
+              {workshops.map(workshop => (
+                <tr key={workshop.id}>
+                  <td>{workshop.id}</td>
+                  <td>{workshop.ubicacion_id}</td>
+                  <td>{workshop.nombre}</td>
+                  <td>{workshop.descripcion}</td>
+                  <td>{workshop.dia_semana}</td>
+                  <td>{workshop.hora_inicio}</td>
+                  <td>{workshop.hora_fin}</td>
+                  <td>{workshop.cupo_maximo}</td>
                   <td>
-                    {Array.isArray(ubication.talleres)
-                      ? ubication.talleres.map((taller, index) => (
-                          <span
-                            style={{ color: 'blue', fontWeight: 'bold' }}
-                            key={index}
-                          >
-                            {taller.nombre}
-                            {index < ubication.talleres.length - 1 && <br />}
-                          </span>
-                        ))
-                      : ubication.talleres}
-                  </td>
-                  <td>
-                    <Link
-                      className="btn-edit"
-                      to={`/ubications/${ubication.id}`}
-                    >
+                    <Link className="btn-edit" to={`/workshops/${workshop.id}`}>
                       Editar
                     </Link>
                     &nbsp;
                     <button
-                      onClick={e => onDelete(ubication)}
+                      onClick={e => onDelete(workshop)}
                       className="btn-delete"
                     >
                       Eliminar
@@ -144,13 +135,13 @@ const Ubications = () => {
       </div>
       <div>
         {linkPrev && (
-          <button onClick={() => getUbications(linkPrev)} className="btn">
+          <button onClick={() => getWorkshops(linkPrev)} className="btn">
             Anterior
           </button>
         )}
         &nbsp;
         {linkNext && (
-          <button onClick={() => getUbications(linkNext)} className="btn">
+          <button onClick={() => getWorkshops(linkNext)} className="btn">
             Siguiente
           </button>
         )}
@@ -159,4 +150,4 @@ const Ubications = () => {
   );
 };
 
-export default Ubications;
+export default Workshops;

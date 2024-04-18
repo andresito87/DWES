@@ -8,6 +8,7 @@ const StateContext = createContext({
   notification: null,
   setUser: () => {},
   setUbication: () => {},
+  setWorkshop: () => {},
   setToken: () => {},
   setNotification: () => {},
 });
@@ -15,6 +16,7 @@ const StateContext = createContext({
 export const ContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [ubication, setUbication] = useState({});
+  const [workshop, setWorkshop] = useState({});
   const [notification, _setNotification] = useState('');
   const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
 
@@ -45,6 +47,8 @@ export const ContextProvider = ({ children }) => {
         setNotification,
         ubication,
         setUbication,
+        workshop,
+        setWorkshop,
       }}
     >
       {children}

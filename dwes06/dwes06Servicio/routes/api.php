@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UbicationController;
+use App\Http\Controllers\Api\WorkshopController;
 use App\Http\Controllers\TalleresControllerAPI;
 use App\Http\Controllers\UbicacionesControllerAPI;
 use Illuminate\Http\Request;
@@ -32,6 +33,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('/users', UserController::class);
     // CRUD para todas las ubicaciones
     Route::apiResource('/ubications', UbicationController::class);
+    // CRUD para todos los talleres
+    Route::apiResource('/workshops', WorkshopController::class);
 });
 
 

@@ -40,9 +40,10 @@ const DefaultLayout = () => {
   return (
     <div id="defaultLayout">
       <aside>
-        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/dashboard">Página Principal</Link>
         <Link to="/users">Usuarios</Link>
         <Link to="/ubications">Ubicaciones</Link>
+        <Link to="/workshops">Talleres</Link>
       </aside>
       <div className="content">
         <header>

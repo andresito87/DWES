@@ -1,7 +1,7 @@
 const Dashboard = () => {
   return (
     <div className="dashboard">
-      <div>Dashboard</div>
+      <div>Página Principal</div>
       <svg
         className="App-logo"
         xmlns="http://www.w3.org/2000/svg"

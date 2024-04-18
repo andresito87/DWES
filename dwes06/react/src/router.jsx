@@ -10,6 +10,8 @@ import { Navigate } from 'react-router-dom';
 import UserForm from './views/UserForm.jsx';
 import Ubications from './views/Ubications.jsx';
 import UbicationForm from './views/UbicationForm.jsx';
+import Workshops from './views/Workshops.jsx';
+import WorkshopForm from './views/WorkshopForm.jsx';
 
 const router = createBrowserRouter([
   {
@@ -42,11 +44,23 @@ const router = createBrowserRouter([
       },
       {
         path: '/ubications/new',
-        element: <UbicationForm key="userCreate" />,
+        element: <UbicationForm key="ubicationCreate" />,
       },
       {
         path: '/ubications/:id',
-        element: <UbicationForm key="userUpdate" />,
+        element: <UbicationForm key="ubicationUpdate" />,
+      },
+      {
+        path: '/workshops',
+        element: <Workshops />,
+      },
+      {
+        path: '/workshops/new',
+        element: <WorkshopForm key="workshopCreate" />,
+      },
+      {
+        path: '/workshops/:id',
+        element: <WorkshopForm key="workshopUpdate" />,
       },
     ],
   },
