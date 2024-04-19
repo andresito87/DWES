@@ -29,7 +29,12 @@ const Signup = () => {
       .catch(error => {
         const { response } = error;
         if (response && response.status === 422) {
-          setErrors(response.data.errors);
+          if (response.data.errors) {
+            setErrors(response.data.errors);
+          } else {
+            console.log(response.data);
+            setErrors(response.data.message);
+          }
         }
       });
   };
@@ -41,9 +46,11 @@ const Signup = () => {
           <h1 className="title">Regístrate Gratis</h1>
           {errors && (
             <div className="alert">
-              {Object.entries(errors).map(([key]) => (
-                <p key={key}>{errors[key][0]}</p>
-              ))}
+              {Array.isArray(errors) ? (
+                errors.map((error, index) => <p key={index}>{error}</p>)
+              ) : (
+                <p>{errors}</p>
+              )}
             </div>
           )}
           <input ref={usernameRef} type="text" placeholder="Usuario" />

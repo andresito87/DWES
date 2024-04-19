@@ -36,6 +36,12 @@ class AuthController extends Controller
     public function signup(SignupRequest $request)
     {
         $data = $request->validated();
+        if (User::where('username', $data['username'])->exists()) {
+            return response()->json(['message' => 'El nombre de usuario ya existe'], 422);
+        }
+        if (User::where('email', $data['email'])->exists()) {
+            return response()->json(['message' => 'El email ya está en uso'], 422);
+        }
         /** @var User $user */
         $user = User::create([
             'username' => $data['username'],
@@ -46,12 +52,11 @@ class AuthController extends Controller
         $token = $user->createToken('main')->plainTextToken;
 
         //return response(compact('user', 'token'));
-        return response()->json(['user' => $user, 'token' => $token]);
+        return response()->json(['user' => $user, 'token' => $token], 201);
     }
 
     public function logout(Request $request)
     {
-
         /** @var User $user */
         $user = $request->user();
         $user->tokens()->where('id', auth()->id())->delete();

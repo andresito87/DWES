@@ -29,7 +29,7 @@ class StoreUserRequest extends FormRequest
                 'required',
                 'string',
                 'confirmed',
-                Password::min(8)->letters()->symbols()],
+                Password::min(8)->letters()],
         ];
     }
 }

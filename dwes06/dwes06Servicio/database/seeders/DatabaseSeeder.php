@@ -15,17 +15,18 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(30)->create();
 
-        User::factory()->create([
-            'username' => 'prueba',
-            'email' => 'prueba@example.com',
-            'password' => bcrypt('prueba')
-        ]);
-
         // Ejecutar el seeder de ubicaciones
         $this->call(UbicacionSeeder::class);
 
         // Ejecutar el seeder de talleres
         $this->call(TallerSeeder::class);
+
+        // Usuario de prueba
+        User::factory()->create([
+            'username' => 'prueba',
+            'email' => 'prueba@example.com',
+            'password' => bcrypt('prueba')
+        ]);
 
     }
 }

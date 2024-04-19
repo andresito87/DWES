@@ -9,9 +9,6 @@ const Login = () => {
   const passwordRef = useRef();
   const rememberRef = useRef();
   const [errors, setErrors] = useState(null);
-  const [formData, setFormData] = useState({
-    inputValue: '',
-  });
   const { setUser, setToken } = useStateContext();
   const handleInputChange = () => {
     setErrors(null);
