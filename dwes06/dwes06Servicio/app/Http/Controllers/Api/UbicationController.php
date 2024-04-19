@@ -33,7 +33,7 @@ class UbicationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int|string $idUbicacion)
+    public function show(int $idUbicacion)
     {
         if (! Ubicacion::where('id', $idUbicacion)->exists()) {
             return response()->json(['message' => 'Ubicación no encontrada'], 404);
@@ -54,9 +54,17 @@ class UbicationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ubicacion $ubication)
+    public function destroy(int $ubication)
     {
-        $ubication->delete();
-        return response()->json("", 204);
+        $ubicacion = Ubicacion::find($ubication);
+        if (! $ubicacion) {
+            return response()->json(['message' => 'Ubicación no encontrada'], 404);
+        }
+
+        if ($ubicacion->delete()) {
+            return response()->json('', 204);
+        }
+
+        return response()->json(['message' => 'No se pudo eliminar la ubicación'], 500);
     }
 }

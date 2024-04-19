@@ -26,6 +26,7 @@ class WorkshopController extends Controller
      */
     public function store(StoreWorkshopRequest $request)
     {
+
         $data = $request->validated();
         $ubicacion = Ubicacion::find($data['ubicacion_id']);
         if (! $ubicacion) {
@@ -39,12 +40,13 @@ class WorkshopController extends Controller
 
         $workshop = Taller::create($data);
         return response()->json(new WorkshopResource($workshop), 201);
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $idTaller)
+    public function show(int|string $idTaller)
     {
         if (! Taller::where('id', $idTaller)->exists()) {
             return response()->json(['message' => 'Taller no encontrado'], 404);
@@ -59,6 +61,9 @@ class WorkshopController extends Controller
     {
         $data = $request->validated();
         $ubicacion = Ubicacion::find($data['ubicacion_id']);
+        if (! $ubicacion) {
+            return response()->json(['message' => 'Ubicación no encontrada'], 404);
+        }
         $dias_disponibles = explode(',', $ubicacion->dias);
         if (! in_array($data['dia_semana'], $dias_disponibles)) {
             return response()->json(['message' => 'Día no disponible en la ubicación'], 422);

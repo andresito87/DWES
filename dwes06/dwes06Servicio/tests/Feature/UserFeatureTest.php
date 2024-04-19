@@ -146,4 +146,27 @@ class UserFeatureTest extends TestCase
 
         $usuario->delete();
     }
+
+    public function test_endpoint_eliminar_usuario()
+    {
+        $usuario = User::factory()->create();
+        $response = $this->actingAs($usuario)
+            ->withSession(['banned' => false])
+            ->delete('/api/users/' . $usuario->id);
+
+        $response->assertStatus(204);
+        $response->assertNoContent();
+    }
+
+    public function test_endpoint_eliminar_usuario_no_existente()
+    {
+        $usuario = User::factory()->create();
+        $response = $this->actingAs($usuario)
+            ->withSession(['banned' => false])
+            ->delete('/api/users/' . 9999999);
+
+        $this->assertEquals(404, $response->status());
+
+        $usuario->delete();
+    }
 }

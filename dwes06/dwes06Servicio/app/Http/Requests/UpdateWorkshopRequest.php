@@ -22,7 +22,7 @@ class UpdateWorkshopRequest extends FormRequest
     public function rules() : array
     {
         return [
-            'ubicacion_id' => 'required|exists:ubicaciones,id',
+            'ubicacion_id' => 'required|integer',
             'nombre' => 'required|string|min:4|max:50',
             'descripcion' => 'required|string|max:255',
             'dia_semana' => ['required', 'string', 'regex:/^[LMXJVSD]$/'],
