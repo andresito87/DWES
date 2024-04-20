@@ -26,17 +26,17 @@
 						},
 						{
 							"key": "dia_semana",
-							"value": "S",
+							"value": "L",
 							"type": "text"
 						},
 						{
 							"key": "hora_inicio",
-							"value": "08:00",
+							"value": "07:00",
 							"type": "text"
 						},
 						{
 							"key": "hora_fin",
-							"value": "10:00",
+							"value": "08:00",
 							"type": "text"
 						},
 						{
@@ -146,7 +146,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"nueva_ubicacion\": 4\r\n}",
+					"raw": "{\r\n    \"nueva_ubicacion\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -168,6 +168,91 @@
 						"talleres",
 						"2",
 						"cambiarubicacion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup",
+			"protocolProfileBehavior": {
+				"followAuthorizationHeader": true,
+				"disableUrlEncoding": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Andrespoda\",\r\n    \"email\": \"andrespoda@gmail.com\",\r\n    \"password\": \"prueba\",\r\n    \"password_confirmation\":\"prueba\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/signup",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cookie",
+						"value": "XSRF-TOKEN=eyJpdiI6IlVFWTB2NGZNUEIwbjNraDl3dzZWK2c9PSIsInZhbHVlIjoid1pPZUY4Y0RrZDNtaEllQnZ1SmVYbHJDVURLYWZiK0wwSCtSV2JSM3pvT2h3Q2Rmd3gxcEFLeURPQ0pNWUV5NmJBSHU4M1JNMW43V1lpNnpVV01pbmdVNzdOZ2hjTWJ5MmliOUFpOTQraGMxQ0g0aHVxNzF5SUVLTElTQlU5Y2YiLCJtYWMiOiJiNmZlMmI2N2JhMmZlNWNlNDU5MThiYzAwN2E0Zjc1YzBjODk0N2ZkYjExZDJiMzFkYjA0MjM0ZGUwMjRmMTBmIiwidGFnIjoiIn0; laravel_session=eyJpdiI6IlZwdGVBV2lURWNXZ01kS012ZUhjbVE9PSIsInZhbHVlIjoiL2hmVjN4NUw0U3hIdGt1Tm9kOWJiYkpCQlFzbHcxdWZTb0FLei9QbzN2QmtaWktZRXNqODJsdmFVWVMvWS9HNWxrTW1QNmdCOWk0dzRPdDdHYXFMcFpKOTh4dUJIREpBdHkyeHBZRExYakh3VEdVWUdDRjQ4cG1qOXBpalBjbWsiLCJtYWMiOiJkOTVlNTA2Njc3OGFiMjg3MTAwMmIxOGQ2YTQ1NjA0ZDFiNWM2MjkwYTk5MTYwNjBlY2M1ZmRkYmQxZmY3ZTlkIiwidGFnIjoiIn0",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Andrespoda\",\r\n    \"password\": \"prueba\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"login"
 					]
 				}
 			},
