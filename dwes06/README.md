@@ -25,7 +25,7 @@
 - Para su correcto funcionamiento, se debe crear una base de datos MySQL con el nombre `respira_laravel`, ejecutar las migraciones y los seeders del proyecto Laravel con el comando `php artisan migrate --seed`.
 - En la ruta `http://127.0.0.1:8000/api/documentation/` se encuentra la documentación de la API-Rest generada con Swagger.
 - En la carpeta `Postman` se encuentra un archivo JSON con la colección de peticiones a la API-Rest para ser importado en Postman y poder probar el servicio web.
-- En la carpteta `react` se encuentra una aplicación cliente creada con React que consume el servicio web. Para su correcto funcionamiento, se debe ejecutar el comando `npm install` para instalar las dependencias y luego `npm run dev` para iniciar el servidor local de React.
+- En la carpteta `react` se encuentra una aplicación cliente creada con React que consume el servicio web. Para su correcto funcionamiento, se debe ejecutar el comando `npm install` para instalar las dependencias y luego `npm run dev` para iniciar el servidor local de React. Como usuario y contraseña se puede usar `prueba` y `prueba` para el login, sino desea registrarse.
 - El archivo `Comando Artisan.txt` contiene los comandos de Artisan necesarios para la creación de modelos, controladores, migraciones, factorias, seeders. Además, se incluyen los comandos para la ejecucion de los test de la API-Rest (los test no son mi enfoque principal, en esta tarea).
 
 ## Tecnologías y programas utilizados
