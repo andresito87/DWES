@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Ejemplo de uso de XMLHttpRequest</title>
+</head>
+
+<body>
+
+
+    <div id="loginsection" style="display:none">
+        <form action="" id="loginform" onsubmit="login(); return false;">
+            <label for="nuevo"> Usuario: <input type="text" name="usuario"></label>
+            <label for="nuevo"> Password: <input type="password" name="password"></label>
+            <input type="submit" value="¡Login!">
+        </form>
+    </div>
+
+    <div id="numerossection" style="display:none">
+
+        <form action="" id="nuevonumero" method="post" onsubmit="nuevoNumero(); return false;">
+            <label for="nuevo"> Número a añadir: <input type="text" name="numero"></label>
+            <input type="submit" value="¡Añadir!">
+        </form>
+        <BR>
+        <form action="" id="borrarnumero" method="post" onsubmit="borrarNumero(); return false;">
+            <label for="nuevo"> Número a borrar: <input type="text" name="numero"></label>
+            <input type="submit" value="¡Borrar!">
+        </form>
+        <BR>
+        <form action="" id="cambiarnumero" method="post" onsubmit="cambiarNumero(); return false;">
+            <label for="nuevo"> Número actual: <input type="text" name="numero_actual"></label><BR>
+            <label for="nuevo"> Número nuevo: <input type="text" name="numero_nuevo"></label><BR>
+            <input type="submit" value="¡Actualizar!">
+        </form>
+        <BR>
+        <button id="boton_actualizar">Actualizar Lista De Numeros </button> <button id="boton_logout">Cerrar
+            sesión.</button>
+        <BR>
+        <div id=""
+            style="border:1px solid black; padding:20px; width:300px; margin:50px 0px 0px 100px; text-align: center;">
+            <H2>Lista de números</H2>
+        </div>
+        <div id="numeros"
+            style="border:1px solid black; padding:20px; width:300px; margin-left:100px; text-align: center;">
+            No cargado todavía
+        </div>
+
+    </div>
+
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.4.min.js"></script>
+
+    <script>
+
+        function actualizarListaDeNumeros() {
+            // Obtenemos el elemento HTML donde mostraremos los números
+            const numeros = $("#numeros");
+
+            // Realizamos la petición al servidor utilizando jQuery
+            $.get("backend/listarnumeros.php")
+                .done(function (data) {
+                    // Si la petición se realiza correctamente, procesamos los datos
+                    data = JSON.parse(data);
+                    if (!necesitaIniciarSesion(data)) {
+                        $('#numerossection').show();
+                        $('#loginsection').hide();
+                        numeros.html(data.join("<BR>"));
+                    }
+                })
+                .fail(function () {
+                    // Si falla realizamos una acción alternativa
+                    numeros.html("Error al realizar la solicitud.");
+                });
+        }
+
+        function nuevoNumero() {
+            var numero = $("form#nuevonumero input[name=numero]").val();
+
+            var datosAEnviar = { "numero": numero };
+
+            $.post("backend/nuevonumero.php", datosAEnviar)
+                .done(function (respuesta) {
+                    let datos = JSON.parse(respuesta);
+                    if (datos.resultado) {
+                        if (!necesitaIniciarSesion(respuesta)) {
+                            actualizarListaDeNumeros();
+                            $("form#nuevonumero")[0].reset();
+                        }
+                    }
+                    else
+                        alert("No se ha podido agregar el número.");
+                })
+                .fail(function () {
+                    alert("Ha ocurrido un error al agregar el número.");
+                });
+        }
+
+        function borrarNumero() {
+            const numero = $("form#borrarnumero input[name=numero]").val();
+
+            $.ajax({
+                url: "backend/borrarnumero.php",
+                type: "DELETE",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    numero: numero
+                }),
+                success: function (response) {
+                    const respuesta = JSON.parse(response);
+                    if (respuesta.resultado) {
+                        if (!necesitaIniciarSesion(respuesta)) {
+                            actualizarListaDeNumeros();
+                            $("form#borrarnumero")[0].reset();
+                        }
+                    } else {
+                        alert("No se ha podido borrar el número.");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Ha ocurrido un error: " + errorThrown);
+                }
+            });
+        }
+
+        function cambiarNumero() {
+            const numero_actual = $('form#cambiarnumero input[name=numero_actual]').val();
+            const numero_nuevo = $('form#cambiarnumero input[name=numero_nuevo]').val();
+
+            $.ajax({
+                url: 'backend/cambiarnumero.php',
+                type: 'PUT',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ numero_actual, numero_nuevo }),
+                success: function (respuesta) {
+                    if (!necesitaIniciarSesion(respuesta)) {
+                        if (respuesta.resultado) {
+                            actualizarListaDeNumeros();
+                            $('form#cambiarnumero')[0].reset();
+                        } else {
+                            alert("No se ha podido cambiar el número.");
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Ha ocurrido un error: " + error);
+                }
+            });
+        }
+
+
+        function necesitaIniciarSesion(datos) {
+            if (typeof datos === "object" && datos.hasOwnProperty("error") &&
+                datos.error === 'login_required') {
+                $('#numerossection').hide();
+                $('#loginsection').show();
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+
+        function login() {
+            var formData = new FormData($("#loginform")[0]);
+
+            let datosAuth= {'usuario':formData.get('usuario'),
+                        'password':formData.get('password') };
+
+            $.post("backend/login.php", datosAuth, function (respuesta) {
+                respuesta = JSON.parse(respuesta);
+                if (respuesta.hasOwnProperty("access_granted")) {
+                    if (respuesta.access_granted) {
+                        $("#loginform")[0].reset();
+                        actualizarListaDeNumeros();
+                    } else {
+                        alert("El usuario y la contraseña no son válidos.");
+                    }
+                } else {
+                    alert("Se ha producido algún error.");
+                }
+            });
+        }
+
+        function logout() {
+            $.get('backend/logout.php', function (respuesta) {
+                necesitaIniciarSesion(JSON.parse(respuesta));
+            });
+        }
+
+        $('#boton_actualizar').click(actualizarListaDeNumeros);
+        $('#boton_logout').click(logout);
+
+        actualizarListaDeNumeros();
+    </script>
+
+</body>
+
+</html>

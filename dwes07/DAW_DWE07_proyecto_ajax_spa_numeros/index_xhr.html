@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Ejemplo de uso de XMLHttpRequest</title>
+</head>
+
+<body>
+
+    <div id="loginsection" style="display:none">
+        <form action="" id="loginform" onsubmit="login(); return false;">
+            <label for="nuevo"> Usuario: <input type="text" name="usuario"></label>
+            <label for="nuevo"> Password: <input type="password" name="password"></label>
+            <input type="submit" value="¡Login!">
+        </form>
+    </div>
+
+    <div id="numerossection" style="display:none">
+
+        <form action="" id="nuevonumero" method="post" onsubmit="nuevoNumero(); return false;">
+            <label for="nuevo"> Número a añadir: <input type="text" name="numero"></label>
+            <input type="submit" value="¡Añadir!">
+        </form>
+        <BR>
+        <form action="" id="borrarnumero" method="post" onsubmit="borrarNumero(); return false;">
+            <label for="nuevo"> Número a borrar: <input type="text" name="numero"></label>
+            <input type="submit" value="¡Borrar!">
+        </form>
+        <BR>
+        <form action="" id="cambiarnumero" method="post" onsubmit="cambiarNumero(); return false;">
+            <label for="nuevo"> Número actual: <input type="text" name="numero_actual"></label><BR>
+            <label for="nuevo"> Número nuevo: <input type="text" name="numero_nuevo"></label><BR>
+            <input type="submit" value="¡Actualizar!">
+        </form>
+        <BR>
+        <button id="boton_actualizar">Actualizar Lista De Numeros </button> <button id="boton_logout">Cerrar
+            sesión.</button>
+        <BR>
+        <div id=""
+            style="border:1px solid black; padding:20px; width:300px; margin:50px 0px 0px 100px; text-align: center;">
+            <H2>Lista de números</H2>
+        </div>
+        <div id="numeros"
+            style="border:1px solid black; padding:20px; width:300px; margin-left:100px; text-align: center;">
+            No cargado todavía
+        </div>
+
+    </div>
+
+    <script>
+
+        function actualizarListaDeNumeros() {
+            // Creamos una instancia de XMLHttpRequest
+            var xmlhttp = new XMLHttpRequest();
+
+            // Indicamos la función manejadora del evento onreadystatechange
+            xmlhttp.onreadystatechange = function () {
+                //Comprobamos que la petición retorna un estado correcto
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                    //Si el estado es correcto, procesamos los datos        
+                    console.log(this.responseText);
+                    let datos = JSON.parse(this.responseText);
+                    if (siNecesitaIniciarSesion(datos)) return;
+                    document.getElementById('numerossection').style.display = 'block';
+                    document.getElementById('loginsection').style.display = 'none';
+                    const numeros = document.getElementById('numeros');
+                    if (Array.isArray(datos)) {
+                        if (datos.length > 0)
+                            numeros.innerHTML = datos.join('<BR>');
+                        else
+                            numeros.innerHTML = "<H3>No hay números en la lista</H3>";
+                    }
+                } else if (this.readyState === XMLHttpRequest.DONE && this.status !== 200) {
+                    alert("Ha ocurrido un error: " + this.statusText);
+                }
+            };
+
+            // Inicializa la petición que se va a realizar de forma asíncrona
+            xmlhttp.open("GET", "backend/listarnumeros.php");
+
+            /* Envía la solicitud al servidor, cuando se reciba se 
+               ejecutará la función manejadora */
+            xmlhttp.send();
+        }
+
+        function nuevoNumero() {
+            // Creamos una instancia de XMLHttpRequest
+            var xhttp = new XMLHttpRequest();
+
+            // Indicamos la función manejadora del evento onreadystatechange
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                    let respuesta = JSON.parse(this.responseText);
+                    if (siNecesitaIniciarSesion(respuesta)) return;
+                    if (respuesta.resultado) {
+                        actualizarListaDeNumeros();
+                        document.getElementById('nuevonumero').reset();
+                    }
+                    else
+                        alert("No se ha podido agregar el número.");
+                } else if (this.readyState === XMLHttpRequest.DONE && this.status !== 200) {
+                    alert("Ha ocurrido un error: " + this.statusText);
+                }
+            };
+
+            // Configuramos la solicitud HTTP POST asíncrona
+            xhttp.open("POST", "backend/nuevonumero.php");
+
+            // Creamos una instancia de FormData y agregamos los datos del formulario
+            var formData = new FormData(document.getElementById('nuevonumero'));
+
+            // Enviamos los datos del formulario
+            xhttp.send(formData);
+        }
+
+        function borrarNumero() {
+            // Obtenemos el valor del input
+            const numero = document.querySelector('#borrarnumero input[name=numero]').value;
+
+            // Creamos una instancia de XMLHttpRequest
+            const xhr = new XMLHttpRequest();
+
+            // Indicamos la función manejadora del evento onreadystatechange
+            xhr.onreadystatechange = function () {
+                if (this.readyState === XMLHttpRequest.DONE) {
+                    // Si la petición ha sido completada correctamente
+                    if (this.status === 200) {
+                        const respuesta = JSON.parse(this.responseText);
+                        if (siNecesitaIniciarSesion(respuesta)) return;
+                        if (respuesta.resultado) {
+                            actualizarListaDeNumeros();
+                            document.getElementById('borrarnumero').reset();
+                        } else {
+                            alert("No se ha podido borrar el número.");
+                        }
+                    } else {
+                        alert("Ha ocurrido un error: " + this.statusText);
+                    }
+                } else if (this.readyState === XMLHttpRequest.DONE && this.status !== 200) {
+                    alert("Ha ocurrido un error: " + this.statusText);
+                }
+            };
+
+            // Configuramos la solicitud HTTP DELETE asíncrona
+            xhr.open("DELETE", "backend/borrarnumero.php");
+
+            // Configuramos la cabecera de la petición
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            // Enviamos los datos en formato JSON
+            xhr.send(JSON.stringify({ numero: numero }));
+        }
+
+        function cambiarNumero() {
+            // Obtenemos el valor de los inputs
+            const numero_actual = document.querySelector('#cambiarnumero input[name=numero_actual]').value;
+            const numero_nuevo = document.querySelector('#cambiarnumero input[name=numero_nuevo]').value;
+
+            // Creamos una instancia de XMLHttpRequest
+            const xhr = new XMLHttpRequest();
+
+            // Indicamos la función manejadora del evento onreadystatechange
+            xhr.onreadystatechange = function () {
+                // Si la petición ha sido completada correctamente
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    const respuesta = JSON.parse(this.responseText);
+                    if (siNecesitaIniciarSesion(respuesta)) return;
+                    if (respuesta.resultado) {
+                        actualizarListaDeNumeros();
+                        document.getElementById('cambiarnumero').reset();
+                    } else {
+                        alert("No se ha podido cambiar el número.");
+                    }
+                } else if (this.readyState === XMLHttpRequest.DONE && this.status !== 200) {
+                    alert("Ha ocurrido un error: " + this.statusText);
+                }
+
+            };
+
+            // Configuramos la solicitud HTTP DELETE asíncrona
+            xhr.open("PUT", "backend/cambiarnumero.php");
+
+            // Configuramos la cabecera de la petición
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            // Enviamos los datos en formato JSON
+            let datos = { 'numero_actual': numero_actual, 'numero_nuevo': numero_nuevo };
+            xhr.send(JSON.stringify(datos));
+
+        }
+
+        function siNecesitaIniciarSesion(datos) {
+            if (typeof datos === "object" && datos.hasOwnProperty("error") &&
+                datos.error === 'login_required') {
+                document.getElementById('numerossection').style.display = 'none';
+                document.getElementById('loginsection').style.display = 'block';
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+
+        function login() {
+
+            var formData = new FormData(document.getElementById('nuevonumero'));
+            var xhttp = new XMLHttpRequest();
+
+            // Indicamos la función manejadora del evento onreadystatechange
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                    let respuesta = JSON.parse(this.responseText);
+                    if (respuesta.hasOwnProperty('access_granted'))
+                        if (respuesta.access_granted) {
+                            document.getElementById('loginform').reset();
+                            actualizarListaDeNumeros();
+                        }
+                        else
+                            alert("El usuario y la contraseña no son válidos.");
+                    else
+                        alert("Se ha producido algún error.");
+                }
+            };
+
+            // Configuramos la solicitud HTTP POST asíncrona
+            xhttp.open("POST", "backend/login.php");
+
+            // Creamos una instancia de FormData y agregamos los datos del formulario
+            var formData = new FormData(document.getElementById('loginform'));
+
+            // Enviamos los datos del formulario
+            xhttp.send(formData);
+        }
+
+        function logout() {
+
+            var xhttp = new XMLHttpRequest();
+
+            // Indicamos la función manejadora del evento onreadystatechange
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                    let respuesta = JSON.parse(this.responseText);
+                    siNecesitaIniciarSesion(respuesta);
+                }
+            };
+
+            // Configuramos la solicitud HTTP POST asíncrona
+            xhttp.open("GET", "backend/logout.php");
+
+            // Enviamos los datos del formulario
+            xhttp.send();
+        }
+
+        document.getElementById('boton_actualizar').onclick = actualizarListaDeNumeros;
+        document.getElementById('boton_logout').onclick = logout;
+
+        actualizarListaDeNumeros();
+    </script>
+
+
+</body>
+
+</html>

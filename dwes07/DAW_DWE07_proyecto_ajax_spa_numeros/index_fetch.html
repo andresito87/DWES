@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Ejemplo de uso de XMLHttpRequest</title>
+</head>
+
+<body>
+
+
+
+    <div id="loginsection" style="display:none">
+        <form action="" id="loginform" onsubmit="login(); return false;">
+            <label for="nuevo"> Usuario: <input type="text" name="usuario"></label>
+            <label for="nuevo"> Password: <input type="password" name="password"></label>
+            <input type="submit" value="¡Login!">
+        </form>
+    </div>
+
+    <div id="numerossection" style="display:none">
+
+        <form action="" id="nuevonumero" method="post" onsubmit="nuevoNumero(); return false;">
+            <label for="nuevo"> Número a añadir: <input type="text" name="numero"></label>
+            <input type="submit" value="¡Añadir!">
+        </form>
+        <BR>
+        <form action="" id="borrarnumero" method="post" onsubmit="borrarNumero(); return false;">
+            <label for="nuevo"> Número a borrar: <input type="text" name="numero"></label>
+            <input type="submit" value="¡Borrar!">
+        </form>
+        <BR>
+        <form action="" id="cambiarnumero" method="post" onsubmit="cambiarNumero(); return false;">
+            <label for="nuevo"> Número actual: <input type="text" name="numero_actual"></label><BR>
+            <label for="nuevo"> Número nuevo: <input type="text" name="numero_nuevo"></label><BR>
+            <input type="submit" value="¡Actualizar!">
+        </form>
+        <BR>
+        <button id="boton_actualizar">Actualizar Lista De Numeros </button> <button id="boton_logout">Cerrar
+            sesión.</button>
+        <BR>
+        <div id=""
+            style="border:1px solid black; padding:20px; width:300px; margin:50px 0px 0px 100px; text-align: center;">
+            <H2>Lista de números</H2>
+        </div>
+        <div id="numeros"
+            style="border:1px solid black; padding:20px; width:300px; margin-left:100px; text-align: center;">
+            No cargado todavía
+        </div>
+
+    </div>
+
+    <script>
+
+        function actualizarListaDeNumeros() {
+            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/listarnumeros.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Ha ocurrido un error: " + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(datos => {
+                    if (siNecesitaIniciarSesion(datos)) return;
+                    document.getElementById('numerossection').style.display = 'block';
+                    document.getElementById('loginsection').style.display = 'none';
+                    const numeros = document.getElementById('numeros');
+                    if (Array.isArray(datos)) {
+                        if (datos.length > 0)
+                            numeros.innerHTML = datos.join('<BR>');
+                        else
+                            numeros.innerHTML = "<H3>No hay números en la lista</H3>";
+                    }
+                })
+                .catch(error => {
+                    alert(error);
+                });
+        }
+
+        function nuevoNumero() {
+            const formData = new FormData(document.getElementById('nuevonumero'));
+            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/nuevonumero.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Ha ocurrido un error: " + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(respuesta => {
+                    if (siNecesitaIniciarSesion(respuesta)) return;
+                    if (respuesta.resultado) {
+                        actualizarListaDeNumeros();
+                        document.getElementById('nuevonumero').reset();
+                    } else {
+                        alert("No se ha podido agregar el número.");
+                    }
+                })
+                .catch(error => {
+                    alert(error);
+                });
+        }
+
+        function borrarNumero() {
+            const numero = document.querySelector('#borrarnumero input[name=numero]').value;
+            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/borrarnumero.php', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ numero: numero })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Ha ocurrido un error: " + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(respuesta => {
+                    if (siNecesitaIniciarSesion(respuesta)) return;
+                    if (respuesta.resultado) {
+                        actualizarListaDeNumeros();
+                        document.getElementById('borrarnumero').reset();
+                    } else {
+                        alert("No se ha podido borrar el número.");
+                    }
+                })
+                .catch(error => {
+                    alert(error);
+                });
+        }
+
+        function cambiarNumero() {
+            const numero_actual = document.querySelector('#cambiarnumero input[name=numero_actual]').value;
+            const numero_nuevo = document.querySelector('#cambiarnumero input[name=numero_nuevo]').value;
+
+            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/cambiarnumero.php', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 'numero_actual': numero_actual, 'numero_nuevo': numero_nuevo })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Ha ocurrido un error: ' + response.statusText);
+                    }
+                })
+                .then(respuesta => {
+                    if (siNecesitaIniciarSesion(respuesta)) return;
+                    if (respuesta.resultado) {
+                        actualizarListaDeNumeros();
+                        document.getElementById('cambiarnumero').reset();
+                    } else {
+                        alert("No se ha podido cambiar el número.");
+                    }
+                })
+                .catch(error => {
+                    alert(error);
+                });
+        }
+
+        function siNecesitaIniciarSesion(datos) {
+            if (typeof datos === "object" && datos.hasOwnProperty("error") &&
+                datos.error === 'login_required') {
+                document.getElementById('numerossection').style.display = 'none';
+                document.getElementById('loginsection').style.display = 'block';
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+
+        function login() {
+            // Obtenemos los datos del formulario
+            const formData = new FormData(document.getElementById('loginform'));
+
+            // Configuramos la solicitud HTTP POST con fetch
+            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/login.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(respuesta => {
+                    if (respuesta.hasOwnProperty('access_granted')) {
+                        if (respuesta.access_granted) {
+                            document.getElementById('loginform').reset();
+                            actualizarListaDeNumeros();
+                        } else {
+                            alert("El usuario y la contraseña no son válidos.");
+                        }
+                    } else {
+                        alert("Se ha producido algún error.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function logout() {
+            // Configuramos la solicitud HTTP GET con fetch
+            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/logout.php', {
+                method: 'GET'
+            })
+                .then(response => response.json())
+                .then(respuesta => {
+                    siNecesitaIniciarSesion(respuesta);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        document.getElementById('boton_actualizar').onclick = actualizarListaDeNumeros;
+        document.getElementById('boton_logout').onclick = logout;
+
+        actualizarListaDeNumeros();
+
+    </script>
+</body>
+
+</html>
