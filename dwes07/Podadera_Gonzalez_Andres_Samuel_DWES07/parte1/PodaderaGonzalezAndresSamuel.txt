@@ -1,0 +1,40 @@
+<---- Pregunta 1 ---->
+¿Qué fragmentos de código del formulario dado en el código de arranque permite subir archivos al servidor? Comenta brevemente que lo hace diferente a un formulario normal.
+Respuesta:
+>---- Respuesta ----<
+<form enctype="multipart/form-data" action="" method="POST">
+    <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+    Envia el fichero para analizar: <input name="fichero_usuario" type="file" />
+    <BR>
+    <input type="submit" value="Enviar fichero" />
+</form>
+Según se expone en este articulo, https://es.javascript.info/formdata#enviando-un-formulario-con-un-archivo,usar Content-Type: multipart/form-data y <input type="file"> permiten subir archivos al servidor. En el código de arranque se utiliza el atributo enctype="multipart/form-data" en el formulario para permitir el envío de archivos ademas de los tipos de datos que permite un formulario normal, si se utilizara un formulario normal ContentType: application/x-www-form-urlencoded no se podrían enviar archivos.
+
+<---- Pregunta 2 ---->
+¿Qué fragmentos de código permite saber y acceder a los archivos subidos por el usuario? Explica su uso y que información se envía junto a cada archivo.
+>---- Respuesta ----<
+https://www.php.net/manual/es/reserved.variables.files.php
+$_FILES['fichero_usuario']
+$_FILES es un variable superglobal que contiene un array asociativo de elementos enviados al script actual a través del método POST con el atributo enctype="multipart/form-data" del formulario. Los nombres de los elementos del array son los nombres de los campos de formulario que contienen los datos de los archivos subidos. $_FILES contendrá elementos de la forma:
+$_FILES['fichero_usuario']['tmp_name'] almacenará el nombre temporal del archivo en el que se ha almacenado el archivo subido en el servidor.
+$_FILES['fichero_usuario']['error'] contendrá si se produjo algún error en la subida del archivo.
+
+<---- Pregunta 3 ---->
+¿Qué función es utilizada para tratar de forma segura los archivos subidos? ¿Cuál es el objetivo de su uso? ¿Dónde se almacenan los archivos subidos?
+>---- Respuesta ----<
+Diría que la función move_uploaded_file() es utilizada para tratar de forma segura los archivos subidos. El objetivo de su uso es mover un archivo subido a una nueva ubicación. Si el archivo se ha subido correctamente, se moverá a la ubicación especificada. Si hay un error, se devolverá false. Los archivos subidos se almacenan en el directorio temporal del servidor y con esta funcion se mueven a un directorio único. También influyen en esta situación 
+$newtmpname = CARPETA_SUBIDAS . DIRECTORY_SEPARATOR . uniqid() . '-' . basename($_FILES['fichero_usuario']['tmp_name']);
+que permite crear un nombre único de directorio para el archivo subido y la funcion hash_file() que calcula el hash de un archivo en lugar de tener que leerlo entero y comparar los datos(no queremos archivos duplicados).
+
+<---- Pregunta 4 ---->
+¿Qué información se almacena en el archivo serializado para cada archivo subido? ¿Cuántos archivos se pueden subir como máximo?
+>---- Respuesta ----<
+Con estos trozos de código:
+```$datos_archivo = $_FILES['fichero_usuario'];
+$datos_archivo['tmp_name'] = $newtmpname;
+$datos_archivo['HASH256'] = $hash256;
+$datos_archivo['estado'] = 'no_enviado_a_virus_total';
+$datos[] = $datos_archivo;```
+file_put_contents(DATOS, serialize($datos));
+Se almacena en el archivo serializado DATOS la información de cada archivo subido, como el nombre temporal del archivo, el hash256, el estado del archivo y el archivo en sí ($datos es un array con los datos de los archivos subidos).
+count($datos) > 5 => Se pueden subir un máximo de 5 archivos.
