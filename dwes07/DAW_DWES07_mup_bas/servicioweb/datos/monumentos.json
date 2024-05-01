@@ -1,0 +1,114 @@
+{
+    "Almer\u00eda": [
+        {
+            "nombre": "La Alcazaba",
+            "latitud": 36.84011072974817,
+            "longitud": -2.4699259151793393,
+            "id": "ALM1"
+        },
+        {
+            "nombre": "Catedral de Almer\u00eda",
+            "latitud": 36.84062308724677,
+            "longitud": -2.4627049568683095,
+            "id": "ALM2"
+        }
+    ],
+    "C\u00e1diz": [
+        {
+            "nombre": "Catedral de C\u00e1diz",
+            "latitud": 36.52931308004989,
+            "longitud": -6.294051850580315,
+            "id": "CAD1"
+        },
+        {
+            "nombre": "Castillo de San Marcos",
+            "latitud": 36.52230577381359,
+            "longitud": -6.284987052817953,
+            "id": "CAD2"
+        }
+    ],
+    "C\u00f3rdoba": [
+        {
+            "nombre": "Mezquita-Catedral de C\u00f3rdoba",
+            "latitud": 37.87964773975993,
+            "longitud": -4.779755316784142,
+            "id": "COR1"
+        },
+        {
+            "nombre": "Alc\u00e1zar de los Reyes Cristianos",
+            "latitud": 37.87668186419513,
+            "longitud": -4.778869216617619,
+            "id": "COR2"
+        }
+    ],
+    "Granada": [
+        {
+            "nombre": "La Alhambra",
+            "latitud": 37.17489434185178,
+            "longitud": -3.5843467537504052,
+            "id": "GRA1"
+        },
+        {
+            "nombre": "Catedral de Granada",
+            "latitud": 37.1760325702299,
+            "longitud": -3.597960769794103,
+            "id": "GRA2"
+        }
+    ],
+    "Huelva": [
+        {
+            "nombre": "Monasterio de La R\u00e1bida",
+            "latitud": 37.20806683401434,
+            "longitud": -6.955420303072327,
+            "id": "HUE1"
+        },
+        {
+            "nombre": "Muelle de las Carabelas",
+            "latitud": 37.19797669213228,
+            "longitud": -6.949674989218146,
+            "id": "HUE2"
+        }
+    ],
+    "Ja\u00e9n": [
+        {
+            "nombre": "Catedral de Ja\u00e9n",
+            "latitud": 37.7708985951306,
+            "longitud": -3.7901163366566144,
+            "id": "JAE1"
+        },
+        {
+            "nombre": "Castillo de Santa Catalina",
+            "latitud": 37.76646336486699,
+            "longitud": -3.7908389202421726,
+            "id": "JAE2"
+        }
+    ],
+    "M\u00e1laga": [
+        {
+            "nombre": "Alcazaba de M\u00e1laga",
+            "latitud": 36.72072966369561,
+            "longitud": -4.414293700948763,
+            "id": "MAL1"
+        },
+        {
+            "nombre": "Teatro Romano de M\u00e1laga",
+            "latitud": 36.72177461613445,
+            "longitud": -4.421104040376801,
+            "id": "MAL2"
+        }
+    ],
+    "Sevilla": [
+        {
+            "nombre": "Catedral de Sevilla",
+            "latitud": 37.38339433925786,
+            "longitud": -5.991132869340777,
+            "id": "SEV1"
+        },
+        {
+            "nombre": "Real Alc\u00e1zar de Sevilla",
+            "latitud": 37.38438111647486,
+            "longitud": -5.992831449544826,
+            "id": "SEV2"
+        }
+    ]
+}
