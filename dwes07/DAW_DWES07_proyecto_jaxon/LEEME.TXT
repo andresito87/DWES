@@ -1,0 +1,5 @@
+No olvides ejecutar:
+
+composer install
+
+Antes de intentar ejecutar el proyecto.

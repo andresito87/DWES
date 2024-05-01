@@ -58,7 +58,7 @@
             const numeros = $("#numeros");
 
             // Realizamos la petición al servidor utilizando jQuery
-            $.get("backend/listarnumeros.php")
+            $.get("http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/listarnumeros.php")
                 .done(function (data) {
                     // Si la petición se realiza correctamente, procesamos los datos
                     data = JSON.parse(data);
@@ -166,10 +166,12 @@
         function login() {
             var formData = new FormData($("#loginform")[0]);
 
-            let datosAuth= {'usuario':formData.get('usuario'),
-                        'password':formData.get('password') };
+            let datosAuth = {
+                'usuario': formData.get('usuario'),
+                'password': formData.get('password')
+            };
 
-            $.post("backend/login.php", datosAuth, function (respuesta) {
+            $.post("http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/login.php", datosAuth, function (respuesta) {
                 respuesta = JSON.parse(respuesta);
                 if (respuesta.hasOwnProperty("access_granted")) {
                     if (respuesta.access_granted) {
