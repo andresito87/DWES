@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <head>
     <title>Ejemplo de uso de XMLHttpRequest</title>
@@ -58,7 +60,7 @@
             const numeros = $("#numeros");
 
             // Realizamos la petición al servidor utilizando jQuery
-            $.get("http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/listarnumeros.php")
+            $.get("backend/listarnumeros.php")
                 .done(function (data) {
                     // Si la petición se realiza correctamente, procesamos los datos
                     data = JSON.parse(data);
@@ -171,7 +173,7 @@
                 'password': formData.get('password')
             };
 
-            $.post("http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/login.php", datosAuth, function (respuesta) {
+            $.post("backend/login.php", datosAuth, function (respuesta) {
                 respuesta = JSON.parse(respuesta);
                 if (respuesta.hasOwnProperty("access_granted")) {
                     if (respuesta.access_granted) {

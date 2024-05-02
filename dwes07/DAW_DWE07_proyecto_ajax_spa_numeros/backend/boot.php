@@ -1,16 +1,13 @@
 <?php
 include 'funcs.php';
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: *");
 
 session_start();
 
-if (defined('AUTH_REQUIRED')) {
-    if (! comprobarSiAutenticado())
-        die(json_encode(['error' => 'login_required']));
-    if (! isset($_SESSION['datos']))
-        $_SESSION['datos'] = [rand(1, 100), rand(1, 100)];
-    $datos =& $_SESSION['datos']; //creamos una referencia para manejar mejor los datos de la sesión 
+if (defined('AUTH_REQUIRED'))
+{
+    if (!comprobarSiAutenticado()) die (json_encode(['error'=>'login_required']));
+    if (!isset($_SESSION['datos'])) $_SESSION['datos']=[rand(1,100),rand(1,100)];    
+    $datos=&$_SESSION['datos']; //creamos una referencia para manejar mejor los datos de la sesión 
 }
 
-$metodoHTTP = $_SERVER['REQUEST_METHOD'];
+$metodoHTTP=$_SERVER['REQUEST_METHOD'];

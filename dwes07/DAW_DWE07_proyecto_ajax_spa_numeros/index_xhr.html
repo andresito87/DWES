@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <head>
     <title>Ejemplo de uso de XMLHttpRequest</title>
@@ -57,8 +59,7 @@
             xmlhttp.onreadystatechange = function () {
                 //Comprobamos que la petición retorna un estado correcto
                 if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                    //Si el estado es correcto, procesamos los datos        
-                    console.log(this.responseText);
+                    //Si el estado es correcto, procesamos los datos                     
                     let datos = JSON.parse(this.responseText);
                     if (siNecesitaIniciarSesion(datos)) return;
                     document.getElementById('numerossection').style.display = 'block';

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <head>
     <title>Ejemplo de uso de XMLHttpRequest</title>
@@ -52,7 +54,7 @@
     <script>
 
         function actualizarListaDeNumeros() {
-            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/listarnumeros.php')
+            fetch('backend/listarnumeros.php')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("Ha ocurrido un error: " + response.statusText);
@@ -78,7 +80,7 @@
 
         function nuevoNumero() {
             const formData = new FormData(document.getElementById('nuevonumero'));
-            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/nuevonumero.php', {
+            fetch('backend/nuevonumero.php', {
                 method: 'POST',
                 body: formData
             })
@@ -104,7 +106,7 @@
 
         function borrarNumero() {
             const numero = document.querySelector('#borrarnumero input[name=numero]').value;
-            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/borrarnumero.php', {
+            fetch('backend/borrarnumero.php', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -135,7 +137,7 @@
             const numero_actual = document.querySelector('#cambiarnumero input[name=numero_actual]').value;
             const numero_nuevo = document.querySelector('#cambiarnumero input[name=numero_nuevo]').value;
 
-            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/cambiarnumero.php', {
+            fetch('backend/cambiarnumero.php', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -181,7 +183,7 @@
             const formData = new FormData(document.getElementById('loginform'));
 
             // Configuramos la solicitud HTTP POST con fetch
-            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/login.php', {
+            fetch('backend/login.php', {
                 method: 'POST',
                 body: formData
             })
@@ -205,7 +207,7 @@
 
         function logout() {
             // Configuramos la solicitud HTTP GET con fetch
-            fetch('http://localhost/dwes07/DAW_DWE07_proyecto_ajax_spa_numeros/backend/logout.php', {
+            fetch('backend/logout.php', {
                 method: 'GET'
             })
                 .then(response => response.json())
