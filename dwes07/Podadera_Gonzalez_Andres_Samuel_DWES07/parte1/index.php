@@ -1,6 +1,5 @@
 <?php
 require 'vendor/autoload.php';
-require 'funciones_acceso_servicio_web.php';
 
 if (file_exists(DATOS))
     $datos = unserialize(file_get_contents(DATOS));
@@ -87,18 +86,23 @@ if (isset($_POST['resultadosEscaneo'])) {
             //echo "<H1>OBTENER INFORME DE ANALISIS POR IMPLEMENTAR.</H1>";
             $data = json_decode($response->getBody()->getContents(), true);
             if ($response->getStatusCode() == 200) {
-                echo "<table border='1'>";
-                echo "<tr><th>Motor</th><th>Resultado</th></tr>";
-                foreach ($data['data']['attributes']['last_analysis_results'] as $motor => $resultado) {
-                    echo "<tr><td>$motor</td><td>";
-                    if ($resultado['result'] != null) {
-                        echo "Malware detectado";
-                    } else {
-                        echo "No se ha detectado malware";
+                if (empty($data['data']['attributes']['last_analysis_results'])) {
+                    echo "<h2>El archivo está siendo analizado</h2>";
+                } else {
+                    echo "<table border='1'>";
+                    echo "<tr><th>Motor</th><th>Resultado</th></tr>";
+                    foreach ($data['data']['attributes']['last_analysis_results'] as $motor => $resultado) {
+                        echo "<tr><td>$motor</td><td>";
+                        if ($resultado['result'] != null) {
+                            echo "Malware detectado";
+                        } else {
+                            echo "No se ha detectado malware";
+                        }
+                        echo "</td></tr>";
                     }
-                    echo "</td></tr>";
+                    echo "</table>";
                 }
-                echo "</table>";
+
             } else {
                 $error = $data['error']['message'];
                 echo "<h2>Error: $error</h2>";
