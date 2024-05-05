@@ -1,5 +1,6 @@
 <?php
 require 'vendor/autoload.php';
+require 'funciones_acceso_servicio_web.php';
 
 if (file_exists(DATOS))
     $datos = unserialize(file_get_contents(DATOS));
@@ -11,7 +12,7 @@ if (isset($_FILES['fichero_usuario'])) {
 
         if (count($datos) > 5) {
             echo 'Ya se han subido 5 archivos. Debe eliminar alguno.';
-        } else {            
+        } else {
             $hash256 = hash_file('sha256', $_FILES['fichero_usuario']['tmp_name']);
             if (in_array($hash256, array_column($datos, 'HASH256'))) {
                 echo "<H2>Ya está el archivo subido.</H2>";
@@ -20,7 +21,7 @@ if (isset($_FILES['fichero_usuario'])) {
 
                 $resultado = move_uploaded_file($_FILES['fichero_usuario']['tmp_name'], $newtmpname);
                 if ($resultado) {
-                    
+
                     $datos_archivo = $_FILES['fichero_usuario'];
                     $datos_archivo['tmp_name'] = $newtmpname;
                     $datos_archivo['HASH256'] = $hash256;
@@ -29,26 +30,22 @@ if (isset($_FILES['fichero_usuario'])) {
                 }
             }
         }
-    } 
-    else // $_FILES['fichero_usuario']['error']!=UPLOAD_ERR_OK
+    } else // $_FILES['fichero_usuario']['error']!=UPLOAD_ERR_OK
     {
         echo 'Se ha producido un error al subir el archivo. Es posible qeu sea más grande que el tamaño máximo permitido';
     }
 }
 
-if (isset($_POST['delete']))
-{
-    if (($pos=array_search($_POST['delete'], array_column($datos, 'HASH256')))!==false) {
+if (isset($_POST['delete'])) {
+    if (($pos = array_search($_POST['delete'], array_column($datos, 'HASH256'))) !== false) {
         unlink($datos[$pos]['tmp_name']);
         unset($datos[$pos]);
     }
 }
 
-if (isset($_POST['subirarchivo']))
-{
-    if (($pos=array_search($_POST['subirarchivo'], array_column($datos, 'HASH256')))!==false) {
-        if ($datos[$pos]['estado']==='no_enviado_a_virus_total')
-        {
+if (isset($_POST['subirarchivo'])) {
+    if (($pos = array_search($_POST['subirarchivo'], array_column($datos, 'HASH256'))) !== false) {
+        if ($datos[$pos]['estado'] === 'no_enviado_a_virus_total') {
             /*TODO:
                 1) Completa la función enviarArchivoAVerificar en el archivo funciones_acceso_servicio_web.php.
                    IMPORTANTE: el tipo mime lo puedes extraer de los datos serializados ($datos)
@@ -57,43 +54,64 @@ if (isset($_POST['subirarchivo']))
                     $datos[$pos]['id']=... id del trabajo de análisis generado por el api de virus total...;
                 3) Si no se pudo realizar (HTTP status code 400), mostrar información del error.
             */
-            echo "<H1>SUBIRARCHIVO POR IMPLEMENTAR.</H1>";
-        }
-        else{
+            $resultado = enviarArchivoAVerificar($datos[$pos]['tmp_name'], $datos[$pos]['type']);
+            $data = json_decode($resultado->getBody()->getContents(), true);
+            if ($resultado->getStatusCode() == 200) {
+                $datos[$pos]['estado'] = 'ya_enviado_a_virus_total';
+                $datos[$pos]['id'] = $data['data']['id'];
+                echo "<h2>Archivo enviado correctamente</h2>";
+            } else {
+                $error = $data['error']['message'];
+                echo "<h2>Error: $error</h2>";
+            }
+            //echo "<H1>SUBIRARCHIVO POR IMPLEMENTAR.</H1>";
+        } else {
             echo "El archivo ya ha sido enviado para su análisis.";
         }
-    }
-    else
-    {
+    } else {
         echo "El archivo no existe";
-    }    
+    }
 }
 
-if (isset($_POST['resultadosEscaneo']))
-{
-    if (($pos=array_search($_POST['resultadosEscaneo'], array_column($datos, 'HASH256')))!==false) {
-        if ($datos[$pos]['estado']==='ya_enviado_a_virus_total')
-        {
-             /*TODO:
-                1) Completa la función obtenerEstadoVerificacion en el archivo funciones_acceso_servicio_web.php.
-                2) Usar dicha función par verificar el estado usando el hash 256.                   
-                3) En función de los datos retornados, mostrar una tabla indicando si cada motor antimalware ha detectado algún malware o no.
-                   Importante: virus total tarda un rato en analizar cada archivo, por lo que el informe puede tener la información del resultado de búsqueda o no,
-                   en función de si ha terminado el análisis.
-            */
-            echo "<H1>OBTENER INFORME DE ANALISIS POR IMPLEMENTAR.</H1>";
-        }
-        else{
+if (isset($_POST['resultadosEscaneo'])) {
+    if (($pos = array_search($_POST['resultadosEscaneo'], array_column($datos, 'HASH256'))) !== false) {
+        if ($datos[$pos]['estado'] === 'ya_enviado_a_virus_total') {
+            /*TODO:
+               1) Completa la función obtenerEstadoVerificacion en el archivo funciones_acceso_servicio_web.php.
+               2) Usar dicha función par verificar el estado usando el hash 256.                   
+               3) En función de los datos retornados, mostrar una tabla indicando si cada motor antimalware ha detectado algún malware o no.
+                  Importante: virus total tarda un rato en analizar cada archivo, por lo que el informe puede tener la información del resultado de búsqueda o no,
+                  en función de si ha terminado el análisis.
+           */
+            $response = obtenerEstadoVerificacion($datos[$pos]['HASH256']);
+            //echo "<H1>OBTENER INFORME DE ANALISIS POR IMPLEMENTAR.</H1>";
+            $data = json_decode($response->getBody()->getContents(), true);
+            if ($response->getStatusCode() == 200) {
+                echo "<table border='1'>";
+                echo "<tr><th>Motor</th><th>Resultado</th></tr>";
+                foreach ($data['data']['attributes']['last_analysis_results'] as $motor => $resultado) {
+                    echo "<tr><td>$motor</td><td>";
+                    if ($resultado['result'] != null) {
+                        echo "Malware detectado";
+                    } else {
+                        echo "No se ha detectado malware";
+                    }
+                    echo "</td></tr>";
+                }
+                echo "</table>";
+            } else {
+                $error = $data['error']['message'];
+                echo "<h2>Error: $error</h2>";
+            }
+        } else {
             echo "El archivo NO ha sido enviado para su análisis o NO ha empezado a ser procesado.";
         }
-    }
-    else
-    {
+    } else {
         echo "El archivo no existe";
-    }    
+    }
 }
 
-include('mostrar_archivos.php');
+include ('mostrar_archivos.php');
 file_put_contents(DATOS, serialize($datos));
 
 ?>
