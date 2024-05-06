@@ -10,6 +10,9 @@ $jaxonScript = $jaxon->getScript();
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>Listar e incrementar stock de productos.</title>
     <?php echo $jaxonCss ?>
         <style>
@@ -62,10 +65,10 @@ $jaxonScript = $jaxon->getScript();
 <input type="button" onclick="<?=rq()->call('logout')?>" value="¡Salir!">
 
 <div id="listaUbicaciones">
-    //GENERAR AQUÍ LISTA DE UBICACIONES
+    <!-- Aquí se mostrará la lista de ubicaciones -->
 </div>
 
-<input type="button" value="Actualizar lista de ubicaciones" onclick="alert('Invocar aquí la operación JAXON-JS para actualizar la lista de ubicaciones')";>
+<input type="button" value="Actualizar lista de ubicaciones" onclick="<?=rq()->call('establecerInterfaz')?>";>
 
 <br>
 <br>

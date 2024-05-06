@@ -67,15 +67,25 @@ function usuarioAutenticado(Response $response)
 
 function cargarListadoUbicaciones(PDO $pdo, Response $response)
 {
-    $response->alert("Implementa la función cargarListadoUbicaciones para generar una tabla HTML con las ubicaciones.");
+    $ubicaciones = Ubicacion::listarUbicaciones($pdo);
+    $html = '<table border="1"> 
+    <thead><tr><th>Nombre</th><th>Descripción</th><th>Días</th></tr></thead>';
+    foreach ($ubicaciones as $ubicacion) {
+        $html .= '<tr><td>' . $ubicacion['nombre'] . '</td><td>' . $ubicacion['descripcion'] . '</td><td>' . $ubicacion['dias'] . '</td></tr>';
+    }
+    $html .= '</table>';
+    $response->assign('listaUbicaciones', 'innerHTML', $html);
 }
 
 function establecerInterfaz()
 {
     usuarioAutenticado($r = new Response());
+    cargarListadoUbicaciones(DB::getConn(), $r);
     return $r;
 }
+
 
 $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'login');
 $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'logout');
 $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'establecerInterfaz');
+$jaxon->register(Jaxon::CALLABLE_FUNCTION, 'cargarListadoUbicaciones');

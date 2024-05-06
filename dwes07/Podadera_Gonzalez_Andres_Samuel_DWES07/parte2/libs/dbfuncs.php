@@ -101,3 +101,11 @@ function archivarseguimiento(PDO $pdo, int $idseguimiento)
     return $resultado;
 
 }
+
+function listarUbicaciones (PDO $pdo)
+{
+    $sql=<<<ENDSQL
+        SELECT * from ubicaciones
+    ENDSQL;
+    return doSQL ($pdo,$sql);
+}
