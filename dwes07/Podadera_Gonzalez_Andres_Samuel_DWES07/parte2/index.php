@@ -45,6 +45,15 @@ $jaxonScript = $jaxon->getScript();
                 margin:5px;
                 border-radius: 10px;
             }
+            button {
+                background-color: #009879;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                margin: 5px;
+            }
         </style>
 </head>
 <body>
@@ -54,7 +63,7 @@ $jaxonScript = $jaxon->getScript();
     <label>DNI: <input type="text" name="usuario" id="login_dni"></label><BR>
     <label>Password: <input type="password" name="password" id="login_password"></label><BR>
     <input type="button"
-        onclick="<?=rq()->call("login",pm()->input('login_dni'),pm()->input('login_password'));?>"
+        onclick="<?=rq()->call('login',pm()->input('login_dni'),pm()->input('login_password'));?>"
         value="Login!">
 </form>
 
@@ -74,19 +83,23 @@ $jaxonScript = $jaxon->getScript();
 <br>
 
 <form id="nuevaUbicacion" onSubmit="return false;">
+    <input type="hidden" name="id" id="id">
     <label> Nombre:<input id="nombre" type="text" name="nombre"></label>
     <BR>
     <label> Descripcion:<input id="descripcion" type="text" name="descripcion"></label>
     <BR>
     <label> Días:
-        <?php foreach(Ubicacion::DIAS as $dia): ?>
-            <input type="checkbox" name="dias[]" value="<?=$dia?>"> <?=$dia?>
+        <?php foreach(Ubicacion::DIAS as $dia):?>
+            <input id="<?=$dia?>" type="checkbox" name="dias[]" value="<?=$dia?>"> <?=$dia?>
         <?php endforeach; ?>
     </label>
     <br>
     <input type="button"
-        onclick="alert('Invocar aquí la operación JAXON-JS para crear la ubicacion')";
-    value="Crear nueva ubicación.">
+        onclick="<?=rq()->call('crearUbicacion',pm()->input('id'),pm()->form('nuevaUbicacion'));?>"
+    value="Crear nueva ubicación">
+    <input type="button"
+        onclick="<?=rq()->call('modificarUbicacion',pm()->input('id'),pm()->form('nuevaUbicacion'));?>"
+    value="Guardar Datos Modificados">
 </form>
 
 <BR>
@@ -100,7 +113,7 @@ $jaxonScript = $jaxon->getScript();
 <?php echo $jaxonScript ?>
 
 <script>    
-    <?= rq()->call('establecerInterfaz'); ?>
+    <?=rq()->call('establecerInterfaz');?>
 </script>
 
 </body>
