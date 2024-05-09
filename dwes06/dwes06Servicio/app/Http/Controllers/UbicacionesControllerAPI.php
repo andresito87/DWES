@@ -42,6 +42,10 @@ class UbicacionesControllerAPI extends Controller
     public function listar()
     {
         $ubicaciones = Ubicacion::all();
+        foreach ($ubicaciones as $ubicacion) {
+            $ubicacion->dias = explode(',', $ubicacion->dias);
+        }
+
         return response()->json($ubicaciones);
     }
 
