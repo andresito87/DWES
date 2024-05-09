@@ -44,6 +44,8 @@ function login($dni, $password)
         $_SESSION['usuario'] = $empleado;
         usuarioAutenticado($response);
         cargarListadoUbicaciones($pdoConn, $response);
+        // Limpio los inputs para evitar que si el usuario se desloguea mientras modificaba una ubicación, se muestren esos datos al volver a loguearse. Sería incoherente, son sesiones distintas.
+        limpiarInputsAlCompletarOperacion($response);
     } else {
         $response->alert("El usuario y password indicado no son válidos.");
     }
@@ -58,6 +60,7 @@ function logout()
     $response->clear('listaUbicaciones', 'innerHTML');
     unset($_SESSION['usuario']);
     usuarioAutenticado($response);
+    limpiarZonaLog($response);
     return $response;
 }
 
@@ -69,7 +72,6 @@ function usuarioAutenticado(Response $response)
         $response->assign('listaUbicaciones', 'innerHTML', 'MOSTRAR AQUÍ LISTA DE UBICACIONES');
         $response->assign('formulario_autenticacion', 'style.display', 'block');
         $response->assign('area_autenticada', 'style.display', 'none');
-        limpiarZonaLog($response);
         return false;
     } else {
         $response->assign('formulario_autenticacion', 'style.display', 'none');
@@ -110,8 +112,9 @@ function crearUbicacion(int|string $id, array $datos)
     if (! usuarioAutenticado($response))
         return $response;
 
-    if ($id > 0) {
-        logMessage($response, 'Error: No se puede crear una ubicación con un ID ya existente.');
+    if (isset($id) && $id !== '') {
+        logMessage($response, 'Error: No se puede crear una ubicación con un ID ya existente. Le recomendamos que limpie el formulario y vuelva a intentarlo.');
+        return $response;
     }
 
     $errores = verificarDatosUbicacion($datos);
@@ -127,8 +130,11 @@ function crearUbicacion(int|string $id, array $datos)
     if ($resultado > 0) {
         cargarListadoUbicaciones($pdo, $response);
         limpiarInputsAlCompletarOperacion($response);
-    } else {
-        logMessage($response, DB::getLastError());
+    } else if ($resultado === -1) {
+        logMessage($response, 'Error: Operacion en la base de datos fallida.');
+    } else if ($resultado === false || $resultado === 0) {
+        limpiarInputsAlCompletarOperacion($response);
+        logMessage($response, 'Aviso: No se ha modificado ninguna ubicación.');
     }
     return $response;
 }
@@ -168,6 +174,8 @@ function enviarDatosUbicacionParaModificar(int $id)
         foreach (Ubicacion::DIAS as $dia) {
             if (in_array($dia, explode(',', $ubicacion['dias']))) {
                 $response->assign($dia, 'checked', true);
+            } else {
+                $response->assign($dia, 'checked', false);
             }
         }
     } else {
@@ -210,12 +218,13 @@ function modificarUbicacion(int $id, array $datos)
     if ($resultado > 0) {
         cargarListadoUbicaciones($pdo, $response);
         limpiarInputsAlCompletarOperacion($response);
-    } else if ($resultado === false) {
+    } else if ($resultado === -1) {
+        logMessage($response, 'Error: Operacion en la base de datos fallida.');
+    } else if ($resultado === false || $resultado === 0) {
         limpiarInputsAlCompletarOperacion($response);
         logMessage($response, 'Aviso: No se ha modificado ninguna ubicación.');
-    } else {
-        logMessage($response, DB::getLastError());
     }
+
     return $response;
 }
 
@@ -250,6 +259,19 @@ function limpiarInputsAlCompletarOperacion(Response $response)
     }
 }
 
+function limpiarDatosFormulario()
+{
+    $response = new Response();
+    $response->clear('id', 'value');
+    $response->clear('nombre', 'value');
+    $response->clear('descripcion', 'value');
+    foreach (Ubicacion::DIAS as $dia) {
+        $response->clear($dia, 'checked');
+    }
+    return $response;
+}
+
+
 function limpiarZonaLog(Response $response)
 {
     $response->clear('log', 'innerHTML');
@@ -266,5 +288,6 @@ $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'eliminarUbicacion');
 $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'enviarDatosUbicacionParaModificar');
 $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'modificarUbicacion');
 $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'limpiarInputsAlCompletarOperacion');
+$jaxon->register(Jaxon::CALLABLE_FUNCTION, 'limpiarDatosFormulario');
 
 

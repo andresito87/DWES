@@ -39,6 +39,8 @@ if (isset($_POST['delete'])) {
     if (($pos = array_search($_POST['delete'], array_column($datos, 'HASH256'))) !== false) {
         unlink($datos[$pos]['tmp_name']);
         unset($datos[$pos]);
+        // Reindexar el array
+        $datos = array_values($datos);
     }
 }
 

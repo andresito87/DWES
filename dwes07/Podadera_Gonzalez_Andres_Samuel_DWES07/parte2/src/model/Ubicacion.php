@@ -11,6 +11,7 @@ use \PDO;
 
 class Ubicacion
 {
+    public const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
     private $id;
     private $nombre;
     private $descripcion;
@@ -43,9 +44,6 @@ class Ubicacion
         return $this->dias;
     }
 
-
-    public const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-
     public static function listarUbicaciones(PDO $pdo) : array
     {
         $sql = <<<ENDSQL
@@ -74,7 +72,7 @@ class Ubicacion
         return doSQL($pdo, $sql, ['id' => $id]);
     }
 
-    public static function modificarUbicacion(PDO $pdo, string $nombre, string $descripcion, string $dias, int $id) : bool
+    public static function modificarUbicacion(PDO $pdo, string $nombre, string $descripcion, string $dias, int $id) : array|int|bool
     {
         $sql = <<<ENDSQL
             UPDATE ubicaciones

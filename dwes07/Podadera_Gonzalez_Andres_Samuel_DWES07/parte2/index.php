@@ -88,11 +88,11 @@ $jaxonScript = $jaxon->getScript();
     <BR>
     <label> Descripcion:<input id="descripcion" type="text" name="descripcion"></label>
     <BR>
-    <label> Días:
+    <label> Días: </label>
         <?php foreach(Ubicacion::DIAS as $dia):?>
             <input id="<?=$dia?>" type="checkbox" name="dias[]" value="<?=$dia?>"> <?=$dia?>
         <?php endforeach; ?>
-    </label>
+   
     <br>
     <input type="button"
         onclick="<?=rq()->call('crearUbicacion',pm()->input('id'),pm()->form('nuevaUbicacion'));?>"
@@ -100,6 +100,9 @@ $jaxonScript = $jaxon->getScript();
     <input type="button"
         onclick="<?=rq()->call('modificarUbicacion',pm()->input('id'),pm()->form('nuevaUbicacion'));?>"
     value="Guardar Datos Modificados">
+    <input type="button"
+        onclick="<?=rq()->call('limpiarDatosFormulario');?>"
+    value="Limpiar formulario">
 </form>
 
 <BR>
