@@ -6,15 +6,28 @@ use Jaxon\Response\Response;
 use DWES07\model\Ubicacion;
 use DWES07\model\Empleado;
 
-
+// Inicialización de Jaxon, con la configuración de la librería.
 $jaxon = jaxon();
 $jaxon->setOption("js.lib.uri", BASE_URL . "jaxon-dist");
 $jaxon->setOption('core.request.uri', BASE_URL . 'backend.php');
 
+/**
+ * Función que muestra un mensaje de error en el log.
+ * 
+ * @param Response $r Objeto de la clase Response.
+ * @param mixed $dato Puede ser un string o un array de strings.
+ * @return void
+ * 
+ * @uses Response
+ * @author profesor
+ * @version 1.0
+ * @since 2024
+ */
 function logMessage(Response $r, mixed $dato)
 {
+    $textoAMostrar = '<h3>Errores:</h3>';
     if (is_array($dato) && count($dato) > 1) {
-        $textoAMostrar = '<ul>';
+        $textoAMostrar .= '<ul>';
         foreach ($dato as $error) {
             $textoAMostrar .= '<li>' . $error . '</li>';
         }
@@ -23,10 +36,30 @@ function logMessage(Response $r, mixed $dato)
     } else {
         // transformamos el array en una cadena
         $dato = is_array($dato) ? implode(',', $dato) : $dato;
-        $r->append('log', 'innerHTML', '<div>' . $dato . '</div>');
+        $r->append('log', 'innerHTML', '<div><h3>Error:</h3>' . $dato . '</div>');
     }
+    $r->script('localStorage.setItem("contenidoLog", document.getElementById("log").innerHTML);');
 }
 
+/**
+ * Función que permite a un usuario loguearse en la aplicación.
+ * 
+ * @param string $dni DNI del usuario.
+ * @param string $password Contraseña del usuario.
+ * @return Response $response Objeto de la clase Response.
+ * 
+ * @uses Response
+ * @uses DB
+ * @uses Empleado
+ * @uses cargarListadoUbicaciones
+ * @uses limpiarInputsAlCompletarOperacion
+ * @uses logMessage
+ * @uses usuarioAutenticado
+ *
+ * @author profesor
+ * @version 1.0
+ * @since 2024
+ */
 function login($dni, $password)
 {
     $response = new Response();
@@ -52,6 +85,19 @@ function login($dni, $password)
     return $response;
 }
 
+/**
+ * Función que permite a un usuario desloguearse de la aplicación.
+ * 
+ * @return Response $response Objeto de la clase Response.
+ * 
+ * @uses Response
+ * @uses usuarioAutenticado
+ * @uses limpiarZonaLog
+ * 
+ * @author profesor
+ * @version 1.0
+ * @since 2024
+ */
 function logout()
 {
     $response = new Response();
@@ -61,9 +107,28 @@ function logout()
     unset($_SESSION['usuario']);
     usuarioAutenticado($response);
     limpiarZonaLog($response);
+    $response->script('localStorage.setItem("contenidoLog", "");');
     return $response;
 }
 
+/**
+ * Función que verifica si un usuario está autenticado.
+ * 
+ * @param Response $response Objeto de la clase Response.
+ * @return bool Devuelve true si el usuario está autenticado, false en caso contrario.
+ * 
+ * @uses Response
+ * @uses $_SESSION
+ * @uses cargarListadoUbicaciones
+ * @uses limpiarInputsAlCompletarOperacion
+ * @uses logMessage
+ * @uses DB
+ * @uses Ubicacion
+ * 
+ * @author profesor
+ * @version 1.0
+ * @since 2024
+ */
 function usuarioAutenticado(Response $response)
 {
     if (! isset($_SESSION['usuario'])) {
@@ -80,6 +145,20 @@ function usuarioAutenticado(Response $response)
     }
 }
 
+/**
+ * Función que carga el listado de ubicaciones en la interfaz.
+ * 
+ * @param PDO $pdo Objeto de la clase PDO.
+ * @param Response $response Objeto de la clase Response.
+ * @return void
+ * 
+ * @uses Ubicacion
+ * @uses Response
+ * 
+ * @author Andrés Samuel Podadera González
+ * @version 1.0
+ * @since 2024
+ */
 function cargarListadoUbicaciones(PDO $pdo, Response $response)
 {
     $ubicaciones = Ubicacion::listarUbicaciones($pdo);
@@ -92,6 +171,20 @@ function cargarListadoUbicaciones(PDO $pdo, Response $response)
     $response->assign('listaUbicaciones', 'innerHTML', $html);
 }
 
+/**
+ * Función que establece la interfaz de la aplicación.
+ * 
+ * @return Response $r Objeto de la clase Response.
+ * 
+ * @uses usuarioAutenticado
+ * @uses cargarListadoUbicaciones
+ * @uses Response
+ * @uses DB
+ * 
+ * @author profesor
+ * @version 1.0
+ * @since 2024
+ */
 function establecerInterfaz()
 {
     usuarioAutenticado($r = new Response());
@@ -100,6 +193,26 @@ function establecerInterfaz()
 }
 
 // La funcion crearUbicacion recibe un parametro id de tipo int o string porque habrá veces que siendo entero será que se esta modificando y siendo string será que se esta creando uno nuevo, cadena vacía ''.
+/**
+ * Función que crea una nueva ubicación.
+ * 
+ * @param int|string $id ID de la ubicación.
+ * @param array $datos Datos de la ubicación.
+ * @return Response $response Objeto de la clase Response.
+ * 
+ * @uses Response
+ * @uses DB
+ * @uses usuarioAutenticado
+ * @uses verificarDatosUbicacion
+ * @uses Ubicacion
+ * @uses cargarListadoUbicaciones
+ * @uses limpiarInputsAlCompletarOperacion
+ * @uses logMessage
+ * 
+ * @author Andrés Samuel Podadera González
+ * @version 1.0
+ * @since 2024
+ */
 function crearUbicacion(int|string $id, array $datos)
 {
     $response = new Response();
@@ -113,7 +226,7 @@ function crearUbicacion(int|string $id, array $datos)
         return $response;
 
     if (isset($id) && $id !== '') {
-        logMessage($response, 'Error: No se puede crear una ubicación con un ID ya existente. Le recomendamos que limpie el formulario y vuelva a intentarlo.');
+        logMessage($response, 'No se puede crear una ubicación con un ID ya existente. Le recomendamos que limpie el formulario y vuelva a intentarlo.');
         return $response;
     }
 
@@ -139,6 +252,19 @@ function crearUbicacion(int|string $id, array $datos)
     return $response;
 }
 
+/**
+ * Función que verifica los datos de una ubicación.
+ * 
+ * @param array $datos Datos de la ubicación.
+ * @return array $errores Array con los errores encontrados.
+ * 
+ * @uses Ubicacion
+ * @uses Ubicacion::DIAS
+ * 
+ * @author Andrés Samuel Podadera González
+ * @version 1.0
+ * @since 2024
+ */
 function verificarDatosUbicacion(array $datos)
 {
     $errores = [];
@@ -151,6 +277,22 @@ function verificarDatosUbicacion(array $datos)
     return $errores;
 }
 
+/**
+ * Función que envía los datos de una ubicación para modificar.
+ * 
+ * @param int $id ID de la ubicación.
+ * @return Response $response Objeto de la clase Response.
+ * 
+ * @uses Response
+ * @uses usuarioAutenticado
+ * @uses DB
+ * @uses Ubicacion
+ * @uses logMessage
+ * 
+ * @author Andrés Samuel Podadera González
+ * @version 1.0
+ * @since 2024
+ */
 function enviarDatosUbicacionParaModificar(int $id)
 {
     $response = new Response();
@@ -184,6 +326,26 @@ function enviarDatosUbicacionParaModificar(int $id)
     return $response;
 }
 
+/**
+ * Función que modifica una ubicación.
+ * 
+ * @param int $id ID de la ubicación.
+ * @param array $datos Datos de la ubicación.
+ * @return Response $response Objeto de la clase Response.
+ * 
+ * @uses Response
+ * @uses usuarioAutenticado
+ * @uses DB
+ * @uses verificarDatosUbicacion
+ * @uses Ubicacion
+ * @uses cargarListadoUbicaciones
+ * @uses limpiarInputsAlCompletarOperacion
+ * @uses logMessage
+ * 
+ * @author Andrés Samuel Podadera González
+ * @version 1.0
+ * @since 2024
+ */
 function modificarUbicacion(int $id, array $datos)
 {
     $response = new Response();
@@ -228,6 +390,23 @@ function modificarUbicacion(int $id, array $datos)
     return $response;
 }
 
+/**
+ * Función que elimina una ubicación.
+ * 
+ * @param int $id ID de la ubicación.
+ * @return Response $response Objeto de la clase Response.
+ * 
+ * @uses Response
+ * @uses DB
+ * @uses usuarioAutenticado
+ * @uses Ubicacion
+ * @uses cargarListadoUbicaciones
+ * @uses logMessage
+ * 
+ * @author Andrés Samuel Podadera González
+ * @version 1.0
+ * @since 2024
+ */
 function eliminarUbicacion(int $id)
 {
     $response = new Response();
@@ -249,6 +428,19 @@ function eliminarUbicacion(int $id)
     return $response;
 }
 
+/**
+ * Función que limpia los inputs al completar una operación.
+ * 
+ * @param Response $response Objeto de la clase Response.
+ * @return void
+ * 
+ * @uses Response
+ * @uses Ubicacion::DIAS
+ * 
+ * @author Andrés Samuel Podadera González
+ * @version 1.0
+ * @since 2024
+ */
 function limpiarInputsAlCompletarOperacion(Response $response)
 {
     $response->clear('id', 'value');
@@ -259,6 +451,18 @@ function limpiarInputsAlCompletarOperacion(Response $response)
     }
 }
 
+/**
+ * Función que limpia los datos del formulario.
+ * 
+ * @return Response $response Objeto de la clase Response.
+ * 
+ * @uses Response
+ * @uses Ubicacion::DIAS
+ * 
+ * @author Andrés Samuel Podadera González
+ * @version 1.0
+ * @since 2024
+ */
 function limpiarDatosFormulario()
 {
     $response = new Response();
@@ -271,14 +475,25 @@ function limpiarDatosFormulario()
     return $response;
 }
 
-
+/**
+ * Función que limpia la zona de log.
+ * 
+ * @param Response $response Objeto de la clase Response.
+ * @return void
+ * 
+ * @uses Response
+ * 
+ * @author Andrés Samuel Podadera González
+ * @version 1.0
+ * @since 2024
+ */
 function limpiarZonaLog(Response $response)
 {
     $response->clear('log', 'innerHTML');
     $response->assign('log', 'innerHTML', '<H1>Mensajes de LOG:</H1>');
 }
 
-
+// Registro de las funciones
 $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'login');
 $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'logout');
 $jaxon->register(Jaxon::CALLABLE_FUNCTION, 'establecerInterfaz');

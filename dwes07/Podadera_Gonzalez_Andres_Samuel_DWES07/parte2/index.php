@@ -108,14 +108,19 @@ $jaxonScript = $jaxon->getScript();
 <BR>
 </div>
 <div id='log'>
-    <H1>Mensajes de LOG:</H1>
+    <h1>Mensajes de LOG:</h1>
 </div>
 
 <?php echo $jaxonJs ?>
 
 <?php echo $jaxonScript ?>
 
-<script>    
+<script>
+    if(localStorage.getItem("contenidoLog") == null){
+        localStorage.setItem("contenidoLog", "");
+    }else{
+    document.getElementById("log").innerHTML = localStorage.getItem("contenidoLog");
+    }
     <?=rq()->call('establecerInterfaz');?>
 </script>
 
