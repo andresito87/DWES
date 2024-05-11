@@ -38,7 +38,9 @@ function logMessage(Response $r, mixed $dato)
         $dato = is_array($dato) ? implode(',', $dato) : $dato;
         $r->append('log', 'innerHTML', '<div><h3>Error:</h3>' . $dato . '</div>');
     }
-    $r->script('localStorage.setItem("contenidoLog", document.getElementById("log").innerHTML);');
+    // Si el usuario está autenticado, guardamos el contenido del log en el localStorage para que no se pierda al recargar la página.
+    if (usuarioAutenticado($r))
+        $r->script('localStorage.setItem("contenidoLog", document.getElementById("log").innerHTML);');
 }
 
 /**
@@ -188,7 +190,12 @@ function cargarListadoUbicaciones(PDO $pdo, Response $response)
 function establecerInterfaz()
 {
     usuarioAutenticado($r = new Response());
-    cargarListadoUbicaciones(DB::getConn(), $r);
+    $pdo = DB::getConn();
+    if (! $pdo) {
+        logMessage($r, DB::getLastError());
+        return $r;
+    }
+    cargarListadoUbicaciones($pdo, $r);
     return $r;
 }
 
