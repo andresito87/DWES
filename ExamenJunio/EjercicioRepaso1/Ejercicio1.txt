@@ -1,0 +1,29 @@
+Caso práctico unidad 1
+Diseñar un formulario para la recolección de datos de empresas donde hacer la FCT: nombre de la empresa, código postal, nombre de la persona de contacto, correo electrónico, teléfono y áreas donde trabaja (diseño web, diseño de aplicaciones móviles, diseño de aplicaciones de escritorio  y/o administración de sistemas).:
+
+    <form action="#" method="POST">
+        <label for="nombre_empresa">Nombre de la Empresa:</label><br>
+        <input type="text" id="nombre_empresa" name="nombre_empresa"><br><br>
+        <label for="codigo_postal">Código Postal:</label><br>
+        <input type="text" id="codigo_postal" name="codigo_postal"><br><br>
+        <label for="nombre_contacto">Nombre de la Persona de Contacto:</label><br>
+        <input type="text" id="nombre_contacto" name="nombre_contacto"><br><br>
+        <label for="correo">Correo Electrónico:</label><br>
+        <input type="text" id="correo" name="correo"><br><br>
+        <label for="telefono">Teléfono:</label><br>
+        <input type="text" id="telefono" name="telefono"><br><br>
+        <label>Áreas donde trabaja:</label><br>
+        <input type="checkbox" id="diseno_web" name="areas[]" value="diseno_web">
+        <label for="diseno_web">Diseño Web</label><br>
+        <input type="checkbox" id="diseno_movil" name="areas[]" value="diseno_movil">
+        <label for="diseno_movil">Diseño de Aplicaciones Móviles</label><br>
+        <input type="checkbox" id="diseno_escritorio" name="areas[]" value="diseno_escritorio">
+        <label for="diseno_escritorio">Diseño de Aplicaciones de Escritorio</label><br>
+        <input type="checkbox" id="admin_sistemas" name="areas[]" value="admin_sistemas">
+        <label for="admin_sistemas">Administración de Sistemas</label><br><br>
+        <input type="submit" value="Enviar!!">
+    </form>
+
+Los datos a gestionar por la aplicación se guardarán en un archivo serializado. La aplicación permitirá listar las empresas, añadir nuevas y borrar las existentes.
+Caso práctico unidad 3
+Partiendo del ejercicio anterior, vamos a implementar un script donde filtre el listado de empresas en función de las área donde en las que se trabaja y del código postal. Esta información se almacenará en la sesión, de forma que se reutilizará, implementando las características de "establecer filtro" y "limpiar filtros".
