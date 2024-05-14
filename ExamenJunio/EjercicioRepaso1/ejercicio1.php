@@ -1,6 +1,8 @@
 <?php
 require_once 'funciones.php';
 
+// Validar datos del formulario, guardarlos en un archivo y mostrarlos en una tabla con botón eliminar para cada empresa almacenada
+
 $datosEsperados = ['nombre_empresa', 'codigo_postal', 'nombre_contacto', 'correo', 'telefono', 'areas'];
 $areasDisponibles = ['diseno_web', 'diseno_movil', 'diseno_escritorio', 'admin_sistemas'];
 var_dump($_POST);
