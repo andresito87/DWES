@@ -12,7 +12,7 @@ final class TallerTest extends TestCase
 {
     #[Test]
     #[TestDox('Comprobar que el id es nulo al crear un nuevo taller que no ha sido guardado en la base de datos')]
-    public function getIdTallerNoGuardado(): void
+    public function getIdTallerNoGuardado() : void
     {
         $taller = new Taller();
         $this->assertNull($taller->getId());
@@ -20,7 +20,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el id se establece correctamente cuando el taller ha sido guardado en la base de datos')]
-    public function getIdTallerGuardado(): void
+    public function getIdTallerGuardado() : void
     {
         // Creamos el mock de la conexión a la base de datos
         $conexionMock = $this->createMock(PDO::class);
@@ -55,7 +55,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el nombre se obtiene correctamente')]
-    public function getNombre(): void
+    public function getNombre() : void
     {
         $taller = new Taller();
         $taller->setNombre('Taller de prueba');
@@ -64,7 +64,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el nombre se establece correctamente')]
-    public function setNombre(): void
+    public function setNombre() : void
     {
         $taller = new Taller();
         $this->assertTrue($taller->setNombre('Taller de prueba'));
@@ -72,7 +72,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el nombre no se establece cuando es una cadena vacía')]
-    public function setNombre_cadenaVacia(): void
+    public function setNombre_cadenaVacia() : void
     {
         $taller = new Taller();
         $this->assertFalse($taller->setNombre(''));
@@ -80,7 +80,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la descripción se obtiene correctamente')]
-    public function getDescripcion(): void
+    public function getDescripcion() : void
     {
         $taller = new Taller();
         $taller->setDescripcion('Descripción de prueba');
@@ -89,7 +89,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la descripción se establece correctamente')]
-    public function setDescripcion(): void
+    public function setDescripcion() : void
     {
         $taller = new Taller();
         $this->assertTrue($taller->setDescripcion('Descripción de prueba'));
@@ -97,7 +97,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la descripción no se establece cuando es una cadena vacía')]
-    public function setDescripcion_cadenaVacia(): void
+    public function setDescripcion_cadenaVacia() : void
     {
         $taller = new Taller();
         $this->assertFalse($taller->setDescripcion(''));
@@ -105,7 +105,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la ubicación se obtiene correctamente')]
-    public function getUbicacion(): void
+    public function getUbicacion() : void
     {
         $taller = new Taller();
         $taller->setUbicacion('Ubicación de prueba');
@@ -114,7 +114,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la ubicación se establece correctamente')]
-    public function setUbicacion(): void
+    public function setUbicacion() : void
     {
         $taller = new Taller();
         $this->assertTrue($taller->setUbicacion('Ubicación de prueba'));
@@ -122,7 +122,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la ubicación no se establece cuando es una cadena vacía')]
-    public function setUbicacion_cadenaVacia(): void
+    public function setUbicacion_cadenaVacia() : void
     {
         $taller = new Taller();
         $this->assertFalse($taller->setUbicacion(''));
@@ -130,7 +130,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el día de la semana se obtiene correctamente')]
-    public function getDiaSemana(): void
+    public function getDiaSemana() : void
     {
         $taller = new Taller();
         $taller->setDiaSemana('Lunes');
@@ -139,7 +139,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el día de la semana se establece correctamente cuando es un día válido')]
-    public function setDiaSemana_valido(): void
+    public function setDiaSemana_valido() : void
     {
         $taller = new Taller();
         $this->assertTrue($taller->setDiaSemana('Lunes'));
@@ -147,7 +147,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el día de la semana no se establece cuando es un día no válido (Domingo)')]
-    public function setDiaSemana_invalido(): void
+    public function setDiaSemana_invalido() : void
     {
         $taller = new Taller();
         $this->assertFalse($taller->setDiaSemana('Domingo'));
@@ -155,7 +155,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la hora de inicio se obtiene correctamente')]
-    public function getHoraInicio(): void
+    public function getHoraInicio() : void
     {
         $taller = new Taller();
         $taller->setHoraInicio(new DateTime('10:00'));
@@ -164,7 +164,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la hora de inicio se establece correctamente')]
-    public function setHoraInicio(): void
+    public function setHoraInicio() : void
     {
         $taller = new Taller();
         $this->assertTrue($taller->setHoraInicio(new DateTime('10:00')));
@@ -172,7 +172,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la hora de inicio no se establece cuando es mayor que la hora de fin')]
-    public function setHoraInicio_mayorQueHoraFin(): void
+    public function setHoraInicio_mayorQueHoraFin() : void
     {
         $taller = new Taller();
         $taller->setHoraFin(new DateTime('12:00'));
@@ -181,7 +181,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la hora de fin se obtiene correctamente')]
-    public function getHoraFin(): void
+    public function getHoraFin() : void
     {
         $taller = new Taller();
         $taller->setHoraFin(new DateTime('12:00'));
@@ -190,7 +190,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la hora de fin se establece correctamente')]
-    public function setHoraFin(): void
+    public function setHoraFin() : void
     {
         $taller = new Taller();
         $this->assertTrue($taller->setHoraFin(new DateTime('12:00')));
@@ -198,7 +198,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que la hora de fin no se establece cuando es menor que la hora de inicio')]
-    public function setHoraFin_menorQueHoraInicio(): void
+    public function setHoraFin_menorQueHoraInicio() : void
     {
         $taller = new Taller();
         $taller->setHoraInicio(new DateTime('10:00'));
@@ -207,7 +207,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el cupo máximo se obtiene correctamente')]
-    public function getCupoMaximo(): void
+    public function getCupoMaximo() : void
     {
         $taller = new Taller();
         $taller->setCupoMaximo(10);
@@ -216,7 +216,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el cupo máximo se establece correctamente')]
-    public function setCupoMaximo(): void
+    public function setCupoMaximo() : void
     {
         $taller = new Taller();
         $this->assertTrue($taller->setCupoMaximo(10));
@@ -224,7 +224,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el cupo máximo no se establece cuando es menor que 5')]
-    public function setCupoMaximo_menorQue5(): void
+    public function setCupoMaximo_menorQue5() : void
     {
         $taller = new Taller();
         $this->assertFalse($taller->setCupoMaximo(4));
@@ -232,7 +232,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el cupo máximo no se establece cuando es mayor que 30')]
-    public function setCupoMaximo_mayorQue30(): void
+    public function setCupoMaximo_mayorQue30() : void
     {
         $taller = new Taller();
         $this->assertFalse($taller->setCupoMaximo(31));
@@ -240,7 +240,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que cuando se guarda un taller en la base de datos se recibe la cantidad de registros afectados')]
-    public function guardar(): void
+    public function guardar() : void
     {
         // Creamos el mock de la conexión a la base de datos
         $conexionMock = $this->createMock(PDO::class);
@@ -270,7 +270,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el método rescatar() devuelve un objeto Taller con los datos de un registro de la base de datos')]
-    public function rescatar(): void
+    public function rescatar() : void
     {
         // Creamos el mock de la conexión a la base de datos
         $conexionMock = $this->createMock(PDO::class);
@@ -306,7 +306,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el método borrar() devuelve la cantidad de registros afectados al eliminar un taller de la base de datos')]
-    public function borrar(): void
+    public function borrar() : void
     {
         // Creamos el mock de la conexión a la base de datos
         $conexionMock = $this->createMock(PDO::class);
@@ -326,7 +326,7 @@ final class TallerTest extends TestCase
 
     #[Test]
     #[TestDox('Comprobar que el método actualizar() devuelve la cantidad de registros afectados al modificar un taller en la base de datos')]
-    public function actualizar(): void
+    public function actualizar() : void
     {
         // Creamos el mock de la conexión a la base de datos
         $conexionMock = $this->createMock(PDO::class);

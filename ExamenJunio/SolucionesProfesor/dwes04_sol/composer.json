@@ -1,0 +1,18 @@
+{
+    "name": "dwes_iesaguadulce/dwes04-2024",
+    "description": "Solución de la tarea DWES04",
+    "version": "1.0.0",
+    "type":"project",
+    "authors": [
+        {
+            "name": "Salvador Romero Villegas"
+        }
+    ],
+    "require": {
+        "smarty/smarty": "^4.4.1"
+    },
+    "autoload": {
+        "psr-4": { "DWES04SOL\\": "src/" },
+        "classmap": ["lib/"]
+    }
+}
