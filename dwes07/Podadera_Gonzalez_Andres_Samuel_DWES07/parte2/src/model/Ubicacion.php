@@ -53,13 +53,17 @@ class Ubicacion
         return doSQL($pdo, $sql);
     }
 
-    public static function crearUbicacion(PDO $pdo, string $nombre, string $descripcion, string $dias) : bool
+    public function crearUbicacion(PDO $pdo) : bool
     {
         $sql = <<<ENDSQL
             INSERT INTO ubicaciones (nombre, descripcion, dias)
             VALUES (:nombre, :descripcion, :dias);
         ENDSQL;
-        return doSQL($pdo, $sql, ['nombre' => $nombre, 'descripcion' => $descripcion, 'dias' => $dias]);
+        if (doSQL($pdo, $sql, ['nombre' => $this->nombre, 'descripcion' => $this->descripcion, 'dias' => $this->dias])) {
+            $this->id = $pdo->lastInsertId();
+            return true;
+        }
+        return false;
     }
 
     public static function obtenerUbicacion(PDO $pdo, int $id) : array

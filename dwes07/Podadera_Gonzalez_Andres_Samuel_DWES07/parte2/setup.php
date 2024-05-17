@@ -245,7 +245,7 @@ function crearUbicacion(int|string $id, array $datos)
     }
 
     $ubicacion = new Ubicacion($datos['nombre'], $datos['descripcion'], implode(',', $datos['dias']));
-    $resultado = Ubicacion::crearUbicacion($pdo, $ubicacion->getNombre(), $ubicacion->getDescripcion(), $ubicacion->getDias());
+    $resultado = $ubicacion->crearUbicacion($pdo);
 
     if ($resultado > 0) {
         cargarListadoUbicaciones($pdo, $response);
@@ -425,6 +425,7 @@ function eliminarUbicacion(int $id)
 
     if (! usuarioAutenticado($response))
         return $response;
+
 
     $resultado = Ubicacion::eliminarUbicacion($pdo, $id);
     if ($resultado > 0) {
