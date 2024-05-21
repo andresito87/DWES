@@ -1,0 +1,21 @@
+**Featured and Unit Test**
+php artisan test
+php artisan make:test ModeloTest
+php artisan make:test ModeloTest --unit
+
+**Migrations**
+php artisan migrate:reset
+php artisan migrate:fresh --seed (ejecuta las migraciones y siembra la base de datos)
+
+**Seeders**
+php artisan make:seeder NombreSeeder
+php artisan db:seed --class=NombreSeeder
+php artisan db:seed (resetear la base de datos y ejecutar todos los seeders)
+
+**Models, Controllers, Views**
+php artisan make:model NombreModelo
+php artisan make:controller NombreController
+php artisan make:view NombreVista
+
+** Ver lista de rutas disponibles **
+php artisan route:list
