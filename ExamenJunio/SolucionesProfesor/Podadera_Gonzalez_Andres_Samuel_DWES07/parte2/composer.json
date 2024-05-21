@@ -1,0 +1,19 @@
+{
+    "require": {
+        "psr/container": "2.0.1",
+        "jaxon-php/jaxon-core": "3.8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "DWES07\\": "src/"
+        },
+        "classmap":
+            [
+                "libs/"
+            ],
+        "files":[
+            "conf/conf.php"
+        ]
+
+    }
+}

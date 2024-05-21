@@ -1,0 +1,52 @@
+<---- Pregunta 1 ---->
+¿En que archivo están las funciones que se han registrado para su uso desde Javascript usando JAXON-JS?
+
+>---- Respuesta ----<
+En el archivo setup.php se encuentran las funciones que se han registrado para su uso desde Javascript usando JAXON-JS. Ruta Relativa del archivo: parte2/setup.php
+
+<---- Pregunta 2 ---->
+¿Qué funciones se han registrado para que se puedan utilizar desde Javascript y cual es el propósito de cada una?
+
+>---- Respuesta ----<
+Como análisis incial, el objeto response de jaxon se mueve, modifica y actualiza el contenido de la página web. Usando la información que contiene y ejecutando sus métodos cuando es necesario, somos capaces de modificar el HTML de la página web en tiempo real, desde el servidor.
+Se han registrado las siguientes funciones:
+- logMessage(Response $r, mixed $dato): Esta función se encarga mostrar un mensaje en la zona de logs de la página. Básicamnete, la función recibe un obejto response de la librería Jaxon y un string con el mensaje que se desea mostrar. La función usa un método del objeto response(append) que recibe tres parámetros: el identificador del elemento HTML donde se mostrará el mensaje, el atributo que será modificado en el HTML y el mensaje que se mostrará(en este caso de agregará un div con el mensaje al final del elemento con el id 'log').
+- login($dni, $password): Esta función se encarga de realizar la autenticación de un usuario. Recibe dos parámetros: el DNI del usuario y la contraseña. La función hace una consulta a la base de datos para verificar si el usuario existe y si la contraseña es correcta. Si no se introducen las credenciales correctas, se muestra un alert() con información para el usuario. También se comprueba si el usuario se ha logueado antes, para no mostrarle el login de nuevo, esto se hace comprobando los datos de la sesión. Si la autenticación es exitosa, se muestra el lista de ubicaciones y las posibilidad de agregar nuevas ubicaciones. Nota: En esta función veo algo que quizás se podría mejorar en tema de eficiencia. En la causistica de que el usuario no se loguee correctamente, la respuesta en el HTML mediante la librería jaxon se genera igualmente, hacemos trabajar al servidor sin necesidad. Quizás sería mejor generar la respuesta que se mostrará en el HTML desde el servidor si y sólo si la autenticación es exitosa.(cambiar de lugar esta línea $response->assign('listaUbicaciones', 'innerHTML','//GENERAR AQUÍ LISTA DE UBICACIONES'); //TODO: comprobar implementación de esta estrategía)
+- logout(): Esta función se encarga de cerrar la sesión de un usuario. Básicamente, la función destruye la informacion del usuario en la sesión y llama a la función usuarioAutenticado() que comprobará que el usuario ya no está autenticado y mostrará el login de nuevo. Estamos todo el tiempo, ordenando desde funciones de PHP ejecutadas en el Backend, lo que mostramos en el Frontend en código HTML con la librería Jaxon.
+- usuarioAutenticado(Response $response): Esta función se encarga de comprobar si un usuario está autenticado. Recibe un objeto response de la librería Jaxon. La función comprueba si el usuario está autenticado(comprobando los datos de la sesión), si es así, muestra la lista de ubicaciones y la posibilidad de agregar nuevas ubicaciones. Si el usuario no está autenticado, muestra el login. También se encarga de limpiar los inputs de usuario y contraseña del login.
+cargarListadoUbicaciones(PDO $pdo, Response $response)
+- cargarListadoUbicaciones(PDO $pdo, Response $response): Esta función se encarga de cargar el listado de ubicaciones en la página. Recibe un objeto PDO para realizar la consulta a la base de datos y un objeto response de la librería Jaxon. La función hace una consulta a la base de datos para obtener las ubicaciones y las carga en el objeto response para que se muestren en la página. Todavia no la tengo implementada pero me supongo que usará el método assign del objeto response para asignar el listado de ubicaciones al elemento HTML correspondiente. ¡¡¡Aviso!!!: Esta función hace dos cosas, consulta a la base de datos y genera el HTML que se mostrará en la página. Quizás sería mejor dividir esta función en dos, una que consulte a la base de datos y otra que genere el HTML. De esta forma, si en un futuro se quiere cambiar la forma en la que se muestran las ubicaciones, no se tendría que modificar la función que consulta a la base de datos. Principio de responsabilidad única(Single Responsibility Principle).
+
+- establecerInterfaz()
+
+<---- Pregunta 3 ---->
+¿Qué fragmento de código PHP es el encargado de registrar cada función para su uso en JAXON-JS?
+
+>---- Respuesta ----<
+En las últimas líneas del archivo setup.php se registran las funciones para su uso en JAXON-JS. Ruta Relativa del archivo: parte2/setup.php. Las funciones se registran de la siguiente forma:
+$jaxon->register(Jaxon::CALLABLE_FUNCTION, 'login');
+$jaxon->register(Jaxon::CALLABLE_FUNCTION, 'logout');
+$jaxon->register(Jaxon::CALLABLE_FUNCTION, 'establecerInterfaz');
+
+
+<---- Pregunta 4 ---->
+¿Qué hace exactamente el código $jaxon->setOption('core.request.uri', BASE_URL . 'backend.php');?
+
+>---- Respuesta ----<
+El código setea o establece la opción 'core.request.uri' en el objeto o instancia jaxon con el valor de la constante BASE_URL concatenada con el string 'backend.php'. La constante BASE_URL se define en el archivo config.php y contiene la URL base del proyecto. La opción 'core.request.uri' se utiliza para indicar la URL del archivo que procesará las peticiones de JAXON-JS. En este caso, se establece la URL del archivo backend.php, que es el encargado de procesar las peticiones de JAXON-JS. De esta forma, JAXON-JS sabe a que URL debe enviar las peticiones para que sean procesadas por el backend. En este script la librería Jaxon-JS se configura para que tenga a su disposición todas las funciones que se han registrado JAXON-JS en el archivo parte2/setup.php
+
+<---- Pregunta 5 ---->
+¿Cuál es el propósito del archivo comun.php?
+
+
+>---- Respuesta ----<
+El archivo es incluido al inicio de parte2/setup.php y se encarga de:
+- Cancela por parte de PHP que se muestren errores relacionados con características obsoletas de PHP.
+- Se incluye el archivo vendor/autoload.php que carga las clases de las librerías que se han instalado con composer.
+- Se define la constante BASE_URL que contiene la URL base del proyecto. Esta constante se utiliza para establecer la URL del archivo que procesará las peticiones de JAXON-JS. Este sistema de obtención de la URL base del proyecto a partir de la url que realiza la petición es muy útil, ya que si en un futuro se cambia la URL del proyecto, la aplicación seguirá funcionando correctamente sin necesidad de modificar el código.
+
+<---- Pregunta 6 ---->
+¿Porqué index.php incluye setup.php y no el archivo backend.php? Explícalo con tus palabras.
+
+>---- Respuesta ----<
+El archivo backend.php es algo que usará la librería Jaxon internamente para saber que peticiones puede procesar y a que funciones tiene que llamar para procesar dichas funciones(simula el comportamiento de un backend, endpoints y peticiones a esos endpoints los cuales devuelven información). El archivo setup.php es el encargado de registrar las funciones que se pueden utilizar desde Javascript y de configurar JAXON-JS para que sepa a que URL debe enviar las peticiones para que sean procesadas por el backend. Por lo tanto, es necesario incluir el archivo setup.php en index.php para que las funciones registradas en setup.php estén disponibles para su uso en JAXON-JS. En resumen, index.php incluye setup.php y no backend.php porque setup.php es el encargado de registrar las funciones que se pueden utilizar desde Javascript(desde el frontend) y de configurar JAXON-JS para que sepa a que URL debe enviar las peticiones para que sean procesadas por el backend.

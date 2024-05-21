@@ -26,7 +26,6 @@ class Taller extends Modelo
     private ?int $cupo_maximo = null;//cupo_maximo INT,
 
 
-
     public function getNombre() : string
     {
         return $this->nombre;

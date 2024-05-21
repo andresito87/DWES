@@ -1,0 +1,6 @@
+composer init //CREACION DE PROYECTO COMPOSER
+composer dumpautoload //SE RECARGAN TODOS LOS PAQUETES Y LAS DEPENDENCIAS
+require_once __DIR__ . '/vendor/autoload.php'; //NECESARIO EN EL PUNTO DE ENTRADA DE LA APP
+composer require "vendor/package:1.0" //INSTALA LA DEPENDENCIA
+composer update	//Actualiza todos los paquetes
+composer remove vendor/package //DESINSTALA EL PAQUETE

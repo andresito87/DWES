@@ -3,11 +3,14 @@
 namespace DWES04SOL\modelo;
 
 use \PDO;
+use PDOException;
 use \PDOStatement;
 
-class Talleres {
+class Talleres
+{
 
-    private static function recogerTalleres(PDO $pdo, PDOStatement $stmt): array {
+    private static function recogerTalleres(PDO $pdo, PDOStatement $stmt) : array
+    {
         $talleres = [];
         foreach ($stmt as $reg) {
             $talleres[] = Taller::rescatar($pdo, $reg['id']);
@@ -15,7 +18,8 @@ class Talleres {
         return $talleres;
     }
 
-    public static function listar(PDO $pdo): array|bool {
+    public static function listar(PDO $pdo) : array|bool
+    {
         $SQL = "SELECT id FROM talleres";
         try {
             $stmt = $pdo->query($SQL);
@@ -24,16 +28,17 @@ class Talleres {
             return false;
         }
     }
-    
-    public static function filtrarPorDia(PDO $pdo, $dia_semana): array|bool {
+
+    public static function filtrarPorDia(PDO $pdo, $dia_semana) : array|bool
+    {
         $SQL = "SELECT id FROM talleres WHERE LOWER(dia_semana) like LOWER(:dia_semana)";
         try {
             $stmt = $pdo->prepare($SQL);
             $stmt->bindValue('dia_semana', $dia_semana);
-            if ($stmt->execute())
-            {
+            if ($stmt->execute()) {
                 return self::recogerTalleres($pdo, $stmt);
-            }
+            } else
+                return false;
         } catch (PDOException $ex) {
             return false;
         }
