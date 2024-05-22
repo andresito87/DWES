@@ -12,8 +12,8 @@ class UbicacionController extends Controller
      */
     public function index()
     {
-        $ubicaciones=Ubicacion::all();
-        return view('ubicaciones',['ubicaciones'=>$ubicaciones]);
+        $ubicaciones = Ubicacion::all();
+        return view('ubicaciones', ['ubicaciones' => $ubicaciones]);
     }
 
     /**
@@ -29,14 +29,14 @@ class UbicacionController extends Controller
      */
     public function store(Request $request)
     {
-        $datosvalidados=$request->validate([
-            'nombre'=>'required|min:4|max:50',
-            'descripcion'=>'required',
-            'dias'=>['required','array'],
-            'dias.*'=>['required','distinct','in:L,M,X,J,V,S,D']
+        $datosvalidados = $request->validate([
+            'nombre' => 'required|min:4|max:50',
+            'descripcion' => 'required',
+            'dias' => ['required', 'array'],
+            'dias.*' => ['required', 'distinct', 'in:L,M,X,J,V,S,D']
         ]);
 
-        $datosvalidados['dias']=join(',',$datosvalidados['dias']??[]);
+        $datosvalidados['dias'] = join(',', $datosvalidados['dias'] ?? []);
 
         Ubicacion::create($datosvalidados);
 
@@ -48,7 +48,7 @@ class UbicacionController extends Controller
      */
     public function show(Ubicacion $ubicacion)
     {
-        return view('ubicaciones/detalleubicacion',['ubicacion'=>$ubicacion]);
+        return view('ubicaciones/detalleubicacion', ['ubicacion' => $ubicacion]);
     }
 
     /**
@@ -56,7 +56,7 @@ class UbicacionController extends Controller
      */
     public function edit(Ubicacion $ubicacion)
     {
-        return view('ubicaciones/edit',['ubicacion'=>$ubicacion]);
+        return view('ubicaciones/edit', ['ubicacion' => $ubicacion]);
     }
 
     /**
@@ -64,40 +64,40 @@ class UbicacionController extends Controller
      */
     public function update(Request $request, Ubicacion $ubicacion)
     {
-        $datosvalidados=$request->validate([
-            'nombre'=>'required|min:4|max:50',
-            'descripcion'=>'required',
-            'dias.*'=>['required','distinct','in:L,M,X,J,V,S,D']
+        $datosvalidados = $request->validate([
+            'nombre' => 'required|min:4|max:50',
+            'descripcion' => 'required',
+            'dias.*' => ['required', 'distinct', 'in:L,M,X,J,V,S,D']
         ]);
 
-        $ubicacion->nombre=$datosvalidados['nombre'];
-        $ubicacion->descripcion=$datosvalidados['descripcion'];
-        $ubicacion->dias=join(',',$datosvalidados['dias']??[]);
+        $ubicacion->nombre = $datosvalidados['nombre'];
+        $ubicacion->descripcion = $datosvalidados['descripcion'];
+        $ubicacion->dias = join(',', $datosvalidados['dias'] ?? []);
         $ubicacion->save();
 
         return redirect('ubicaciones');
     }
 
-     /**
+    /**
      * Muestra un formulario para confirmar la eliminación.
      * -->Se añade este controlador
      */
     public function destroyconfirm(Ubicacion $ubicacion)
     {
-        return view('ubicaciones.destroyconfirm',['ubicacion'=>$ubicacion->id]);
+        return view('ubicaciones.destroyconfirm', ['ubicacion' => $ubicacion->id]);
     }
 
     /**
      * Remove the specified resource from storage.
      * -->Se añade Request $request
      */
-    public function destroy(Ubicacion $ubicacion,Request $request)
+    public function destroy(Ubicacion $ubicacion, Request $request)
     {
-        $datosvalidados=$request->validate([
-            'confirmar'=>'required|in:si,no'
+        $datosvalidados = $request->validate([
+            'confirmar' => 'required|in:si,no'
         ]);
 
-        if ($datosvalidados['confirmar']==='si') {
+        if ($datosvalidados['confirmar'] === 'si') {
             //Borramos primero los talleres que puediera tener esta ubicación.
             $ubicacion->talleres()->delete();
             //Borramos la ubicación

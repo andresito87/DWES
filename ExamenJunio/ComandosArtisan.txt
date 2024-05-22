@@ -4,8 +4,9 @@ php artisan make:test ModeloTest
 php artisan make:test ModeloTest --unit
 
 **Migrations**
-php artisan migrate:reset
+php artisan migrate:reset (resetea todas las migraciones)
 php artisan migrate:fresh --seed (ejecuta las migraciones y siembra la base de datos)
+php artisan make:migration crear_tabla_usuarios (crea una migración para crear una tabla usuarios)
 
 **Seeders**
 php artisan make:seeder NombreSeeder
@@ -19,3 +20,9 @@ php artisan make:view NombreVista
 
 ** Ver lista de rutas disponibles **
 php artisan route:list
+
+** CheatSheet Laravel 10 **
+https://itf-laravel-10.netlify.app/config/cheatsheet
+
+** Crear un nuevo proyecto **
+composer create-project laravel/laravel^10.0 nombreProyecto
