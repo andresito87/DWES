@@ -5,13 +5,14 @@ php artisan make:test ModeloTest --unit
 
 **Migrations**
 php artisan migrate:reset (resetea todas las migraciones)
-php artisan migrate:fresh --seed (ejecuta las migraciones y siembra la base de datos)
+php artisan migrate:fresh --seed (ejecuta las migraciones, siembra la base de datos si el seeder se usa en el seeder de la base de datos)
 php artisan make:migration crear_tabla_usuarios (crea una migración para crear una tabla usuarios)
 
-**Seeders**
+**Seeders:Sembrar la base de datos**
 php artisan make:seeder NombreSeeder
-php artisan db:seed --class=NombreSeeder
-php artisan db:seed (resetear la base de datos y ejecutar todos los seeders)
+php artisan db:seed NombreSeeder (ejecuta el seeder y siembra la base de datos)
+php artisan db:seed (resetear la base de datos y ejecutar todos los seeders si esta configurado en el DatabaseSeeder.php)
+
 
 **Models, Controllers, Views**
 php artisan make:model NombreModelo
@@ -25,4 +26,33 @@ php artisan route:list
 https://itf-laravel-10.netlify.app/config/cheatsheet
 
 ** Crear un nuevo proyecto **
-composer create-project laravel/laravel^10.0 nombreProyecto
+composer create-project laravel/laravel:^10 nombreProyecto
+
+** Plantillas Blade **
+https://laravel.com/docs/10.x/blade
+
+** Validaciones **
+https://laravel.com/docs/10.x/validation
+
+** Mostrar errores de validación **
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+** Quering datos con Eloquent **
+$users = User::all();
+$users = User::where('active', 1)->get();
+$users = User::where('votes', '>', 100)->get();
+$users = User::where('name', '=', 'John')->get();
+$users = User::where('name', 'like', 'T%')->get();
+$users = User::where([
+    ['status', '=', '1'],
+    ['subscribed', '<>', '1'],
+])->get();
+https://laravel.com/docs/10.x/eloquent-relationships#querying-relations
