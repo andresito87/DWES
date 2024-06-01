@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo taller</title>
+</head>
+<body>
+    <form action="creartaller.php" method="POST">
+        <label for="nombre">Nombre del taller:</label><br>
+        <input type="text" id="nombre" name="nombre" ><br><br>
+        
+        <label for="descripcion">Descripción:</label><br>
+        <textarea id="descripcion" name="descripcion" rows="4" cols="50" ></textarea><br><br>
+        
+        <label for="dia_semana">Día de la Semana:</label><br>
+        <input type="text" id="dia_semana" name="dia_semana" ><br><br>
+        
+        <label for="hora_inicio">Hora de Inicio:</label><br>
+        <input type="text" id="hora_inicio" name="hora_inicio" ><br><br>
+        
+        <label for="hora_fin">Hora de Fin:</label><br>
+        <input type="text" id="hora_fin" name="hora_fin" ><br><br>
+        
+        <label for="cupo_maximo">Cupo Máximo:</label><br>
+        <input type="text" id="cupo_maximo" name="cupo_maximo" ><br><br>
+        
+        <label for="ubicacion_id">ID de Ubicación:</label><br>
+        <input type="text" id="ubicacion_id" name="ubicacion_id" ><br><br>
+        
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>

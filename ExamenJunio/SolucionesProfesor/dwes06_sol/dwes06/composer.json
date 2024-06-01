@@ -1,0 +1,12 @@
+{
+    "name": "portatil_profesorado/dwes06_sol",
+    "type": "project",
+    "require": {
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "PortatilProfesorado\\Dwes06Sol\\": "src/"
+        }
+    }
+}
