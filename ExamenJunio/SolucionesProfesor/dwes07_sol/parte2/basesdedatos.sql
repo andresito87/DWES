@@ -1,3 +1,4 @@
+use respira;
 DROP TABLE IF EXISTS `ubicaciones`;
 
 CREATE TABLE `ubicaciones` (
