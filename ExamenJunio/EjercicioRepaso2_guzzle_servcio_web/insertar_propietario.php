@@ -26,7 +26,7 @@ if (! empty($_POST)) {
             $errores[] = "El dato edad no es válido";
     }
 }
-if (! isset($errores) && isset($old)) {
+if (isset($errores) && empty($errores) && isset($old)) {
     $sql = "INSERT INTO propietarios (nombre, apellidos, edad) values (:nombre, :apellidos, :edad)";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue('nombre', $old['nombre']);

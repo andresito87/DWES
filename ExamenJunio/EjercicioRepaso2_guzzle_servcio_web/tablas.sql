@@ -1,5 +1,7 @@
 CREATE SCHEMA ejemplo_ex_20232024;
 
+USE ejemplo_ex_20232024;
+
 CREATE TABLE propietarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50),
