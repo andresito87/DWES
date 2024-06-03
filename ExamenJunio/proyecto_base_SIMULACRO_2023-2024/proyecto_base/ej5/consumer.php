@@ -60,12 +60,18 @@ if ($respuesta) {
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($datosVideojuegos as $videojuego) : ?>
+            <?php if (empty($datosVideojuegos)) : ?>
                 <tr>
-                    <td><?= $videojuego[0] ?></td>
-                    <td><?= $videojuego[1] ?></td>
+                    <td colspan="2">No hay videojuegos con esas características</td>
                 </tr>
-            <?php endforeach; ?>
+            <?php else : ?>
+                <?php foreach ($datosVideojuegos as $videojuego) : ?>
+                    <tr>
+                        <td><?= $videojuego[0] ?></td>
+                        <td><?= $videojuego[1] ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
 

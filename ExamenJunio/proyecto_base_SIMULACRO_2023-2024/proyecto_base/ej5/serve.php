@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $datosJSONrecibidos = file_get_contents("php://input");
     //TODO: decodificar los datos JSON recibidos y, si son correctos, guardarlos.
     $json = json_decode($datosJSONrecibidos, true);
-    if ($json !== null) {
+    if ($json !== false && is_array($json)) {
         if (! isset($json['nombre']) || empty($json['nombre'])) {
             $error[] = "Falta nombre";
         }
