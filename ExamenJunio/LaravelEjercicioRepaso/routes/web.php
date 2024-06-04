@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [LibroController::class, 'listarLibrosEntreDosYears'])->name('mostrarLibros');
+Route::get('/', [LibroController::class, 'listarLibrosEntreDosYears'])->name('mostrarLibros'); // puede llevar parámetros maxYear y minYear
+// Ejemplo de URL: http://localhost:8000/?minYear=2000&maxYear=2010
 
 Route::get('/nuevo', [LibroController::class, 'mostrarFormNuevoLibro'])->name('formNuevoLibro');
 
