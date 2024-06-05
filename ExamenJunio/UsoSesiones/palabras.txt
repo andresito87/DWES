@@ -1,0 +1,1 @@
+Esto es un texto que contiene varias palabras que se repiten varias veces, como por ejemplo la palabra texto, que se repite 3 veces. Otra palabra que se repite es veces, que se repite 2 veces. Y así sucesivamente. Necesito un programa que me permita contar cuántas veces se repite cada palabra en un texto.

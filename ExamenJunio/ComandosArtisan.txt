@@ -34,7 +34,7 @@ https://laravel.com/docs/10.x/blade
 ** Validaciones **
 https://laravel.com/docs/10.x/validation
 
-** Mostrar errores de validación **
+** Mostrar errores de validación en plantilla Blade**
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -44,6 +44,11 @@ https://laravel.com/docs/10.x/validation
         </ul>
     </div>
 @endif
+
+** Crear lista de productos  en plantilla Blade **
+@foreach ($products as $product)
+    <p>This is product {{ $product->id }}</p>
+@endforeach
 
 ** Quering datos con Eloquent **
 $users = User::all();

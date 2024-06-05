@@ -1,0 +1,11 @@
+A priori, no debe ser necesario usar composer, dado que ya están instaladas las dependencias (carpetas vendor), pero se proporciona "por si acaso". Para ejecutar php.bat y composer.bat es necesario invocarlos desde el terminal de comandos de windows "CMD" en la carpeta de cada ejercicio. No uséis powershell, o si abrís un terminal con powershell, teclead y ejecutad "cmd" para iniciar el terminal de comandos clásico.
+
+Es importante que sepáis que en el examen también se van a incluir dichos scripts. La idea de incluirlos es por si en alguna sede no está instalado composer o si php no está en el PATH. 
+
+No obstante, si veis que no conseguís ejecutar "php.bat" y/o "composer.bat" recordad que podéis ejecutarlo poniendo la ruta completa a php.exe en XAMPP (c:\xampp\php\php.exe) . 
+A priori, en todos los equipos de todas las sedes, estará instalado XAMPP en c:\xampp:
+
+Ejecutar artisan (en la carpeta de cada ejercicio): "C:\xampp\php\php.exe artisan ... comando ...". 
+Por ejemplo: C:\xampp\php\php.exe artisan serve
+Ejecutar composer (en la carpeta de cada ejercicio): "C:\xampp\php\php.exe composer.phar ...". 
+Por ejemplo: C:\xampp\php\php.exe composer.phar install.

@@ -13,7 +13,9 @@ ENDSQL;
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    //Leemos los datos "RAW" recibidos desde php://input que es donde se envian los datos en formato JSON
     $datos = file_get_contents("php://input");
+    // decodificar los datos JSON recibidos y, si son correctos, guardarlos.
     $json = json_decode($datos, true);
     if ($json !== null) {
         if (! isset($json['codigocomunidad']) || empty($json['codigocomunidad'])) {

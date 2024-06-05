@@ -6,8 +6,10 @@ $SQL = 'SELECT p.id, p.codigocomunidad, p.localizacion, p.cuota, pr.nombre, pr.a
 SELECT p.id, p.codigocomunidad, p.localizacion, p.cuota, pr.nombre, pr.apellidos FROM pisos as p, propietarios as pr WHERE p.id_propietario=pr.id '
 ENDSQL;*/
 
+// Si se ha pasado un id de propiedad, filtramos por él
 if (isset($_GET['idprop']) && preg_match('/^\d+$/', $_GET['idprop'])) {
     $SQL .= ' and pr.id = :id';
+    // Guardamos el id en un array asociativo para bindearlo
     $datos['id'] = intval($_GET['idprop']);
 }
 
